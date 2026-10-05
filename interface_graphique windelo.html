@@ -1030,7 +1030,7 @@
                 <div class="labels"><label data-fr="Angle" data-en="Angle">Angle</label><span id="valRotation">0.0°</span></div>
                 <div class="slider-wrapper">
                     <div id="ghost-rot" class="ghost-marker"></div>
-                    <input type="range" id="sliderRotation" min="-180" max="180" value="0" step="0.1" aria-label="Angle de rotation de l'aile">
+                    <input type="range" id="sliderRotation" min="-90" max="270" value="90" step="0.1" aria-label="Angle de rotation de l'aile">
                 </div>
             </div>
 
@@ -2894,6 +2894,10 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             document.getElementById('m3'), document.getElementById('m4')
         ];
         const sliderRotation = document.getElementById('sliderRotation');
+        // The slider holds the wing angle in the physics frame; the readout is (slider − 90)°, i.e.
+        // relative to the boat axis. Its range −90…270 gives a full ±180° either side of the axis
+        // (it used to be −180…180, so the wing stopped at +90°). Angles written to it are wrapped here.
+        const _wrapRot = (d) => { while (d > 270) d -= 360; while (d < -90) d += 360; return d; };
 
         // Reefing state: 0 = full wing, 1 = head section furled, 2 = top two furled.
         // Changing it feeds the 3D-geometry signature (currentCamberValues) so the wing,
@@ -5014,7 +5018,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
                 let rotDiff = committedOptRotation - window._autoShadow.rot;
                 if (rotDiff > 180) rotDiff -= 360; if (rotDiff < -180) rotDiff += 360;
                 let nextRot = approach(window._autoShadow.rot, committedOptRotation, rotDiff);
-                while (nextRot > 180) nextRot -= 360; while (nextRot < -180) nextRot += 360;
+                nextRot = _wrapRot(nextRot);
                 sliderRotation.value = nextRot;
                 window._autoShadow.rot = nextRot;
             }
@@ -5063,7 +5067,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             previousAeroSig = aeroSig;
 
             if (optChanged && state.coach) {
-                updateGhostMarker('ghost-rot', -180, 180, optimalRotationDeg);
+                updateGhostMarker('ghost-rot', -90, 270, _wrapRot(optimalRotationDeg));
                 updateGhostMarker('ghost-m1', -15, 15, optCamberVals[0]);
                 updateGhostMarker('ghost-m2', -15, 15, optCamberVals[1]);
                 updateGhostMarker('ghost-m3', -15, 15, optCamberVals[2]);
@@ -5982,7 +5986,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
                     let absCL = Math.abs(a.cl), absCD = Math.max(a.cd, 0.001);
                     avgDL += absCD / Math.max(absCL, 0.001);
                 }
-                textDL.textContent = (avgDL / 4).toFixed(2);
+                textDL.textContent = avgDL / 4 > 99 ? '> 99' : (avgDL / 4).toFixed(2);   // CL ≈ 0 at broadside angles
             }
 
             // --- Sailing mode indicator ---
