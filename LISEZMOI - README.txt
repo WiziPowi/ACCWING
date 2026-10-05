@@ -7,7 +7,7 @@
 Gardez TOUS les fichiers ensemble dans le meme dossier.
 Keep ALL files together in the same folder.
 
-  - interface_graphique windelo.html   (la page / the page)
+  - interface_graphique EO3.html       (la page / the page)
   - 3D Windelo pour IHM test.stl        (le modele 3D / the 3D model)
   - Lancer Windelo.bat                  (Windows)
   - windelo_server.ps1                  (Windows, requis par le .bat)
@@ -56,7 +56,7 @@ run once:  xcode-select --install  then try again.
 ================================================================
 Sur telephone, le fichier HTML suffit : pas de lanceur. Le modele
 3D y est integre (version allegee).
-1. Copiez "interface_graphique windelo.html" sur le telephone
+1. Copiez "interface_graphique EO3.html" sur le telephone
    (Fichiers / Documents, e-mail, AirDrop, WhatsApp...).
 2. Ouvrez-le (iPhone : app Fichiers ; Android : ouvrir avec Chrome).
 3. Onglets en haut : Controles / Profils 2D / Aile 3D / Systeme.

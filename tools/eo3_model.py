@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Procedural Energy Observer 2 catamaran, drawn from the side/3-4 renders, written as a
+"""Procedural Energy Observer 3 catamaran, drawn from the side/3-4 renders, written as a
 binary STL with facet colours (VisCAM RGB555) for tools/embed_stl.py.
 
-    python3 tools/eo2_model.py eo2.stl && python3 tools/embed_stl.py eo2.stl
+    python3 tools/eo3_model.py eo3.stl && python3 tools/embed_stl.py eo3.stl
     (add --colours for the two-tone render colours; default is the simulator's plain grey)
 
 Metres, Z up, length along X (stern at 0, bow at +X), keel bottom at z = 0.
@@ -135,7 +135,7 @@ for py in (-7.0, -3.0, 3.0, 7.0):
         tri(a, b, c, 'roof'); tri(a, c, d, 'roof')
 
 args = [a for a in sys.argv[1:] if not a.startswith('--')]
-out = args[0] if args else 'eo2.stl'
+out = args[0] if args else 'eo3.stl'
 v = np.array(tris, dtype='<f4')
 rec = np.zeros(len(v), dtype=[('n', '<f4', 3), ('v', '<f4', (3, 3)), ('a', '<u2')])
 rec['v'] = v
@@ -143,7 +143,7 @@ q5 = lambda h: [int(h[i:i + 2], 16) * 31 // 255 for i in (1, 3, 5)]
 if '--colours' in sys.argv:          # facet colours are opt-in; by default the page's grey is used
     rec['a'] = [0x8000 | (r << 10) | (g << 5) | b for r, g, b in (q5(COL[c]) for c in cols)]
 with open(out, 'wb') as f:
-    f.write(b'Energy Observer 2 (procedural, ACCWing sim)'.ljust(80, b' '))
+    f.write(b'Energy Observer 3 (procedural, ACCWing sim)'.ljust(80, b' '))
     f.write(struct.pack('<I', len(v))); f.write(rec.tobytes())
 z = v[..., 2]
 print(f'{out}: {len(v):,} triangles, {L:.0f} m x {2 * (YC + W0 * 1.12):.1f} m, height {z.max():.1f} m, draft {T} m')

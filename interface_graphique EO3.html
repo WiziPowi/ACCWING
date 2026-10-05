@@ -3759,7 +3759,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             waterline: HULL_PIVOT_Y,          // world Y of the fake-water plane (= 495)
             sinkFrac: 0.17,                   // submerge by this fraction of the model's height (≈1.5 m draft / 8.8 m)
             sinkM: 0,                          // extra nudge on top: + sinks deeper, − lifts (metres)
-            unitsPerM: 11.5,                  // world units per metre: EO2 catamaran, 40 m ↔ target 460
+            unitsPerM: 11.5,                  // world units per metre: EO3 catamaran, 40 m ↔ target 460
             yawDeg: 90,                       // rotation about the vertical axis (+ = clockwise seen from above)
             maxTris: 3500000,                 // safety cap; bigger meshes are uniformly thinned
             // Base axis map: Z-up CAD export (Rhino) → world (Y points DOWN). yawDeg is
@@ -3782,7 +3782,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             footDropM: 0.55,    // foot height: metres BELOW the model's highest point (roof is 0.55 m under the wheelhouse top)
             foreAftM: 0,        // reference spar position; each rig in `positions` is offset from it
             athwartM: 0,
-            // EO2 layout (from the photos): two pairs side by side on the roof — aft pair ≈ 0.3 L from
+            // EO3 layout (from the photos): two pairs side by side on the roof — aft pair ≈ 0.3 L from
             // the stern, forward pair just aft of the wheelhouse (metres from mid-length / centreline).
             // (mast ≈ 1.5 m forward of the wing's visual centre, so the wings stay where the render has them).
             positions: [ { foreAftM: 1.9, athwartM: -4.5 }, { foreAftM: 1.9, athwartM: 4.5 },
@@ -4126,7 +4126,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         });
 
         // Seed the known model so its toggle is present.
-        _registerModel({ key: 'windelo', name: 'Energy Observer 2', fileName: '3D Windelo pour IHM test.stl', url: '3D Windelo pour IHM test.stl',
+        _registerModel({ key: 'windelo', name: 'Energy Observer 3', fileName: '3D Windelo pour IHM test.stl', url: '3D Windelo pour IHM test.stl',
                          embedded: !!(_embeddedMeshEl && _embeddedMeshEl.textContent.trim()) });
 
         // Windelo build: load the Windelo model at startup (see _getBuffer for which copy), then the

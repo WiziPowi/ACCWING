@@ -29,7 +29,7 @@ import zipfile
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_HTML = os.path.join(HERE, '..', 'interface_graphique windelo.html')
+DEFAULT_HTML = os.path.join(HERE, '..', 'interface_graphique EO3.html')
 BEGIN, END = '<!-- WINDELO-MESH:BEGIN', '<!-- WINDELO-MESH:END -->'
 BEGIN_LINE = BEGIN + ' — lighter Windelo model, written by tools/embed_stl.py (do not edit by hand) -->'
 
