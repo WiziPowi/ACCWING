@@ -52,6 +52,31 @@ First time only: if macOS says "unidentified developer", RIGHT-CLICK
 run once:  xcode-select --install  then try again.
 
 ================================================================
+  TELEPHONE / TABLETTE  -  PHONE / TABLET
+================================================================
+Sur telephone, le fichier HTML suffit : pas de lanceur. Le modele
+3D y est integre (version allegee).
+1. Copiez "interface_graphique windelo.html" sur le telephone
+   (Fichiers / Documents, e-mail, AirDrop, WhatsApp...).
+2. Ouvrez-le (iPhone : app Fichiers ; Android : ouvrir avec Chrome).
+3. Onglets en haut : Controles / Profils 2D / Aile 3D / Systeme.
+* Si le modele n'est pas integre, le bouton "Charger le STL..."
+  permet de choisir le fichier STL sur le telephone.
+* Le pilotage moteur / IMU (Web Serial) reste prevu pour PC.
+
+On a phone the HTML file is enough: no launcher. A lighter copy
+of the 3D model is embedded in it. Copy the file to the phone and
+open it (iPhone: Files app; Android: open with Chrome). Tabs at
+the top: Controls / 2D / 3D / System. If the model is not
+embedded, "Charger le STL..." lets you pick the STL on the phone.
+Motor / IMU control (Web Serial) is still meant for a PC.
+
+Mettre a jour le modele integre / update the embedded model
+(python3 + pip install numpy fast-simplification) :
+    python3 tools/embed_stl.py "3D Windelo pour IHM test.stl"
+    (option --tris 60000 pour plus de detail / for more detail)
+
+================================================================
   MOTEUR / WEB SERIAL
 ================================================================
 Le pilotage du moteur (CubeMars AK45-36) necessite un navigateur

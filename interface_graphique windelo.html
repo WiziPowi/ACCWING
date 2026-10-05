@@ -38,16 +38,17 @@
                 "telem   telem   telem   telem";
             gap: 1px;
         }
-        /* Tablet range: collapse to a 2-column layout so neither view gets squashed */
+        /* Tablet range (iPad, small windows): 2D above 3D, between the controls and the right
+           column. The right column used to get its own auto-height row, which grew to its full
+           content height and squeezed both views to 0 px. */
         @media (max-width: 1100px) and (min-width: 781px) {
-            body { grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+            body { grid-template-columns: minmax(200px, 250px) minmax(0, 1fr) minmax(190px, 230px);
                    grid-template-areas:
-                       "header   header"
-                       "sidebar  view2d"
-                       "sidebar  view3d"
-                       "rightbar rightbar"
-                       "telem    telem";
-                   grid-template-rows: 40px minmax(0,1fr) minmax(0,1fr) auto auto; }
+                       "header  header  header"
+                       "sidebar view2d  rightbar"
+                       "sidebar view3d  rightbar"
+                       "telem   telem   telem";
+                   grid-template-rows: 40px minmax(0,1fr) minmax(0,1fr) auto; }
         }
 
         /* --- Top Status Bar --- */
@@ -495,7 +496,8 @@
         @media (max-width: 780px),
                (max-height: 500px) and (orientation: landscape) and (max-width: 900px) {
           body {
-            grid-template-columns: 1fr;
+            /* minmax(0,…): a wide child must never widen the page past the screen (sideways scroll). */
+            grid-template-columns: minmax(0, 1fr);
             grid-template-rows: 40px 36px minmax(0, 1fr) auto;
             grid-template-areas:
               "header"
@@ -511,7 +513,7 @@
           }
           html, body { height: 100%; margin: 0; }
           /* Push only the chrome under the notch — not the whole grid */
-          .app-header { padding-top: env(safe-area-inset-top); box-sizing: content-box; }
+          .app-header { padding-top: env(safe-area-inset-top); box-sizing: content-box; overflow: hidden; }
           .telemetry  { padding-bottom: env(safe-area-inset-bottom); }
 
           /* Tab bar */
@@ -556,9 +558,14 @@
             grid-area: main;
             display: none;
           }
+          /* The right column (health, motor, IMU, polar, E-stop) gets its own tab. Without
+             this it kept grid-area "rightbar", which this layout does not define: the grid then
+             added implicit tracks for it and the main row collapsed to 0 px. */
+          .right-bar { grid-area: main; display: none; }
           body.mtab-controls .sidebar { display: flex; }
           body.mtab-2d .view-2d       { display: flex; }
           body.mtab-3d .view-3d       { display: flex; }
+          body.mtab-sys .right-bar    { display: flex; }
 
           .sidebar .panel-body { padding: 12px 14px; }
 
@@ -587,6 +594,12 @@
           /* Larger compass for finger interaction */
           .compass-container { padding: 8px 16px 10px 16px; }
           #compass-svg { width: 190px; height: 209px; }
+        }
+
+        /* --- Phones in portrait: the header's "Mode:" readout does not fit next to the
+               JOUR/NUIT + FR/EN toggles; the same value is shown in the telemetry strip. --- */
+        @media (max-width: 480px) {
+          .app-header .header-status { display: none; }
         }
 
         /* --- Very small phones: tighter still --- */
@@ -915,6 +928,7 @@
         <label class="mobile-tab active" data-tab="controls"><input type="radio" name="mtab" value="controls" checked><span data-fr="Contrôles" data-en="Controls">Contrôles</span></label>
         <label class="mobile-tab" data-tab="2d"><input type="radio" name="mtab" value="2d"><span data-fr="Profils 2D" data-en="2D Profiles">Profils 2D</span></label>
         <label class="mobile-tab" data-tab="3d"><input type="radio" name="mtab" value="3d"><span data-fr="Aile 3D" data-en="3D Wing">Aile 3D</span></label>
+        <label class="mobile-tab" data-tab="sys"><input type="radio" name="mtab" value="sys"><span data-fr="Système" data-en="System">Système</span></label>
     </nav>
 
     <!-- === SIDEBAR (Controls) === -->
@@ -1052,9 +1066,11 @@
                 <label class="btn-toggle" id="btnReefAffale" title="Affaler — replie toute l'aile dans le balestron / fully douse the wing into the boom"><input type="radio" name="reef" value="4">Affaler</label>
             </div>
 
-            <!-- Windelo STL preloads automatically over http://localhost (see "Lancer Windelo.bat").
-                 The manual file picker was removed; stl-status still shows preload progress/errors. -->
+            <!-- The Windelo model loads automatically: the full STL when served by the PC launcher
+                 (http://localhost), otherwise the lighter copy embedded in this file (phone, file://).
+                 The picker below only appears if neither is available. -->
             <div id="stl-status" class="stl-status"></div>
+            <label id="stl-load-btn" class="btn-toggle" style="display:none"><input type="file"><span data-fr="Charger le STL…" data-en="Load the STL…">Charger le STL…</span></label>
         </div>
     </div>
 
@@ -1217,6 +1233,9 @@
         </div>
     </div>
 
+    <!-- WINDELO-MESH:BEGIN — lighter Windelo model, written by tools/embed_stl.py (do not edit by hand) -->
+    <!-- WINDELO-MESH:END -->
+
     <script>
         // --- Silent diagnostics: errors are captured but the overlay stays hidden.
         //     Run window.__diag.show() in the console to reveal it for debugging. ---
@@ -1309,7 +1328,7 @@
             var body = document.body;
             if (!body.className.match(/\bmtab-/)) body.classList.add('mtab-controls');
             function activate(key) {
-                body.classList.remove('mtab-controls', 'mtab-2d', 'mtab-3d');
+                body.classList.remove('mtab-controls', 'mtab-2d', 'mtab-3d', 'mtab-sys');
                 body.classList.add('mtab-' + key);
                 var tabs = document.querySelectorAll('.mobile-tab');
                 for (var i = 0; i < tabs.length; i++) {
@@ -2469,13 +2488,48 @@
             });
         }
 
-        async function _getBuffer(entry) {
-            if (entry.file) return await entry.file.arrayBuffer();
-            if (entry.url) {
-                const r = await fetch(entry.url);
-                if (!r.ok) throw new Error('HTTP ' + r.status);
-                return await r.arrayBuffer();
+        // Lighter copy of the Windelo STL embedded in this page (written by tools/embed_stl.py), so
+        // the model also loads where fetch() cannot: a phone, file://, a mail/WhatsApp preview.
+        // Payload (base64, little-endian): uint16 vertices quantised over meta.min..meta.max, then
+        // uint16/uint32 triangle indices. It is rebuilt into a binary STL and goes through parseSTL
+        // exactly like the real file (same axis map, centring, waterline, mast/wing placement).
+        const _embeddedMeshEl = document.getElementById('windelo-mesh');
+        function _embeddedSTLBuffer() {
+            const meta = JSON.parse(_embeddedMeshEl.getAttribute('data-meta'));
+            const bin = atob(_embeddedMeshEl.textContent.replace(/\s+/g, ''));
+            const src = new DataView(new ArrayBuffer(bin.length));
+            for (let i = 0; i < bin.length; i++) src.setUint8(i, bin.charCodeAt(i));
+            const nV = meta.vertices, nT = meta.triangles, lo = meta.min, hi = meta.max;
+            const ib = meta.indexBytes, iOff = nV * 6;
+            if (bin.length < iOff + nT * 3 * ib) throw new Error('modèle intégré tronqué');
+            const out = new DataView(new ArrayBuffer(84 + 50 * nT));
+            out.setUint32(80, nT, true);
+            let o = 84;
+            for (let t = 0; t < nT * 3; t += 3) {
+                o += 12;                                  // facet normal left blank → parseSTL derives it
+                for (let k = 0; k < 3; k++) {
+                    const v = ib === 4 ? src.getUint32(iOff + (t + k) * 4, true) : src.getUint16(iOff + (t + k) * 2, true);
+                    for (let a = 0; a < 3; a++, o += 4)
+                        out.setFloat32(o, lo[a] + (hi[a] - lo[a]) * src.getUint16((v * 3 + a) * 2, true) / 65535, true);
+                }
+                o += 2;
             }
+            return out.buffer;
+        }
+        // The PC launcher serves the folder on localhost: only there is the full-quality STL fetched.
+        const _servedByLauncher = () => /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+
+        async function _getBuffer(entry) {
+            if (entry.file) { entry.source = 'file'; return await entry.file.arrayBuffer(); }
+            if (entry.url && (!entry.embedded || _servedByLauncher())) {
+                try {
+                    const r = await fetch(entry.url);
+                    if (!r.ok) throw new Error('HTTP ' + r.status);
+                    entry.source = 'url';
+                    return await r.arrayBuffer();
+                } catch (e) { if (!entry.embedded) throw e; }   // launcher without the STL → embedded copy
+            }
+            if (entry.embedded) { entry.source = 'embedded'; return _embeddedSTLBuffer(); }
             throw new Error('no-source');
         }
 
@@ -2491,7 +2545,9 @@
             if (_rotSlider) { _rotSlider.value = 90; if (window._autoShadow) window._autoShadow.rot = 90; }
             if (_titre3d) _titre3d.textContent = (entry.name || 'STL').toUpperCase();
             const thin = parsed.stride > 1 ? ' · 1/' + parsed.stride + ' affiché' : '';
-            _stlStatus(parsed.tris.toLocaleString('fr-FR') + ' triangles' + thin, 'ok');
+            const from = entry.source === 'embedded' ? ' · modèle intégré (allégé)' : '';
+            _stlStatus(parsed.tris.toLocaleString('fr-FR') + ' triangles' + thin + from, 'ok');
+            if (_stlLoadBtn) _stlLoadBtn.style.display = 'none';
             try { mettreAJour(); } catch (_) {}
         }
 
@@ -2536,9 +2592,10 @@
                         selectModel('wing');
                     }
                 }, 30);
-            }).catch(() => {
-                // fetch is blocked on file:// — reveal the manual loader so the user can pick the STL.
-                _stlStatus('Préchargement bloqué (ouvrez via un serveur HTTP) — ou chargez le STL :', 'err');
+            }).catch((e) => {
+                // Neither the embedded copy nor the STL file could be read — reveal the manual loader.
+                const why = location.protocol === 'file:' ? 'fichier ouvert en local' : (e && e.message ? e.message : 'introuvable');
+                _stlStatus('Modèle 3D non chargé (' + why + ') — chargez le STL :', 'err');
                 _stlPendingKey = key;
                 if (_stlLoadBtn) _stlLoadBtn.style.display = '';
             });
@@ -2571,15 +2628,16 @@
         });
 
         // Seed the known model so its toggle is present.
-        _registerModel({ key: 'windelo', name: 'Windelo', fileName: '3D Windelo pour IHM test.stl', url: '3D Windelo pour IHM test.stl' });
+        _registerModel({ key: 'windelo', name: 'Windelo', fileName: '3D Windelo pour IHM test.stl', url: '3D Windelo pour IHM test.stl',
+                         embedded: !!(_embeddedMeshEl && _embeddedMeshEl.textContent.trim()) });
 
-        // Windelo build: preload the Windelo STL at startup (served over HTTP). Fetches the
-        // mesh, then the wing/mast are mounted on it automatically (see selectModel).
+        // Windelo build: load the Windelo model at startup (see _getBuffer for which copy), then the
+        // wing/mast are mounted on it automatically (see selectModel).
         selectModel('windelo');
 
         // Auto-detect: when served over HTTP, models.json lists the STL files in the
-        // folder; each becomes a toggle. Harmlessly ignored on file:// (fetch throws).
-        fetch('models.json').then(r => (r.ok ? r.json() : null)).then(j => {
+        // folder; each becomes a toggle. Skipped on file:// (fetch cannot read local files).
+        if (location.protocol !== 'file:') fetch('models.json').then(r => (r.ok ? r.json() : null)).then(j => {
             if (!j || !Array.isArray(j.models)) return;
             j.models.forEach(mdl => {
                 if (!mdl || !mdl.file) return;
