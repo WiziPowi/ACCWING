@@ -3,6 +3,7 @@
 binary STL with facet colours (VisCAM RGB555) for tools/embed_stl.py.
 
     python3 tools/eo2_model.py eo2.stl && python3 tools/embed_stl.py eo2.stl
+    (add --colours for the two-tone render colours; default is the simulator's plain grey)
 
 Metres, Z up, length along X (stern at 0, bow at +X), keel bottom at z = 0.
 Proportions measured on the side render (people on deck ≈ 14 px/m): ~40 m long, silver hull
@@ -133,12 +134,14 @@ for py in (-7.0, -3.0, 3.0, 7.0):
         a, b, c, d = (xa, y1, ZD), (xb, y2, ZD), (xb, y2, ZD + 2.2), (xa, y1, ZD + 2.2)
         tri(a, b, c, 'roof'); tri(a, c, d, 'roof')
 
-out = sys.argv[1] if len(sys.argv) > 1 else 'eo2.stl'
+args = [a for a in sys.argv[1:] if not a.startswith('--')]
+out = args[0] if args else 'eo2.stl'
 v = np.array(tris, dtype='<f4')
 rec = np.zeros(len(v), dtype=[('n', '<f4', 3), ('v', '<f4', (3, 3)), ('a', '<u2')])
 rec['v'] = v
 q5 = lambda h: [int(h[i:i + 2], 16) * 31 // 255 for i in (1, 3, 5)]
-rec['a'] = [0x8000 | (r << 10) | (g << 5) | b for r, g, b in (q5(COL[c]) for c in cols)]
+if '--colours' in sys.argv:          # facet colours are opt-in; by default the page's grey is used
+    rec['a'] = [0x8000 | (r << 10) | (g << 5) | b for r, g, b in (q5(COL[c]) for c in cols)]
 with open(out, 'wb') as f:
     f.write(b'Energy Observer 2 (procedural, ACCWing sim)'.ljust(80, b' '))
     f.write(struct.pack('<I', len(v))); f.write(rec.tobytes())
