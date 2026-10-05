@@ -46,17 +46,25 @@ def read_stl_bytes(path):
 
 
 def parse_stl(data):
-    """Return an (n, 3, 3) float64 array of triangles. Binary is detected by its exact size."""
+    """Return (triangles (n, 3, 3) float64, facet colours (n,) '#rrggbb' or None).
+    Binary is detected by its exact size; colours follow the VisCAM convention
+    (attribute bit 15 set, RGB555 in bits 14-0)."""
     if len(data) >= 84:
         n = struct.unpack_from('<I', data, 80)[0]
         if 84 + 50 * n == len(data):
             rec = np.dtype([('n', '<f4', 3), ('v', '<f4', (3, 3)), ('a', '<u2')])
-            return np.frombuffer(data, rec, n, 84)['v'].astype(np.float64)
+            r = np.frombuffer(data, rec, n, 84)
+            a = r['a'].astype(np.int64)
+            cols = None
+            if (a & 0x8000).any():
+                rgb = np.stack([(a >> 10) & 31, (a >> 5) & 31, a & 31], 1) * 255 // 31
+                cols = np.array(['#%02x%02x%02x' % tuple(c) for c in rgb])
+            return r['v'].astype(np.float64), cols
     nums = re.findall(rb'vertex\s+(\S+)\s+(\S+)\s+(\S+)', data)
     tris = np.array(nums, dtype=np.float64).reshape(-1, 3, 3)
     if not len(tris):
         sys.exit('no triangles found (not an STL file?)')
-    return tris
+    return tris, None
 
 
 def weld(tris):
@@ -105,9 +113,10 @@ def decimate(verts, faces, target, agg, preserve_border):
     return v, f.astype(np.int64), 'quadric (fast-simplification)'
 
 
-def encode(verts, faces, lo, hi, anchors):
-    """uint16 positions over [lo, hi], then indices; 6 zero-area anchor triangles keep the
-    original bounding box (the page centres and scales the model from it)."""
+def encode(verts, faces, lo, hi, anchors, face_col=None):
+    """uint16 positions over [lo, hi], then indices, then (optional) uint8 palette index per
+    triangle; 6 zero-area anchor triangles keep the original bounding box (the page centres
+    and scales the model from it)."""
     base = len(verts)
     verts = np.vstack([verts, anchors])
     faces = np.vstack([faces, np.repeat(np.arange(base, base + len(anchors))[:, None], 3, 1)])
@@ -115,6 +124,8 @@ def encode(verts, faces, lo, hi, anchors):
     q = np.clip(np.round((verts - lo) / ext * 65535), 0, 65535).astype('<u2')
     ib = 2 if len(verts) <= 65535 else 4
     payload = q.tobytes() + faces.astype('<u2' if ib == 2 else '<u4').tobytes()
+    if face_col is not None:
+        payload += np.concatenate([face_col, np.zeros(len(anchors), np.int64)]).astype('u1').tobytes()
     return payload, len(verts), len(faces), ib
 
 
@@ -157,15 +168,29 @@ def main():
         ap.error('give the STL file (or --remove)')
 
     name, data = read_stl_bytes(a.stl)
-    tris = parse_stl(data)
+    tris, cols = parse_stl(data)
     verts, faces = weld(tris)
     lo, hi = verts.min(0), verts.max(0)
     anchors = np.array([verts[np.argmin(verts[:, k])] for k in range(3)] + [verts[np.argmax(verts[:, k])] for k in range(3)])
-    dv, df, how = decimate(verts, faces, a.tris, a.agg, a.preserve_border)
-    payload, nV, nT, ib = encode(dv, df, lo, hi, anchors)
+    if cols is None:
+        dv, df, how = decimate(verts, faces, a.tris, a.agg, a.preserve_border)
+        face_col, palette = None, None
+    else:
+        # Coloured model: decimate each colour on its own so faces keep their colour.
+        palette = sorted(set(cols))[:255]
+        groups = [weld(tris[cols == c]) for c in palette]
+        total = sum(len(f) for _, f in groups)
+        dv, df, fc, off = [], [], [], 0
+        for k, (gv, gf) in enumerate(groups):
+            v, f, how = decimate(gv, gf, max(12, round(a.tris * len(gf) / total)), a.agg, a.preserve_border)
+            dv.append(v); df.append(f + off); fc.append(np.full(len(f), k)); off += len(v)
+        dv, df, face_col = np.vstack(dv), np.vstack(df), np.concatenate(fc)
+    payload, nV, nT, ib = encode(dv, df, lo, hi, anchors, face_col)
     meta = {'format': 'accwing-mesh-1', 'source': name, 'sourceTriangles': int(len(tris)),
             'triangles': int(nT), 'vertices': int(nV), 'indexBytes': ib,
             'min': [round(float(x), 6) for x in lo], 'max': [round(float(x), 6) for x in hi]}
+    if palette:
+        meta['palette'] = palette
     before, after = write_html(a.html, lambda nl: block(meta, payload, nl))
 
     shrink = np.abs(np.concatenate([dv.min(0) - lo, hi - dv.max(0)])).max() / (np.ptp(verts, axis=0).max() or 1)
