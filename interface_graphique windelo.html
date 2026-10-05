@@ -3164,6 +3164,15 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         //   awsKt     vent apparent local en noeuds (pour Cd_fric ; defaut 15 kt)
         function aeroCoeffs(aoaRad, camberPct, awsKt){
             const aoaDeg = aoaRad * 180/Math.PI;
+            // Reverse flow (|AoA| > 90°, wind on the trailing edge): same plate seen from its other end,
+            // i.e. the reversed chord at AoA − 180° with the camber sign flipped. A sharp trailing edge
+            // makes a poor leading edge, so lift −25 % / drag +25 %, blended in from 90° (where both ends
+            // give the same broadside plate) to 135°. Before this, every angle past 90° gave CL 0 / CD 1.2.
+            if (Math.abs(aoaDeg) > 90) {
+                const r = aeroCoeffs((aoaDeg - 180 * Math.sign(aoaDeg)) * Math.PI / 180, -camberPct, awsKt);
+                const w = smoothstep(90, 135, Math.abs(aoaDeg));
+                return { CL: r.CL * (1 - 0.25 * w), CD: r.CD * (1 + 0.25 * w), effAoA: r.effAoA, stalled: r.stalled };
+            }
             const side = (aoaDeg + CFD.camPerDeg*camberPct) >= 0 ? 1 : -1;   // amure (cote portance)
             const aAbs = Math.abs(aoaDeg), cAbs = Math.min(15, Math.abs(camberPct));
             let CLmag;
@@ -4899,8 +4908,6 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
                     let aw_vx = tw_vx - b_vx, aw_vy = tw_vy - b_vy;
                     let lAWS = Math.sqrt(aw_vx*aw_vx + aw_vy*aw_vy);
                     let lAWA = Math.atan2(-aw_vy, -aw_vx);
-                    let tackSign = -Math.sign(aw_vx); if (tackSign === 0) tackSign = 1;
-
                     let relWindAngle = lAWA + Math.PI / 2;
                     relWindAngle = Math.atan2(Math.sin(relWindAngle), Math.cos(relWindAngle));
                     let absRelWind = Math.abs(relWindAngle);
@@ -4910,10 +4917,10 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
                         else if (portantHystActive && absRelWind > PORTANT_EXIT) portantHystActive = false;
                     }
 
-                    if (portantHystActive) {
-                        optRotations.push(lAWA + (Math.PI / 2) * tackSign);
-                        optCamberVals.push(0);
-                    } else if (absRelWind > DOWNWIND_THRESHOLD) {
+                    // Downwind (portantHystActive) is no longer forced to a broadside wing: the optimiser
+                    // below searches incidence 0–90° on both tacks, which includes that drag-only setting,
+                    // so it picks the best thrust there too. portantHystActive still drives the mode label.
+                    if (absRelWind > DOWNWIND_THRESHOLD) {
                         optRotations.push(lAWA);
                         optCamberVals.push(0);
                     } else {
