@@ -3719,6 +3719,28 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             const lo=_cfdIp1(cols, grid[i], c), hi=_cfdIp1(cols, grid[i+1], c);
             return lo+(hi-lo)*t;
         }
+        // Lift-coefficient magnitude from the matrix for camber c (0–15 %) at an incidence m (0–90°) on the
+        // SAME side as the camber: CFD matrix up to 45°, then blended (45→60°) into the flat-plate sin 2α.
+        function _clMatrix(c, m) {
+            if (m <= 45) return _cfdIp2(CFD.cl, CFD.clCam, CFD.clAlpha, c, m);
+            const f = smoothstep(45, 60, m);
+            return _cfdIp2(CFD.cl, CFD.clCam, CFD.clAlpha, c, 45) * (1 - f) + Math.max(0, Math.sin(2 * Math.min(90, m) * Math.PI / 180)) * f;
+        }
+        // Signed CL for a camber c >= 0 at a signed incidence a (deg, |a| <= 90), and the effective angle.
+        //  a >= 0 : incidence and camber on the same side → the matrix.
+        //  a <  0 : incidence AGAINST the camber (not in the matrix). Lift falls linearly from CL(c, 0) to 0 at
+        //           the zero-lift angle −camPerDeg·c (the matrix's own CL(c,0)/(camPerDeg·c) ≈ its 0 % lift
+        //           slope, as thin-airfoil theory gives), then builds on the other side like the 0 % camber
+        //           row at the effective angle a + camPerDeg·c (the camber shift fades out from 20° to 45°).
+        // Continuous everywhere. The former model used the full matrix value of |a| and only flipped its sign
+        // at the zero-lift angle, so CL jumped from −CLmax to +CLmax there: in manual the wing could sit on
+        // that angle and the thrust flickered push / pull every frame.
+        function _clSigned(c, a) {
+            if (a >= 0) return { CL: _clMatrix(c, a), eff: a + CFD.camPerDeg * c };
+            const ae = a + CFD.camPerDeg * c * (1 - smoothstep(20, 45, -a));
+            if (ae >= 0) return { CL: c > 0 ? _clMatrix(c, 0) * ae / (CFD.camPerDeg * c) : 0, eff: ae };
+            return { CL: -_clMatrix(0, -ae), eff: ae };
+        }
         // aeroCoeffs : Cl et Cd (total) issus de la matrice CFD.
         //   aoaRad    angle d'attaque geometrique (rad)
         //   camberPct cambrure max en % de corde (le signe porte l'amure)
@@ -3734,19 +3756,17 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
                 const w = smoothstep(90, 135, Math.abs(aoaDeg));
                 return { CL: r.CL * (1 - 0.25 * w), CD: r.CD * (1 + 0.25 * w), effAoA: r.effAoA, stalled: r.stalled };
             }
-            const side = (aoaDeg + CFD.camPerDeg*camberPct) >= 0 ? 1 : -1;   // amure (cote portance)
+            // Work with camber >= 0 (the matrix quadrant) and flip the result back: CL(a, −c) = −CL(−a, c).
+            const s = camberPct < 0 ? -1 : 1;
             const aAbs = Math.abs(aoaDeg), cAbs = Math.min(15, Math.abs(camberPct));
-            let CLmag;
-            if (aAbs <= 45) CLmag = _cfdIp2(CFD.cl, CFD.clCam, CFD.clAlpha, cAbs, aAbs);
-            else { const ar = Math.min(90,aAbs)*Math.PI/180; CLmag = Math.max(0, Math.sin(2*ar)); } // >45 deg hors matrice: plaque plane
+            const L = _clSigned(cAbs, s * aoaDeg);
             const cdfric = _cfdIp1(CFD.awsKt, CFD.cdFric, (typeof awsKt==='number' ? awsKt : 15));
             let extra;
             if (aAbs <= 45) extra = _cfdIp2(CFD.cdExtra, CFD.cdCam, CFD.cdAlpha, cAbs, aAbs);
             else { const e45=_cfdIp2(CFD.cdExtra, CFD.cdCam, CFD.cdAlpha, cAbs, 45); const f=Math.min(1,(aAbs-45)/45); extra = e45 + ((1.2 - cdfric) - e45)*f; } // >45 deg hors matrice : plaque plane
             const CD = cdfric + extra;   // v3 : downwash + induite + Cl_max(cambrure) DEJA dans les donnees
-            const effDeg = aAbs + CFD.camPerDeg*cAbs;     // angle effectif (geo + cambrure)
-            const stalled = effDeg >= 20;                  // decrochage indicatif (visuel)
-            return { CL: side*CLmag, CD: CD, effAoA: side*effDeg*Math.PI/180, stalled };
+            const stalled = Math.abs(L.eff) >= 20;         // decrochage indicatif (visuel)
+            return { CL: s * L.CL, CD: CD, effAoA: s * L.eff * Math.PI/180, stalled };
         }
 
         const CONFIG = {
