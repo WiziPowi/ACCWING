@@ -77,6 +77,59 @@ Mettre a jour le modele integre / update the embedded model
     (option --tris 60000 pour plus de detail / for more detail)
 
 ================================================================
+  ECRAN DE BARRE (tactile, mer / Garmin)  -  HELM SCREEN
+================================================================
+La page s'ouvre sur l'ecran BARRE : vue de dessus (bateau, 4 ailes
+a leur angle reel, vent reel / apparent, poussee, optimum en
+pointilles), 6 grands chiffres et de gros boutons.
+  - MODE : MANUEL / AUTO / DRAPEAU (ailes dans le vent, sans poussee).
+  - ANGLE AILES et CAMBRURE : boutons - / + (maintenir = repetition).
+  - REGLAGE RAPIDE : A PLAT, OPTIMUM (applique l'optimum une fois).
+  - RIS : PLEIN / 1 RIS / 2 RIS / AFFALER.
+Bouton INGENIERIE (en haut) : l'ancienne page complete (moteur, IMU,
+vues 2D/3D, polaire). Maintenir 1 s pour y aller ; BARRE pour revenir.
+
+Securites tactiles :
+  - Actions qui font bouger l'aile = MAINTENIR 1 s : AUTO (activation),
+    ris / affaler, armer le moteur, aller a la page Ingenierie.
+  - Les touches tres breves (gouttes, embruns) et a plusieurs doigts
+    sont ignorees (CONFIG.helm.minTouchMs = 40 ms).
+  - VERROU : bloque tout l'ecran sauf l'ARRET D'URGENCE ;
+    deverrouiller = maintenir 1,5 s.
+  - AIDE : touchez ensuite n'importe quel element pour savoir a quoi
+    il sert (remplace les info-bulles, inutilisables au doigt).
+ARRET D'URGENCE : toujours en haut a droite, sur toutes les pages.
+Un toucher coupe le moteur ; REARMER = maintenir 1,5 s.
+Affichage : JOUR (contraste maximal au soleil) -> NUIT -> NUIT ROUGE
+(vision de nuit) ; attenuation 100/75/50/30 % la nuit.
+Alarmes (bandeau + bip, bouton ACQUITTER) : surchauffe / defaut /
+perte de liaison moteur, perte IMU, vent apparent >= 25 nds
+(CONFIG.helm.windAlarmKt). Vue 3D : FLUIDE / ECO / PAUSE (bouton dans
+le panneau 3D) pour economiser le processeur.
+
+A FAIRE COTE BATEAU (hors de ce fichier) :
+  - Garmin n'ouvre pas un fichier HTML : la page doit etre servie par
+    un boitier a bord (Raspberry Pi / controleur ACCWing) sur le reseau
+    Garmin, via le programme OneHelm (HTML5, decouverte mDNS + UPnP ;
+    partenariat Garmin a prevoir).
+  - Le navigateur du traceur n'a pas Web Serial : le pilotage moteur /
+    IMU doit passer dans ce boitier ; la page lui enverra les ordres.
+  - Vent et vitesse viendront du NMEA 2000 (puce DONNEES = SIMULATION
+    tant que ce n'est pas branche).
+  - Securite perte de liaison : le controleur doit mettre les ailes en
+    drapeau seul si l'ecran ne repond plus (chien de garde). L'ecran
+    ne peut pas le garantir.
+
+The page opens on the HELM screen (big numbers, big buttons, top
+view of the wings). ENGINEERING (hold 1 s) is the former full page.
+Wing-moving actions need a 1 s hold; very short / multi-finger
+touches are ignored; LOCK leaves only the EMERGENCY STOP live;
+HELP explains any item you tap; DAY / NIGHT / RED NIGHT themes.
+On a Garmin plotter the page must be served by an onboard box
+(OneHelm), which also has to drive the motors (no Web Serial on the
+plotter), read NMEA 2000 and feather the wings on link loss.
+
+================================================================
   MOTEUR / WEB SERIAL
 ================================================================
 Le pilotage du moteur (CubeMars AK45-36) necessite un navigateur

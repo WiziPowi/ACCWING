@@ -12,9 +12,9 @@
           /* Option A — "Marine cockpit pro" palette (B&G / Garmin inspired).
              Deep navy background + amber-not-orange Pro accent for a distinct
              cockpit feel vs the original neutral-gray + Material colours. */
-          --bg-0:#06101c; --bg-1:#0d1828; --bg-2:#142233; --bg-3:#1f2d40;
-          --fg-0:#eef2f8; --fg-1:#b8c2d0; --fg-2:#7a8696; --fg-3:#4f5d70;
-          --line:#1c2a3d;
+          --bg-0:#0b0d10; --bg-1:#14171c; --bg-2:#1c2026; --bg-3:#2f353e;
+          --fg-0:#eef2f8; --fg-1:#b8c2d0; --fg-2:#a4aebb; --fg-3:#95a0ad;
+          --line:#2b3038;
           --acc-coach:#1FC8E8; --acc-auto:#2DD489; --acc-pro:#FFA424;
           --warn:#FF4D4D;
         }
@@ -23,7 +23,7 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Inter', 'Montserrat', system-ui, 'Segoe UI', Arial, sans-serif;
-            background-color: #06101c;
+            background-color: #0b0d10;
             color: #d0d4da;
             height: 100vh;
             overflow: hidden;
@@ -54,8 +54,8 @@
         /* --- Top Status Bar --- */
         .app-header {
             grid-area: header;
-            background: linear-gradient(180deg, #142233 0%, #13161b 100%);
-            border-bottom: 1px solid #1c2a3d;
+            background: linear-gradient(180deg, #1c2026 0%, #13161b 100%);
+            border-bottom: 1px solid #2b3038;
             display: flex;
             align-items: center;
             padding: 0 14px;
@@ -63,7 +63,7 @@
             font-size: 11px;
             letter-spacing: 1.5px;
             text-transform: uppercase;
-            color: #4f5d70;
+            color: #95a0ad;
             user-select: none;
         }
         .app-header .app-title {
@@ -72,28 +72,28 @@
             font-size: 12px;
             letter-spacing: 2px;
         }
-        .app-header .separator { width: 1px; height: 16px; background: #1c2a3d; }
-        .app-header .version { color:#4a5060; font-size:10px; }
+        .app-header .separator { width: 1px; height: 16px; background: #2b3038; }
+        .app-header .version { color:#8a95a3; font-size:10px; }
         .header-status { display: flex; align-items: center; gap: 6px; }
         .header-status .dot { width: 6px; height: 6px; border-radius: 50%; background: #2DD489; box-shadow: 0 0 6px rgba(45,212,137,0.5); }
 
         /* --- Panel Base --- */
         .panel {
-            background: #0d1828;
-            border: 1px solid #1c2a3d;
+            background: #14171c;
+            border: 1px solid #2b3038;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
         .panel-header {
-            background: linear-gradient(180deg, #142233 0%, #15181e 100%);
+            background: linear-gradient(180deg, #1c2026 0%, #15181e 100%);
             padding: 6px 12px;
             font-size: 10px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.8px;
-            color: #4f5d70;
-            border-bottom: 1px solid #1c2a3d;
+            color: #95a0ad;
+            border-bottom: 1px solid #2b3038;
             flex-shrink: 0;
             display: flex;
             align-items: center;
@@ -115,7 +115,7 @@
         .sidebar {
             grid-area: sidebar;
             background: #111418;
-            border-right: 1px solid #1c2a3d;
+            border-right: 1px solid #2b3038;
         }
         .sidebar .panel-body {
             padding: 10px 12px;
@@ -137,11 +137,11 @@
         /* --- Section Headers inside sidebar --- */
         .section-title {
             font-size: 10px;
-            color: #7a828f;
+            color: #a4aebb;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             padding: 8px 0 4px 0;
-            border-top: 1px solid #142233;
+            border-top: 1px solid #1c2026;
             margin-top: 4px;
             font-weight: 600;
             user-select: none;
@@ -152,9 +152,9 @@
         .mode-toggles { display: flex; gap: 4px; margin-bottom: 6px; }
         .btn-toggle {
             flex: 1;
-            background: #142233;
-            color: #555b66;
-            border: 1px solid #1f2d40;
+            background: #1c2026;
+            color: #95a0ad;
+            border: 1px solid #2f353e;
             padding: 6px 2px;
             border-radius: 3px;
             font-size: 9px;
@@ -172,7 +172,7 @@
         }
         /* Hide the native checkbox/radio but keep it activatable via the label tap. */
         .btn-toggle input { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
-        .btn-toggle:hover { border-color: #3a3f48; color: #7a8696; }
+        .btn-toggle:hover { border-color: #3a3f48; color: #a4aebb; }
         .btn-toggle.active-coach { background: rgba(31, 200, 232, 0.08); color: #1FC8E8; border-color: rgba(31,200,232,0.35); box-shadow: 0 0 8px rgba(31,200,232,0.1); }
         .btn-toggle.active-auto { background: rgba(45, 212, 137, 0.08); color: #2DD489; border-color: rgba(45,212,137,0.35); box-shadow: 0 0 8px rgba(45,212,137,0.1); }
         .btn-toggle.active-pro { background: rgba(255, 164, 36, 0.08); color: #FFA424; border-color: rgba(255,164,36,0.35); box-shadow: 0 0 8px rgba(255,164,36,0.1); }
@@ -180,7 +180,7 @@
         .model-toggles { display: flex; gap: 4px; margin-bottom: 6px; }
         .model-toggles.wrap { flex-wrap: wrap; }
         #stl-load-btn { width: 100%; margin-top: 8px; margin-bottom: 4px; }
-        .stl-status { font-size: 9px; color: #7a828f; letter-spacing: 0.3px; line-height: 1.35; min-height: 12px; padding: 0 1px 4px; }
+        .stl-status { font-size: 9px; color: #a4aebb; letter-spacing: 0.3px; line-height: 1.35; min-height: 12px; padding: 0 1px 4px; }
         .stl-status.err { color: #FF6B6B; }
         .stl-status.ok  { color: #8fc6a0; }
         /* Compass silhouettes — show one set depending on selected boat model. */
@@ -195,10 +195,10 @@
             background: #0e1015;
             padding: 6px 8px;
             border-radius: 3px;
-            border: 1px solid #142233;
+            border: 1px solid #1c2026;
             margin-bottom: 4px;
         }
-        .radio-label { display: flex; align-items: center; gap: 6px; font-size: 11px; cursor: pointer; color: #9099a6; padding: 2px 0; }
+        .radio-label { display: flex; align-items: center; gap: 6px; font-size: 11px; cursor: pointer; color: #c3cad3; padding: 2px 0; }
         .radio-label input[type="radio"] {
             -webkit-appearance: none; appearance: none; margin: 0;
             width: 12px; height: 12px; border: 1px solid #3a3f48; border-radius: 50%;
@@ -214,8 +214,8 @@
 
         /* --- Slider Controls --- */
         .controle-groupe { display: flex; flex-direction: column; margin-bottom: 2px; }
-        .labels { display: flex; justify-content: space-between; font-size: 11px; color: #4f5d70; padding: 0 2px; }
-        .labels span { color: #9099a6; font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace; font-weight: 600; font-size: 11px; }
+        .labels { display: flex; justify-content: space-between; font-size: 11px; color: #95a0ad; padding: 0 2px; }
+        .labels span { color: #c3cad3; font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace; font-weight: 600; font-size: 11px; }
         .slider-wrapper { position: relative; width: 100%; padding-bottom: 8px; }
 
         input[type="range"] {
@@ -224,17 +224,17 @@
             height: 18px;
         }
         input[type="range"]::-webkit-slider-runnable-track {
-            width: 100%; height: 3px; background: #1f2d40; border-radius: 3px; border: none;
+            width: 100%; height: 3px; background: #2f353e; border-radius: 3px; border: none;
         }
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             height: 14px; width: 6px; border-radius: 3px;
-            background: #4f5d70; border: 1px solid #8090a0;
+            background: #95a0ad; border: 1px solid #8090a0;
             margin-top: -6px;
             box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
             transition: background-color 0.15s;
         }
-        input[type="range"]:hover::-webkit-slider-thumb { background: #9099a6; }
+        input[type="range"]:hover::-webkit-slider-thumb { background: #c3cad3; }
         .auto-active input[type="range"]::-webkit-slider-thumb { background: #2DD489; border-color: #5FE3B0; box-shadow: 0 0 6px rgba(45,212,137,0.3); }
         .auto-active input[type="range"] { pointer-events: none; }
 
@@ -274,7 +274,7 @@
         .aile-contour { fill: rgba(20, 24, 30, 0.92); stroke: #c5ccd4; stroke-width: 1.4; stroke-linejoin: round; position: relative; z-index: 10; filter: drop-shadow(0 0 3px rgba(0,0,0,0.8)); }
         .batten-path { fill: none; stroke: #c0c0c0; stroke-width: 2.5; stroke-linecap: round; }
         .mast-circle { fill: #111418; stroke: #aaa; stroke-width: 1.5; }
-        .section-label { fill: #4a5060; font-size: 11px; text-transform: uppercase; font-weight: 500; }
+        .section-label { fill: #8a95a3; font-size: 11px; text-transform: uppercase; font-weight: 500; }
         .ghost-contour { fill: none; stroke: #1FC8E8; stroke-width: 1.5; stroke-dasharray: 4 4; opacity: 0.7; pointer-events: none; }
 
         /* --- 3D View Panel --- */
@@ -287,13 +287,13 @@
 
         /* --- System Health: per-motor + comms temperatures --- */
         .health-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 4px; }
-        .health-item { background: #0e1015; border: 1px solid #1c2a3d; border-radius: 3px; padding: 6px 8px; }
-        .health-item .health-label { font-size: 9px; color: #7a8696; letter-spacing: 0.5px; text-transform: uppercase; }
+        .health-item { background: #0e1015; border: 1px solid #2b3038; border-radius: 3px; padding: 6px 8px; }
+        .health-item .health-label { font-size: 9px; color: #a4aebb; letter-spacing: 0.5px; text-transform: uppercase; }
         .health-item .health-val { font-family: 'JetBrains Mono', Consolas, monospace; font-weight: 700; font-size: 15px; color: var(--fg-0); margin-top: 2px; }
         .health-item.warn .health-val { color: #FFA424; }
         .health-item.crit .health-val { color: #FF4D4D; }
         .health-item .health-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #2DD489; margin-right: 4px; vertical-align: middle; }
-        .health-item.off  .health-dot { background: #4f5d70; }
+        .health-item.off  .health-dot { background: #95a0ad; }
         .health-item.warn .health-dot { background: #FFA424; }
         .health-item.crit .health-dot { background: #FF4D4D; }
         /* Connection state: green border+dot when the motor link is up, red when down. */
@@ -317,8 +317,8 @@
         /* --- Telemetry Bar --- */
         .telemetry {
             grid-area: telem;
-            background: linear-gradient(180deg, #111418 0%, #06101c 100%);
-            border-top: 1px solid #1c2a3d;
+            background: linear-gradient(180deg, #111418 0%, #0b0d10 100%);
+            border-top: 1px solid #2b3038;
             display: flex;
             align-items: stretch;
             padding: 6px 10px;
@@ -329,7 +329,7 @@
             background: #0a0d11;
             padding: 8px 12px;
             border-radius: 3px;
-            border: 1px solid #142233;
+            border: 1px solid #1c2026;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -337,7 +337,7 @@
         }
         .bloc-capteur-titre {
             font-size: 10px;
-            color: #7a828f;
+            color: #a4aebb;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             font-weight: 600;
@@ -353,7 +353,7 @@
             background: #0a0d11;
             padding: 8px 16px;
             border-radius: 3px;
-            border: 1px solid #142233;
+            border: 1px solid #1c2026;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -361,7 +361,7 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            color: #7a828f;
+            color: #a4aebb;
             white-space: nowrap;
         }
 
@@ -369,7 +369,7 @@
         .coach-element { display: none; }
         .coach-active .coach-element { display: inline-block; }
         .coach-active .ghost-marker { display: block; }
-        .pro-legende { display: none; margin-top: 6px; font-size: 10px; color: #4f5d70; padding: 6px 8px; background: #0e1015; border-radius: 3px; border: 1px solid #142233; }
+        .pro-legende { display: none; margin-top: 6px; font-size: 10px; color: #95a0ad; padding: 6px 8px; background: #0e1015; border-radius: 3px; border: 1px solid #1c2026; }
         .pro-active .pro-legende { display: block; }
         .pro-only { display: none; }
         .pro-active .pro-only { display: block; }
@@ -377,7 +377,7 @@
         /* --- Scrollbar --- */
         .panel-body::-webkit-scrollbar { width: 4px; }
         .panel-body::-webkit-scrollbar-track { background: transparent; }
-        .panel-body::-webkit-scrollbar-thumb { background: #1f2d40; border-radius: 3px; }
+        .panel-body::-webkit-scrollbar-thumb { background: #2f353e; border-radius: 3px; }
         .panel-body::-webkit-scrollbar-thumb:hover { background: #3a3f48; }
 
         /* --- 3D SVG responsive scaling --- */
@@ -396,7 +396,7 @@
             padding: 4px 16px 6px 16px;
             margin-bottom: 2px;
             background: #0e1015;
-            border: 1px solid #142233;
+            border: 1px solid #1c2026;
             border-radius: 3px;
             user-select: none;
         }
@@ -410,26 +410,26 @@
         }
         #compass-svg .compass-ring-outer {
             fill: #0a0d11;
-            stroke: #1c2a3d;
+            stroke: #2b3038;
             stroke-width: 1;
         }
         #compass-svg .compass-ring-inner {
             fill: none;
-            stroke: #1c2a3d;
+            stroke: #2b3038;
             stroke-width: 0.5;
             stroke-dasharray: 1 2;
         }
         #compass-svg .compass-tick-major {
-            stroke: #4a5060;
+            stroke: #8a95a3;
             stroke-width: 1;
             stroke-linecap: round;
         }
         #compass-svg .compass-tick-minor {
-            stroke: #1c2a3d;
+            stroke: #2b3038;
             stroke-width: 0.5;
         }
         #compass-svg .compass-label {
-            fill: #4f5d70;
+            fill: #95a0ad;
             font-size: 7px;
             font-family: 'Montserrat', sans-serif;
             font-weight: 600;
@@ -448,7 +448,7 @@
             pointer-events: none;
         }
         #compass-svg .beam-trimaran {
-            stroke: #4f5d70;
+            stroke: #95a0ad;
             stroke-width: 0.7;
             stroke-linecap: round;
             pointer-events: none;
@@ -470,7 +470,7 @@
             filter: drop-shadow(0 0 2px rgba(255,193,7,0.25));
         }
         #compass-svg .compass-bearing-readout {
-            fill: #9099a6;
+            fill: #c3cad3;
             font-size: 6.5px;
             font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
             font-weight: 600;
@@ -520,16 +520,16 @@
           .mobile-tabs {
             grid-area: tabs;
             display: flex;
-            background: linear-gradient(180deg, #142233 0%, #13161b 100%);
-            border-bottom: 1px solid #1c2a3d;
+            background: linear-gradient(180deg, #1c2026 0%, #13161b 100%);
+            border-bottom: 1px solid #2b3038;
             padding: 4px 6px;
             gap: 4px;
           }
           .mobile-tab {
             flex: 1;
-            background: #142233;
-            color: #4f5d70;
-            border: 1px solid #1f2d40;
+            background: #1c2026;
+            color: #95a0ad;
+            border: 1px solid #2f353e;
             padding: 6px 4px;
             border-radius: 3px;
             font-family: inherit;
@@ -643,7 +643,7 @@
         /* --- Time-series performance graph --- */
         .ts-wrapper {
             background: #0e1015;
-            border: 1px solid #142233;
+            border: 1px solid #1c2026;
             border-radius: 3px;
             padding: 6px;
             margin-bottom: 4px;
@@ -672,7 +672,7 @@
         /* --- Polar VMG diagram --- */
         .polar-wrapper {
             background: #0e1015;
-            border: 1px solid #142233;
+            border: 1px solid #1c2026;
             border-radius: 3px;
             padding: 4px 6px 6px 6px;
             margin-bottom: 4px;
@@ -684,9 +684,9 @@
             max-height: 180px;
             cursor: crosshair;
         }
-        #polar-svg .polar-ring { fill: none; stroke: #1c2a3d; stroke-width: 0.4; }
+        #polar-svg .polar-ring { fill: none; stroke: #2b3038; stroke-width: 0.4; }
         #polar-svg .polar-ring-label { fill: var(--fg-3); font-size: 5px; font-family: 'JetBrains Mono', Consolas, monospace; }
-        #polar-svg .polar-axis { stroke: #1c2a3d; stroke-width: 0.4; }
+        #polar-svg .polar-axis { stroke: #2b3038; stroke-width: 0.4; }
         #polar-svg .polar-axis-label { fill: var(--fg-3); font-size: 5.5px; font-family: 'Inter', sans-serif; font-weight: 600; }
         #polar-svg .polar-curve { fill: rgba(31, 200, 232, 0.10); stroke: var(--acc-coach); stroke-width: 1.2; stroke-linejoin: round; }
         #polar-svg .polar-curve-current { fill: rgba(255, 164, 36, 0.06); stroke: var(--acc-pro); stroke-width: 1.0; stroke-dasharray: 2 2; stroke-linejoin: round; }
@@ -710,7 +710,7 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: #142233;
+            background: #1c2026;
             color: #e6c44a;
             border: 1px solid #353a44;
             border-radius: 3px;
@@ -736,7 +736,7 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            background: #142233;
+            background: #1c2026;
             color: #c0c4cc;
             border: 1px solid #353a44;
             border-radius: 3px;
@@ -897,28 +897,374 @@
       .imu-drive-lbl{ display:flex; align-items:center; gap:6px; font-size:11px; color:var(--fg-1); margin:4px 0 6px; cursor:pointer; }
       .imu-drive-lbl input{ accent-color:#FFCB47; }
     </style>
-</head>
-<body class="coach-active mtab-controls">
+    <!-- ============ HELM PAGE + MARINE TOUCH UI (big targets, themes, alarms, lock) ============ -->
+    <style id="helm-style">
+      :root {
+        --hdr-h: 64px;
+        --hb-h: clamp(56px, 9.5vh, 84px);
+        --ui-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        /* NIGHT (default) — neutral charcoal, one colour per meaning:
+           wind = green, wings = white, thrust / optimum = cyan, warning = amber, fault = red. */
+        --u-bg:#0b0d10; --u-panel:#15181d; --u-panel2:#1e2229; --u-line:#323944;
+        --u-fg:#f3f5f8; --u-fg2:#c3cad3; --u-fg3:#95a0ad;
+        --u-sel-bg:#f3f5f8; --u-sel-fg:#0b0d10;
+        --u-wind:#2DD489; --u-wind2:#A6F2CF; --u-wing:#e3e8ee; --u-wing-edge:#95a0ad;
+        --u-thrust:#1FC8E8; --u-opt:#1FC8E8; --u-boat:#2f353e; --u-boat-edge:#7d8896;
+        --u-warn:#FFB020; --u-warn-fg:#0b0d10; --u-crit:#FF4D4D; --u-ok:#2DD489;
+        --u-estop:#E3262B; --u-estop-fg:#ffffff;
+      }
+      /* DAY — maximum contrast for direct sunlight (black on white, bold). */
+      body.sun-mode {
+        --u-bg:#ffffff; --u-panel:#f2f4f6; --u-panel2:#e4e8ec; --u-line:#aeb6c0;
+        --u-fg:#05070a; --u-fg2:#252c35; --u-fg3:#4a5562;
+        --u-sel-bg:#05070a; --u-sel-fg:#ffffff;
+        --u-wind:#00813c; --u-wind2:#00813c; --u-wing:#2a323c; --u-wing-edge:#05070a;
+        --u-thrust:#006f9e; --u-opt:#006f9e; --u-boat:#d3d9df; --u-boat-edge:#4a5562;
+        --u-warn:#B25E00; --u-warn-fg:#ffffff; --u-crit:#C8102E; --u-ok:#00813c;
+      }
+      /* RED NIGHT — red on black only, keeps the crew's night vision. */
+      body.red-mode {
+        --u-bg:#000000; --u-panel:#0c0000; --u-panel2:#170000; --u-line:#4a0700;
+        --u-fg:#ff3b2f; --u-fg2:#d82a1f; --u-fg3:#a11b12;
+        --u-sel-bg:#d82a1f; --u-sel-fg:#000000;
+        --u-wind:#ff4a3d; --u-wind2:#ff4a3d; --u-wing:#c8241a; --u-wing-edge:#ff3b2f;
+        --u-thrust:#ff6a5f; --u-opt:#ff6a5f; --u-boat:#240000; --u-boat-edge:#8a140a;
+        --u-warn:#ff6a5f; --u-warn-fg:#000000; --u-crit:#ff2d20; --u-ok:#ff4a3d;
+        --u-estop:#b3140c; --u-estop-fg:#000000;
+        background:#000;
+      }
+      body.red-mode .panel, body.red-mode .telemetry, body.red-mode .mobile-tabs,
+      body.red-mode #mt-overlay, body.red-mode #imu-overlay { filter:url(#nv-red); }
+      body.sun-mode .app-header { filter:none; }   /* the header has its own day colours (no inversion) */
 
-    <!-- === HEADER BAR === -->
+      /* ---- One font family everywhere; even-width digits so numbers don't jump ---- */
+      body, button, input, select, textarea { font-family:var(--ui-font); }
+      .labels span, .dashboard-valeur, .health-item .health-val, .ts-legend, .polar-legend,
+      #compass-svg .compass-label, #compass-svg .compass-bearing-readout, #polar-svg text {
+        font-family:var(--ui-font) !important; font-variant-numeric:tabular-nums; }
+      body { touch-action:manipulation; -webkit-text-size-adjust:100%; }
+
+      /* ---- Grid rows follow the taller header ---- */
+      body { grid-template-rows:var(--hdr-h) minmax(0,1fr) auto; }
+      @media (max-width:1100px) and (min-width:781px) {
+        body { grid-template-rows:var(--hdr-h) minmax(0,1fr) minmax(0,1fr) auto; }
+      }
+      @media (max-width:780px), (max-height:500px) and (orientation:landscape) and (max-width:900px) {
+        :root { --hdr-h:56px; }
+        body { grid-template-rows:calc(var(--hdr-h) + env(safe-area-inset-top, 0px)) 44px minmax(0,1fr) auto; }
+        .app-header { height:var(--hdr-h); }
+        .mobile-tab { font-size:12px; }
+      }
+      @media (max-height:500px) and (orientation:landscape) and (max-width:900px) {
+        :root { --hdr-h:48px; }
+        body { grid-template-rows:var(--hdr-h) 40px minmax(0,1fr) auto; }
+      }
+
+      /* ---- Header: status chips + big buttons + emergency stop (same place on every page) ---- */
+      .app-header { height:var(--hdr-h); background:var(--u-panel); border-bottom:1px solid var(--u-line);
+        color:var(--u-fg2); padding:0 8px 0 14px; gap:10px; letter-spacing:normal; text-transform:none;
+        font-size:14px; position:relative; z-index:80; overflow:hidden; }
+      .app-title { display:flex; align-items:center; gap:8px; white-space:nowrap; flex:none; }
+      .app-title .brand { font-weight:800; letter-spacing:3px; color:var(--u-fg); font-size:18px; }
+      .app-title .boat { font-weight:800; color:var(--u-fg); font-size:15px; letter-spacing:1px; padding:3px 8px;
+        border:2px solid var(--u-line); border-radius:7px; }
+      .hdr-chips { display:flex; gap:6px; min-width:0; overflow:hidden; flex:1 1 auto; }
+      .chip { display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:9px; flex:none;
+        background:var(--u-panel2); border:1px solid var(--u-line); white-space:nowrap; font-size:13px; }
+      .chip-k { color:var(--u-fg3); font-weight:800; letter-spacing:.6px; font-size:11px; }
+      .chip-v { color:var(--u-fg); font-weight:800; letter-spacing:.3px; }
+      .cdot { width:11px; height:11px; border-radius:50%; background:var(--u-fg3); flex:none; }
+      .chip.ok .cdot { background:var(--u-ok); }
+      .chip.warn .cdot { background:var(--u-warn); }
+      .chip.crit .cdot { background:var(--u-crit); }
+      .chip.warn { border-color:var(--u-warn); }
+      .chip.crit { border-color:var(--u-crit); }
+      .hdr-actions { display:flex; align-items:stretch; gap:6px; margin-left:auto; flex:none; height:100%; padding:6px 0; }
+      .hbtn { min-width:58px; display:inline-flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+        padding:2px 8px; border-radius:10px; border:1.5px solid var(--u-line); background:var(--u-panel2); color:var(--u-fg);
+        font:800 11px/1.1 var(--ui-font); letter-spacing:.5px; cursor:pointer; white-space:nowrap; user-select:none;
+        -webkit-user-select:none; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
+      .hbtn .ico { width:22px; height:22px; }
+      .hbtn.sel, .hbtn[aria-pressed="true"] { background:var(--u-sel-bg); color:var(--u-sel-fg); border-color:var(--u-sel-bg); }
+      .hbtn:active, .hb:active, .btn-toggle:active, .stp:active, .mini-btn:active { transform:scale(.96); }
+      .hbtn.lang-toggle { margin:0; font-size:15px; letter-spacing:1px; }
+      .ico { width:1.3em; height:1.3em; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex:none; }
+      #btnDim { display:none; }
+      body.night-ui #btnDim { display:inline-flex; }
+      /* Emergency stop */
+      #mt-estop { display:inline-flex; align-items:center; gap:8px; width:auto; min-width:150px; height:auto; min-height:0; margin:0;
+        flex:none; padding:0 14px; background:var(--u-estop); color:var(--u-estop-fg); border:2px solid rgba(0,0,0,.35);
+        border-radius:10px; box-shadow:none; font:900 16px/1.05 var(--ui-font); letter-spacing:.6px; text-transform:uppercase;
+        cursor:pointer; touch-action:manipulation; }
+      #mt-estop .estop-ico { font-size:24px; line-height:1; }
+      #mt-estop .lbl { white-space:normal; text-align:left; max-width:6.6em; }
+      #mt-estop.mt-estopped { background:#5b0f1c; color:#fff; border-color:var(--u-crit); }
+      /* Chips keep their key (MOTEUR / IMU…) so two "HORS LIGNE" are never ambiguous; fewer chips on smaller screens. */
+      @media (max-width:1280px) { #chipData, .app-title .brand { display:none; } }
+      @media (max-width:1100px) { #chipMode { display:none; } }
+      @media (max-width:860px)  { .hdr-chips { display:none; } .app-header { justify-content:space-between; } }
+      @media (max-width:560px)  {
+        .app-header { padding:0 6px; gap:4px; }
+        .app-title { display:none; }
+        .hdr-actions { gap:4px; margin-left:0; width:100%; justify-content:space-between; padding:5px 0; }
+        .hbtn { min-width:46px; padding:2px 4px; flex:1 1 0; }
+        .hbtn .hlbl { display:none; }
+        .hbtn .ico { width:24px; height:24px; }
+        #mt-estop { min-width:112px; padding:0 8px; font-size:13px; gap:5px; }
+        #mt-estop .estop-ico { font-size:18px; }
+        body.night-ui #btnDim { display:none; }
+      }
+
+      /* ---- Alarm banner, toast, help bubble, lock shield, dimmer ---- */
+      #alarm-bar { position:fixed; left:0; right:0; top:var(--hdr-h); z-index:90; display:flex; align-items:center; gap:12px;
+        padding:8px 12px; min-height:62px; background:var(--u-warn); color:var(--u-warn-fg);
+        font:800 clamp(15px, 2.3vh, 21px)/1.2 var(--ui-font); border-bottom:2px solid rgba(0,0,0,.35); }
+      #alarm-bar[hidden] { display:none; }
+      #alarm-bar.crit { background:var(--u-crit); color:#fff; }
+      #alarm-bar.info { background:var(--u-panel2); color:var(--u-fg); border-bottom-color:var(--u-line); }
+      #alarm-bar.crit:not(.acked) .alarm-ico { animation:uiBlink 1s steps(2, start) infinite; }
+      #alarm-bar .alarm-ico { width:34px; height:34px; }
+      .alarm-text { flex:1; min-width:0; display:flex; flex-direction:column; }
+      #alarmMore { font-weight:600; font-size:.82em; }
+      #alarm-bar .hbtn { height:48px; color:inherit; border-color:currentColor; background:transparent; }
+      #alarm-bar.acked #alarmAck, #alarm-bar.info #alarmAck { display:none; }
+      @keyframes uiBlink { to { visibility:hidden; } }
+      #ui-toast { position:fixed; left:50%; bottom:22px; transform:translateX(-50%); z-index:100; max-width:90vw;
+        background:var(--u-fg); color:var(--u-bg); padding:12px 20px; border-radius:12px; text-align:center;
+        font:800 17px/1.3 var(--ui-font); opacity:0; transition:opacity .2s; pointer-events:none; }
+      #ui-toast.show { opacity:1; }
+      #help-bubble { position:fixed; z-index:101; max-width:min(440px, 92vw); background:var(--u-panel); color:var(--u-fg);
+        border:2px solid var(--u-opt); border-radius:12px; padding:12px 16px; font:600 17px/1.4 var(--ui-font);
+        box-shadow:0 8px 28px rgba(0,0,0,.45); display:none; }
+      #help-bubble.show { display:block; }
+      body.help-mode { cursor:help; }
+      body.help-mode #btnHelp { outline:3px solid var(--u-opt); outline-offset:-3px; }
+      #lock-shield { position:fixed; inset:0; z-index:70; display:none; background:rgba(0,0,0,.12); touch-action:none; }
+      body.locked #lock-shield { display:block; }
+      body.locked .app-header .hbtn:not(#btnLock), body.locked .app-header .chip { opacity:.3; pointer-events:none; }
+      #lock-shield .lock-msg { position:absolute; left:50%; bottom:26px; transform:translateX(-50%); display:flex; gap:10px;
+        align-items:center; background:var(--u-panel); color:var(--u-fg); border:2px solid var(--u-line); border-radius:12px;
+        padding:12px 18px; font:800 18px/1.3 var(--ui-font); white-space:nowrap; max-width:92vw; }
+      #ui-dimmer { position:fixed; inset:0; z-index:99990; background:#000; opacity:0; pointer-events:none; }
+      body.sun-mode #ui-dimmer { display:none; }
+      /* Hold-to-confirm: the button fills while held. */
+      [data-hold] { position:relative; overflow:hidden; }
+      [data-hold]::after { content:''; position:absolute; inset:0; background:currentColor; opacity:.3; transform:scaleX(0);
+        transform-origin:left center; pointer-events:none; }
+      [data-hold].holding::after { transform:scaleX(1); transition:transform var(--hold-ms, 1000ms) linear; }
+
+      /* ---- Pages: HELM (default) ⇄ ENGINEERING ---- */
+      #helm { display:none; }
+      body.helm-on #helm { display:grid; }
+      body.helm-on .panel, body.helm-on .telemetry, body.helm-on .mobile-tabs,
+      body.helm-on #mt-overlay, body.helm-on #imu-overlay { display:none !important; }
+      #helm { grid-row:2 / -1; grid-column:1 / -1; min-height:0; min-width:0; overflow:hidden; padding:10px; gap:10px;
+        background:var(--u-bg); color:var(--u-fg); font-family:var(--ui-font); user-select:none; -webkit-user-select:none;
+        grid-template-columns:minmax(0, 1.15fr) minmax(0, 1fr); grid-template-rows:minmax(0, 1fr) auto;
+        grid-template-areas:"view tiles" "ctrl ctrl"; }
+      .helm-view { grid-area:view; position:relative; min-height:0; min-width:0; overflow:hidden; display:flex;
+        align-items:center; justify-content:center; background:var(--u-panel); border:1px solid var(--u-line); border-radius:14px; }
+      #helm-svg { width:100%; height:100%; display:block; }
+      .helm-badges { position:absolute; top:10px; left:10px; right:10px; display:flex; flex-wrap:wrap; gap:8px; pointer-events:none; }
+      .hbadge { font:800 clamp(13px, 2vh, 20px)/1 var(--ui-font); letter-spacing:.5px; padding:6px 10px; border-radius:8px;
+        background:var(--u-panel2); border:1.5px solid var(--u-line); color:var(--u-fg); display:inline-flex; gap:6px; align-items:center; }
+      .hbadge .ico { width:1.1em; height:1.1em; }
+      .hbadge.mode { margin-left:auto; background:var(--u-sel-bg); color:var(--u-sel-fg); border-color:var(--u-sel-bg); }
+      .helm-legend { position:absolute; left:10px; right:10px; bottom:8px; display:flex; flex-wrap:wrap; gap:4px 14px;
+        font:700 clamp(11px, 1.6vh, 14px)/1.2 var(--ui-font); color:var(--u-fg2); pointer-events:none; }
+      .helm-legend span { display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
+      .helm-legend svg { width:22px; height:12px; }
+      .helm-tiles { grid-area:tiles; display:grid; grid-template-columns:repeat(2, minmax(0, 1fr));
+        grid-template-rows:repeat(3, minmax(0, 1fr)); gap:10px; min-height:0; min-width:0; }
+      .tile { background:var(--u-panel); border:1px solid var(--u-line); border-radius:14px; padding:8px 14px;
+        display:flex; flex-direction:column; justify-content:space-between; min-height:0; min-width:0; overflow:hidden; }
+      .tile-k { font:800 clamp(12px, 1.7vh, 18px)/1.45 var(--ui-font); letter-spacing:.8px; color:var(--u-fg2);
+        white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      .tile-v { display:flex; align-items:baseline; gap:5px; line-height:1; white-space:nowrap; min-width:0; }
+      .tile-v .num { font-size:clamp(32px, min(8vh, 4.8vw), 110px); font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-1px; }
+      .tile-v .unit { font-size:clamp(15px, 2.6vh, 32px); font-weight:800; color:var(--u-fg2); }
+      .tile-v .side { font-size:clamp(13px, 2.3vh, 28px); font-weight:800; color:var(--u-fg2); margin-left:2px; }
+      .tile-sub { font:700 clamp(12px, 1.7vh, 19px)/1.2 var(--ui-font); color:var(--u-fg2); white-space:nowrap; overflow:hidden;
+        text-overflow:ellipsis; min-height:1.2em; }
+      .tile.alert { border-color:var(--u-warn); box-shadow:inset 0 0 0 2px var(--u-warn); }
+      .helm-controls { grid-area:ctrl; display:flex; flex-wrap:wrap; gap:10px; min-width:0; }
+      .hgroup { background:var(--u-panel); border:1px solid var(--u-line); border-radius:14px; padding:6px 8px 8px;
+        display:flex; flex-direction:column; gap:5px; flex:1 1 auto; min-width:0; }
+      .g-mode { flex-basis:34%; } .g-angle, .g-cam { flex-basis:24%; } .g-quick { flex-basis:30%; } .g-reef { flex-basis:56%; }
+      .hg-k { font:800 12px/1 var(--ui-font); letter-spacing:1px; color:var(--u-fg2); padding:2px 4px 0; white-space:nowrap; }
+      .hg-row { display:flex; gap:8px; min-width:0; }
+      .hb { flex:1 1 0; min-width:0; height:var(--hb-h); border-radius:11px; border:2px solid var(--u-line);
+        background:var(--u-panel2); color:var(--u-fg); font:800 clamp(13px, 2vh, 20px)/1.05 var(--ui-font); letter-spacing:.4px;
+        display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:0 6px; cursor:pointer;
+        touch-action:manipulation; -webkit-tap-highlight-color:transparent; text-align:center; }
+      .hb .ico { width:1.35em; height:1.35em; }
+      .hb.sel { background:var(--u-sel-bg); color:var(--u-sel-fg); border-color:var(--u-sel-bg); }
+      .hb.dis { opacity:.32; pointer-events:none; }
+      .hb-step { flex:0 0 var(--hb-h); font-size:clamp(30px, 4.6vh, 46px); font-weight:700; padding:0; }
+      .hval { flex:1 1 auto; min-width:3.2em; display:flex; align-items:center; justify-content:center;
+        font:800 clamp(22px, 3.8vh, 40px)/1 var(--ui-font); font-variant-numeric:tabular-nums; color:var(--u-fg); }
+      .hval.dim { color:var(--u-fg3); }
+      #helm-svg .h-ring { fill:none; stroke:var(--u-line); stroke-width:1.4; }
+      #helm-svg .h-tick { stroke:var(--u-fg3); stroke-width:.9; }
+      #helm-svg .h-tick.maj { stroke:var(--u-fg2); stroke-width:1.7; }
+      #helm-svg .h-lbl { fill:var(--u-fg2); font:800 7.5px var(--ui-font); text-anchor:middle; dominant-baseline:central; }
+      #helm-svg .h-hull { fill:var(--u-boat); stroke:var(--u-boat-edge); stroke-width:.9; }
+      #helm-svg .h-deck { fill:none; stroke:var(--u-boat-edge); stroke-width:.8; stroke-dasharray:3 2; }
+      #helm-svg .h-wing { fill:var(--u-wing); stroke:var(--u-wing-edge); stroke-width:.7; }
+      #helm-svg .h-mast { fill:var(--u-bg); stroke:var(--u-wing-edge); stroke-width:.9; }
+      #helm-svg .h-ghost { fill:none; stroke:var(--u-opt); stroke-width:1.2; stroke-dasharray:2.6 2; }
+      #helm-svg .h-true { fill:var(--u-wind); }
+      #helm-svg .h-app { fill:var(--u-panel); stroke:var(--u-wind2); stroke-width:2.2; stroke-linejoin:round; }
+      #helm-svg .h-thrust { stroke:var(--u-thrust); stroke-width:3.2; fill:none; stroke-linecap:round; }
+      #helm-svg .h-thrust-head { fill:var(--u-thrust); }
+      #helm-svg .neg .h-thrust { stroke:var(--u-warn); } #helm-svg .neg .h-thrust-head { fill:var(--u-warn); }
+      body:not(.coach-active) #helm-svg .h-ghost, body.helm-feather #helm-svg .h-ghost,
+      body:not(.coach-active) .helm-legend .lg-opt { display:none; }
+      /* Half-screen split / tablet portrait (561–860 px): same two columns, controls on 3 rows. */
+      @media (max-width:860px) {
+        #helm { grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); }
+        .tile { padding:6px 10px; }
+        .tile-k { font-size:12px; letter-spacing:.2px; }
+        .tile-v .num { font-size:clamp(28px, min(6vh, 5.6vw), 64px); }
+        .tile-v .unit, .tile-v .side { font-size:14px; }
+        .hb:not(.hb-step) { font-size:clamp(13px, 1.8vh, 16px); gap:4px; }
+        .g-mode { flex-basis:100%; } .g-angle, .g-cam { flex-basis:40%; } .g-quick { flex-basis:36%; } .g-reef { flex-basis:56%; }
+        :root { --hb-h:clamp(54px, 8vh, 72px); }
+      }
+      /* Phones: one scrolling column — picture, tiles (3 × 2), controls. */
+      @media (max-width:560px) {
+        body.helm-on #helm { display:flex; flex-direction:column; overflow-y:auto; padding:6px; gap:6px; }
+        .helm-view { flex:0 0 auto; height:min(56vh, 96vw); }
+        .helm-tiles { flex:none; grid-template-columns:repeat(3, minmax(0, 1fr)); grid-template-rows:auto auto; gap:6px; }
+        .helm-controls { flex:none; gap:6px; }
+        .tile { padding:5px 8px; gap:2px; }
+        .tile-k { font-size:11px; letter-spacing:.3px; }
+        .tile-v .num { font-size:clamp(26px, 8vw, 40px); }
+        .tile-v .side, .tile-v .unit { font-size:12px; }
+        .tile-sub { font-size:11px; }
+        .g-mode, .g-angle, .g-cam, .g-quick, .g-reef { flex-basis:100%; }
+        .helm-legend { display:none; }
+        .hbadge { font-size:12px; padding:4px 7px; }
+        .hb:not(.hb-step) { font-size:13px; }
+        :root { --hb-h:58px; }
+      }
+      @media (max-height:640px) { .helm-legend { display:none; } }
+
+      /* ---- Engineering page: bigger touch targets, clearer text, clear pressed states ---- */
+      .btn-toggle { min-height:44px; font-size:12px; padding:6px; border-radius:8px; gap:6px; color:#b3bcc7; }
+      .btn-toggle .ico { width:18px; height:18px; }
+      .btn-toggle.active-coach { background:#1FC8E8; color:#06131a; border-color:#1FC8E8; }
+      .btn-toggle.active-auto  { background:#2DD489; color:#05140d; border-color:#2DD489; }
+      .btn-toggle.active-pro   { background:#FFA424; color:#1a1003; border-color:#FFA424; }
+      .btn-toggle.active-model { background:#e3e8ee; color:#0b0d10; border-color:#e3e8ee; }
+      .section-title { font-size:12px; letter-spacing:1px; color:#c3cad3; padding:10px 0 6px; }
+      .panel-header { font-size:12px; letter-spacing:1.2px; color:#c3cad3; min-height:38px; }
+      .labels { font-size:13px; } .labels span { font-size:13px; }
+      input[type="range"] { height:40px; }
+      input[type="range"]::-webkit-slider-runnable-track { height:6px; }
+      input[type="range"]::-webkit-slider-thumb { width:22px; height:34px; margin-top:-14px; border-radius:6px; background:#c3cad3; border:1px solid #0b0d10; }
+      input[type="range"]::-moz-range-thumb { width:22px; height:34px; border-radius:6px; background:#c3cad3; border:1px solid #0b0d10; }
+      input[type="range"]::-moz-range-track { height:6px; background:#2f353e; border-radius:3px; }
+      .slider-wrapper { padding-bottom:6px; }
+      .stp-row { display:flex; align-items:center; gap:6px; }
+      .stp-row .slider-wrapper { flex:1 1 auto; min-width:0; }
+      .stp { flex:none; width:44px; height:44px; border-radius:9px; border:1px solid #2f353e; background:#1c2026; color:#f3f5f8;
+        font:700 26px/1 var(--ui-font); cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+      .auto-active .stp, .feather-active .stp, .stp:disabled { opacity:.3; pointer-events:none; }
+      .feather-active input[type="range"] { pointer-events:none; }
+      .health-item .health-label { font-size:11px; }
+      .health-item .health-val { font-size:17px; }
+      .health-item.disconnected .health-val { font-size:13px; letter-spacing:.5px; color:var(--fg-1); }
+      /* Apparent wind = light green everywhere (amber is kept for warnings). */
+      #compass-svg #awa-arrow-group path { fill:rgba(166, 242, 207, 0.85); filter:none; }
+      .mt-side-note, .imu-side-note { font-size:12px; }
+      #mt-side-arm, #imu-side-arm { min-height:52px; font-size:15px; }
+      #mt-side-cfg, #imu-side-cfg, #imu-side-zero { min-height:44px; font-size:13px; }
+      .imu-drive-lbl { font-size:13px; min-height:40px; }
+      .bloc-capteur-titre { font-size:11px; letter-spacing:1px; }
+      .dashboard-valeur { font-size:clamp(17px, 2.1vw, 26px); }
+      .telem-label { font-size:11px; letter-spacing:1px; }
+      #compass-svg .compass-label { font-size:6.5px; letter-spacing:.4px; }
+      #compass-svg .silhouette-trimaran, #compass-svg .silhouette-kalim { display:none !important; }
+      .mini-btn { min-height:32px; padding:4px 10px; border-radius:8px; border:1px solid #2f353e; background:#1c2026; color:#e3e8ee;
+        font:800 11px/1 var(--ui-font); letter-spacing:.6px; cursor:pointer; text-transform:uppercase; }
+      .view-3d .pause-3d { display:none; position:absolute; inset:0; align-items:center; justify-content:center; text-align:center;
+        color:#c3cad3; font-size:15px; padding:20px; }
+      body.view3d-off .view-3d .pause-3d { display:flex; }
+      body.view3d-off #gl-3d, body.view3d-off #svg-3d { visibility:hidden; }
+      /* Phones (engineering page): keep the 5 telemetry values on one line, tabs on one line. */
+      @media (max-width:780px), (max-height:500px) and (orientation:landscape) and (max-width:900px) {
+        .bloc-capteur-titre { font-size:9px; letter-spacing:.3px; }
+        .dashboard-valeur { font-size:15px; letter-spacing:0; }
+        .bloc-capteur:last-child .dashboard-valeur { font-size:12px !important; }
+        .mobile-tab { font-size:11px; letter-spacing:.4px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        [data-hold].holding::after { transition:none; }
+        #alarm-bar.crit:not(.acked) .alarm-ico { animation:none; }
+      }
+    </style>
+</head>
+<body class="coach-active mtab-controls helm-on">
+
+    <!-- Icon sprite (stroke icons, currentColor) + the red night-vision filter used in "NUIT ROUGE". -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <defs>
+            <!-- Luminance → red only (keeps night vision): R' = 0.45R + 0.9G + 0.25B, G' = B' = 0 -->
+            <filter id="nv-red" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0.45 0.9 0.25 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"/></filter>
+            <symbol id="i-helm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/><path d="M12 1.5v3.5M12 19v3.5M1.5 12H5M19 12h3.5M4.6 4.6l2.5 2.5M16.9 16.9l2.5 2.5M4.6 19.4l2.5-2.5M16.9 7.1l2.5-2.5"/></symbol>
+            <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M3 6h11M18 6h3M3 12h4M11 12h10M3 18h13M20 18h1"/><circle cx="16" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></symbol>
+            <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></symbol>
+            <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></symbol>
+            <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+            <symbol id="i-dim" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></symbol>
+            <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M9.2 9.3a2.9 2.9 0 1 1 4.2 2.6c-.9.5-1.4 1.1-1.4 2.1v.6"/><circle cx="12" cy="17.6" r=".7" fill="currentColor"/></symbol>
+            <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></symbol>
+            <symbol id="i-unlock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 7.7-1.5"/></symbol>
+            <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></symbol>
+            <symbol id="i-auto" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.8 3.5v4h-4"/></symbol>
+            <symbol id="i-flow" viewBox="0 0 24 24"><path d="M2 7c3-3 5 3 8 0s5 3 8 0M2 12c3-3 5 3 8 0s5 3 8 0M2 17c3-3 5 3 8 0s5 3 8 0"/><path d="M19 4.5l3 2.5-3 2.5M19 9.5l3 2.5-3 2.5M19 14.5l3 2.5-3 2.5"/></symbol>
+            <symbol id="i-hand" viewBox="0 0 24 24"><path d="M8 12.5V5.5a1.5 1.5 0 0 1 3 0v6M11 11V4a1.5 1.5 0 0 1 3 0v7M14 11V5.5a1.5 1.5 0 0 1 3 0V13M17 9.5a1.5 1.5 0 0 1 3 0V15a7 7 0 0 1-7 7h-1a6 6 0 0 1-5-2.7L4 15.6a1.6 1.6 0 0 1 2.6-1.8L8 15.5"/></symbol>
+            <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21.5V3M5 4h13l-3.5 4.5L18 13H5"/></symbol>
+            <symbol id="i-flat" viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M3 7c6-3 12-3 18 0" stroke-dasharray="2 3"/></symbol>
+            <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.8 6.4.9-4.6 4.5 1.1 6.3L12 17.3l-5.7 3 1.1-6.3-4.6-4.5 6.4-.9z"/></symbol>
+            <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></symbol>
+            <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3 2 21h20z"/><path d="M12 10v5"/><circle cx="12" cy="18" r=".7" fill="currentColor"/></symbol>
+        </defs>
+    </svg>
+
+    <!-- === HEADER BAR — always visible: status chips, page switch, display, help, lock, EMERGENCY STOP === -->
     <div class="app-header">
-        <span class="app-title">ACCWING SIMULATOR</span>
-        <div class="separator"></div>
-        <div class="header-status">
-            <span data-fr="Mode:" data-en="Mode:">Mode:</span>&nbsp;<span id="headerSailMode">--</span>
-            <div class="dot" style="margin-left:8px"></div>
+        <span class="app-title"><span class="brand">ACCWING</span><span class="boat">EO3</span></span>
+        <div class="hdr-chips" aria-live="polite">
+            <span class="chip" id="chipMode" data-help="Mode de pilotage de l'aile : MANUEL, AUTO (l'optimiseur règle angle et cambrure) ou DRAPEAU (aile dans le vent, sans poussée)." data-help-en="Wing control mode: MANUAL, AUTO (the optimiser sets angle and camber) or FEATHER (wing head to wind, no thrust)."><span class="chip-k" data-fr="MODE" data-en="MODE">MODE</span><span class="chip-v" id="chipModeV">MANUEL</span></span>
+            <span class="chip" id="chipMotor" data-help="Moteur du cambreur 1 (CubeMars AK45-36) : hors ligne, connecté, armé, défaut ou arrêt d'urgence." data-help-en="Camber 1 motor (CubeMars AK45-36): offline, connected, armed, fault or emergency stop."><i class="cdot"></i><span class="chip-k" data-fr="MOTEUR" data-en="MOTOR">MOTEUR</span><span class="chip-v" id="chipMotorV">HORS LIGNE</span></span>
+            <span class="chip" id="chipImu" data-help="Banc IMU (5 capteurs le long d'un cambreur) : hors ligne, simulation ou connecté." data-help-en="IMU bench (5 sensors along one camber batten): offline, simulation or connected."><i class="cdot"></i><span class="chip-k">IMU</span><span class="chip-v" id="chipImuV">HORS LIGNE</span></span>
+            <span class="chip" id="chipData" data-help="Source du vent et de la vitesse. SIMULATION : valeurs calculées par le simulateur — sur le bateau elles viendront du réseau NMEA 2000 via le boîtier de bord (voir LISEZMOI)." data-help-en="Source of wind and boat speed. SIMULATION: values computed by the simulator — on board they will come from the NMEA 2000 network through the onboard box (see README)."><i class="cdot"></i><span class="chip-k" data-fr="DONNÉES" data-en="DATA">DONNÉES</span><span class="chip-v" id="chipDataV">SIMULATION</span></span>
         </div>
-        <span class="version">V2</span>
-        <label class="sun-toggle" title="Bascule jour/nuit / Toggle day/night">
-            <input type="checkbox" id="chkSunMode" checked>
-            <span class="sun-state sun-state--to-day"><span class="sun-icon">☀</span><span data-fr="JOUR" data-en="DAY">JOUR</span></span>
-            <span class="sun-state sun-state--to-night"><span class="sun-icon">☾</span><span data-fr="NUIT" data-en="NIGHT">NUIT</span></span>
-        </label>
-        <label class="lang-toggle" title="Bascule la langue / Switch language">
-            <input type="checkbox" id="chkLang">
-            <span class="lang-state lang-state--to-en">FR</span>
-            <span class="lang-state lang-state--to-fr">EN</span>
-        </label>
+        <div class="hdr-actions">
+            <button type="button" class="hbtn" id="btnPage" data-hold="1000" data-hold-if="onHelm" data-help="Page Barre ⇄ page Ingénierie (réglages moteur, IMU, vues 2D/3D, polaire). Vers l'ingénierie : maintenir 1 s." data-help-en="Helm page ⇄ Engineering page (motor, IMU, 2D/3D views, polar). To engineering: hold 1 s."><svg class="ico"><use id="btnPageIco" href="#i-sliders"/></svg><span class="hlbl" id="btnPageLbl">INGÉNIERIE</span></button>
+            <button type="button" class="hbtn" id="btnTheme" data-help="Affichage : JOUR (contraste maximal en plein soleil) → NUIT → NUIT ROUGE (préserve la vision de nuit)." data-help-en="Display: DAY (maximum contrast in sunlight) → NIGHT → RED NIGHT (keeps night vision)."><svg class="ico"><use id="btnThemeIco" href="#i-sun"/></svg><span class="hlbl" id="btnThemeLbl">JOUR</span></button>
+            <button type="button" class="hbtn" id="btnDim" data-help="Atténuation de l'écran la nuit : 100 → 75 → 50 → 30 %." data-help-en="Night dimming: 100 → 75 → 50 → 30 %."><svg class="ico"><use href="#i-dim"/></svg><span class="hlbl" id="btnDimLbl">100 %</span></button>
+            <label class="hbtn lang-toggle" data-help="Langue : français / anglais." data-help-en="Language: French / English.">
+                <input type="checkbox" id="chkLang">
+                <span class="lang-state lang-state--to-en">FR</span>
+                <span class="lang-state lang-state--to-fr">EN</span>
+            </label>
+            <button type="button" class="hbtn" id="btnHelp" aria-pressed="false" data-help="Mode aide : touchez n'importe quel élément pour savoir à quoi il sert. Touchez AIDE à nouveau pour quitter." data-help-en="Help mode: tap any item to see what it does. Tap HELP again to leave."><svg class="ico"><use href="#i-help"/></svg><span class="hlbl" data-fr="AIDE" data-en="HELP">AIDE</span></button>
+            <button type="button" class="hbtn" id="btnLock" data-hold="1500" data-hold-if="locked" data-help="Verrouille l'écran contre les embruns et les touches involontaires (seul l'ARRÊT D'URGENCE reste actif). Déverrouiller : maintenir 1,5 s." data-help-en="Locks the screen against spray and accidental touches (only the EMERGENCY STOP stays active). Unlock: hold 1.5 s."><svg class="ico"><use id="btnLockIco" href="#i-lock"/></svg><span class="hlbl" id="btnLockLbl">VERROU</span></button>
+            <!-- Emergency stop: always visible, same place on every page. Cuts the motor immediately, blocks re-arming and disconnects all motors. Re-arm: hold 1.5 s. -->
+            <button id="mt-estop" type="button" data-hold="1500" data-hold-if="estop" data-help="ARRÊT D'URGENCE : coupe immédiatement le moteur, bloque le réarmement et déconnecte tous les moteurs. Réarmer : maintenir 1,5 s." data-help-en="EMERGENCY STOP: cuts the motor immediately, blocks re-arming and disconnects all motors. Re-arm: hold 1.5 s."><span class="estop-ico" aria-hidden="true">⛔</span><span class="lbl">ARRÊT URGENCE</span></button>
+        </div>
+        <!-- Day theme flag read by the 3D renderer (sun-mode). Driven by the theme button. -->
+        <input type="checkbox" id="chkSunMode" checked hidden>
+    </div>
+
+    <!-- Alarm banner (under the header): icon + text + acknowledge; colour is never the only cue. -->
+    <div id="alarm-bar" role="alert" hidden>
+        <svg class="ico alarm-ico"><use href="#i-warn"/></svg>
+        <div class="alarm-text"><b id="alarmTitle"></b><span id="alarmMore"></span></div>
+        <button type="button" id="alarmAck" class="hbtn" data-help="Coupe le signal sonore. Le bandeau reste tant que le problème persiste." data-help-en="Silences the beep. The banner stays while the problem persists."><svg class="ico"><use href="#i-bell"/></svg><span class="hlbl" id="alarmAckLbl">ACQUITTER</span></button>
     </div>
 
     <!-- === MOBILE TAB BAR (visible only on phones) === -->
@@ -931,19 +1277,115 @@
         <label class="mobile-tab" data-tab="sys"><input type="radio" name="mtab" value="sys"><span data-fr="Système" data-en="System">Système</span></label>
     </nav>
 
+    <!-- === HELM PAGE (default): what the helmsman needs, readable from the wheel, big touch targets === -->
+    <main id="helm" aria-label="Barre / Helm">
+        <section class="helm-view" data-help="Vue de dessus : bateau (avant en haut), les 4 ailes à leur angle réel, vent réel (flèche verte pleine), vent apparent (flèche creuse), poussée (flèche cyan) et, en mode Coach, l'optimum (ailes en pointillés)." data-help-en="Top view: boat (bow up), the 4 wings at their real angle, true wind (solid green arrow), apparent wind (hollow arrow), thrust (cyan arrow) and, in Coach mode, the optimum (dashed wings).">
+            <svg id="helm-svg" viewBox="-110 -110 220 220" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Bateau, ailes et vent">
+                <g id="hStatic"></g>
+                <g id="hGhosts"></g>
+                <g id="hWings"></g>
+                <g id="hThrust"><line class="h-thrust" x1="0" y1="0" x2="0" y2="0"/><path class="h-thrust-head" d=""/></g>
+                <g id="hApp"><path class="h-app" d="M 0,-80 L -7,-95 L 7,-95 Z"/></g>
+                <g id="hTrue"><path class="h-true" d="M 0,-76 L -8,-89 L -2.6,-89 L -2.6,-108 L 2.6,-108 L 2.6,-89 L 8,-89 Z"/></g>
+            </svg>
+            <div class="helm-badges"><span class="hbadge" id="hAllure">--</span><span class="hbadge mode" id="hModeBadge">MANUEL</span></div>
+            <div class="helm-legend">
+                <span><svg viewBox="0 0 22 12"><path d="M2 6h12M14 1l7 5-7 5z" fill="var(--u-wind)" stroke="var(--u-wind)" stroke-width="2.5"/></svg><b data-fr="Vent réel" data-en="True wind">Vent réel</b></span>
+                <span><svg viewBox="0 0 22 12"><path d="M4 1.5l14 4.5-14 4.5z" fill="var(--u-panel)" stroke="var(--u-wind2)" stroke-width="2"/></svg><b data-fr="Vent apparent" data-en="Apparent wind">Vent apparent</b></span>
+                <span><svg viewBox="0 0 22 12"><path d="M2 6h13" stroke="var(--u-thrust)" stroke-width="3"/><path d="M14 1.5l7 4.5-7 4.5z" fill="var(--u-thrust)"/></svg><b data-fr="Poussée" data-en="Thrust">Poussée</b></span>
+                <span class="lg-opt"><svg viewBox="0 0 22 12"><path d="M2 6h18" stroke="var(--u-opt)" stroke-width="2" stroke-dasharray="3 2"/></svg><b data-fr="Optimum" data-en="Optimum">Optimum</b></span>
+            </div>
+        </section>
+
+        <section class="helm-tiles">
+            <div class="tile" id="tAWA" data-help="Angle du vent apparent mesuré depuis l'avant, côté tribord (TRIB.) ou bâbord (BÂB.)." data-help-en="Apparent wind angle from the bow, starboard (STBD) or port side.">
+                <div class="tile-k" data-fr="ANGLE VENT APP." data-en="APP. WIND ANGLE">ANGLE VENT APP.</div>
+                <div class="tile-v"><span class="num" id="vAWA">--</span><span class="unit">°</span><span class="side" id="sAWA"></span></div>
+                <div class="tile-sub" id="subAWA"></div>
+            </div>
+            <div class="tile" id="tAWS" data-help="Vitesse du vent apparent en tête de mât (30 m)." data-help-en="Apparent wind speed at the masthead (30 m).">
+                <div class="tile-k" data-fr="VENT APPARENT" data-en="APPARENT WIND">VENT APPARENT</div>
+                <div class="tile-v"><span class="num" id="vAWS">--</span><span class="unit" data-fr="nds" data-en="kn">nds</span></div>
+                <div class="tile-sub" id="subAWS"></div>
+            </div>
+            <div class="tile" id="tSOG" data-help="Vitesse du bateau." data-help-en="Boat speed.">
+                <div class="tile-k" data-fr="VITESSE BATEAU" data-en="BOAT SPEED">VITESSE BATEAU</div>
+                <div class="tile-v"><span class="num" id="vSOG">--</span><span class="unit" data-fr="nds" data-en="kn">nds</span></div>
+                <div class="tile-sub" id="subSOG"></div>
+            </div>
+            <div class="tile" id="tTWS" data-help="Vitesse du vent réel en tête de mât (30 m)." data-help-en="True wind speed at the masthead (30 m).">
+                <div class="tile-k" data-fr="VENT RÉEL" data-en="TRUE WIND">VENT RÉEL</div>
+                <div class="tile-v"><span class="num" id="vTWS">--</span><span class="unit" data-fr="nds" data-en="kn">nds</span></div>
+                <div class="tile-sub" id="subTWS"></div>
+            </div>
+            <div class="tile" id="tWing" data-help="Angle des ailes par rapport à l'axe du bateau (+ = vers tribord). En mode Coach, la ligne du bas donne l'angle optimal." data-help-en="Wing angle from the boat axis (+ = towards starboard). In Coach mode the bottom line gives the optimal angle.">
+                <div class="tile-k" data-fr="ANGLE AILES" data-en="WING ANGLE">ANGLE AILES</div>
+                <div class="tile-v"><span class="num" id="vWing">--</span><span class="unit">°</span></div>
+                <div class="tile-sub" id="subWing"></div>
+            </div>
+            <div class="tile" id="tCam" data-help="Cambrure moyenne des sections actives (le signe indique le côté du creux). En mode Coach, la ligne du bas donne la cambrure optimale." data-help-en="Mean camber of the active sections (the sign gives the side of the curve). In Coach mode the bottom line gives the optimal camber.">
+                <div class="tile-k" data-fr="CAMBRURE" data-en="CAMBER">CAMBRURE</div>
+                <div class="tile-v"><span class="num" id="vCam">--</span><span class="unit">%</span></div>
+                <div class="tile-sub" id="subCam"></div>
+            </div>
+        </section>
+
+        <section class="helm-controls">
+            <div class="hgroup g-mode">
+                <div class="hg-k" data-fr="MODE" data-en="MODE">MODE</div>
+                <div class="hg-row">
+                    <button type="button" class="hb" id="hbManual" data-help="MANUEL : vous réglez l'angle et la cambrure avec − / +." data-help-en="MANUAL: you set angle and camber with − / +."><svg class="ico"><use href="#i-hand"/></svg><span data-fr="MANUEL" data-en="MANUAL">MANUEL</span></button>
+                    <button type="button" class="hb" id="hbAuto" data-hold="1000" data-hold-if="helmAutoOff" data-help="AUTO : l'optimiseur règle angle et cambrure en continu. Maintenir 1 s pour activer." data-help-en="AUTO: the optimiser keeps setting angle and camber. Hold 1 s to turn on."><svg class="ico"><use href="#i-auto"/></svg><span>AUTO</span></button>
+                    <button type="button" class="hb" id="hbFeather" data-help="DRAPEAU : les ailes suivent le vent apparent, à plat, sans poussée (mise en sécurité). Effet immédiat." data-help-en="FEATHER: the wings follow the apparent wind, flat, with no thrust (safe mode). Immediate."><svg class="ico"><use href="#i-flag"/></svg><span data-fr="DRAPEAU" data-en="FEATHER">DRAPEAU</span></button>
+                </div>
+            </div>
+            <div class="hgroup g-angle">
+                <div class="hg-k" data-fr="ANGLE AILES" data-en="WING ANGLE">ANGLE AILES</div>
+                <div class="hg-row">
+                    <button type="button" class="hb hb-step" id="hbAngM" data-help="Tourne les ailes de 1° vers bâbord. Maintenir pour répéter." data-help-en="Turns the wings 1° to port. Hold to repeat." aria-label="−1°">−</button>
+                    <output class="hval" id="hvAng">--</output>
+                    <button type="button" class="hb hb-step" id="hbAngP" data-help="Tourne les ailes de 1° vers tribord. Maintenir pour répéter." data-help-en="Turns the wings 1° to starboard. Hold to repeat." aria-label="+1°">+</button>
+                </div>
+            </div>
+            <div class="hgroup g-cam">
+                <div class="hg-k" data-fr="CAMBRURE" data-en="CAMBER">CAMBRURE</div>
+                <div class="hg-row">
+                    <button type="button" class="hb hb-step" id="hbCamM" data-help="Cambrure −0,5 % sur toutes les sections. Maintenir pour répéter." data-help-en="Camber −0.5 % on all sections. Hold to repeat." aria-label="−0.5%">−</button>
+                    <output class="hval" id="hvCam">--</output>
+                    <button type="button" class="hb hb-step" id="hbCamP" data-help="Cambrure +0,5 % sur toutes les sections. Maintenir pour répéter." data-help-en="Camber +0.5 % on all sections. Hold to repeat." aria-label="+0.5%">+</button>
+                </div>
+            </div>
+            <div class="hgroup g-quick">
+                <div class="hg-k" data-fr="RÉGLAGE RAPIDE" data-en="QUICK SET">RÉGLAGE RAPIDE</div>
+                <div class="hg-row">
+                    <button type="button" class="hb" id="hbFlat" data-help="À PLAT : cambrure 0 % sur toutes les sections." data-help-en="FLAT: 0 % camber on all sections."><svg class="ico"><use href="#i-flat"/></svg><span data-fr="À PLAT" data-en="FLAT">À PLAT</span></button>
+                    <button type="button" class="hb" id="hbOpt" data-help="OPTIMUM : applique une fois l'angle et la cambrure calculés par l'optimiseur (reste en manuel)." data-help-en="OPTIMUM: applies the optimiser's angle and camber once (stays in manual)."><svg class="ico"><use href="#i-star"/></svg><span>OPTIMUM</span></button>
+                </div>
+            </div>
+            <div class="hgroup g-reef">
+                <div class="hg-k" data-fr="RIS — maintenir 1 s" data-en="REEF — hold 1 s">RIS — maintenir 1 s</div>
+                <div class="hg-row">
+                    <button type="button" class="hb" data-reef="0" data-hold="1000" data-hold-if="helmReef" data-help="Aile pleine. Maintenir 1 s." data-help-en="Full wing. Hold 1 s."><span data-fr="PLEIN" data-en="FULL">PLEIN</span></button>
+                    <button type="button" class="hb" data-reef="1" data-hold="1000" data-hold-if="helmReef" data-help="1 ris : retire la section de tête. Maintenir 1 s." data-help-en="1 reef: drops the head section. Hold 1 s."><span data-fr="1 RIS" data-en="1 REEF">1 RIS</span></button>
+                    <button type="button" class="hb" data-reef="2" data-hold="1000" data-hold-if="helmReef" data-help="2 ris : retire les deux sections du haut. Maintenir 1 s." data-help-en="2 reefs: drops the top two sections. Hold 1 s."><span data-fr="2 RIS" data-en="2 REEFS">2 RIS</span></button>
+                    <button type="button" class="hb" data-reef="4" data-hold="1000" data-hold-if="helmReef" data-help="Affaler : replie toute l'aile. Maintenir 1 s." data-help-en="Douse: folds the whole wing away. Hold 1 s."><span data-fr="AFFALER" data-en="DOUSE">AFFALER</span></button>
+                </div>
+            </div>
+        </section>
+    </main>
+
     <!-- === SIDEBAR (Controls) === -->
     <div class="panel sidebar" id="panneau-controles">
         <div class="panel-header"><span data-fr="Contrôles" data-en="Controls">Contrôles</span></div>
         <div class="panel-body">
 
-            <div class="logo-accwing">ACCWING</div>
-
             <!-- Mode toggles: rendered as <label> + hidden checkbox so a tap is handled by
-                 the OS-native form widget (always reliable, even inside iOS Quick Look). -->
+                 the OS-native form widget (always reliable, even inside iOS Quick Look).
+                 AUTO moves the wing by itself: switching it ON needs a 1 s hold (off is instant). -->
             <div class="mode-toggles">
-                <label class="btn-toggle active-coach" id="btnCoach"><input type="checkbox" id="chkCoach" checked>Coach</label>
-                <label class="btn-toggle" id="btnAuto"><input type="checkbox" id="chkAuto">Auto</label>
-                <label class="btn-toggle" id="btnPro" title="Affiche les écoulements CFD + décomposition lift/drag des forces aéro / CFD flow visualisation + lift/drag force decomposition"><input type="checkbox" id="chkPro">Pro</label>
+                <label class="btn-toggle active-coach" id="btnCoach" data-help="COACH : affiche l'optimum (repères cyan) sans toucher aux réglages." data-help-en="COACH: shows the optimum (cyan markers) without changing the settings."><input type="checkbox" id="chkCoach" checked><svg class="ico"><use href="#i-target"/></svg>Coach</label>
+                <label class="btn-toggle" id="btnAuto" data-hold="1000" data-hold-if="autoOff" data-help="AUTO : l'optimiseur règle l'angle et la cambrure de l'aile. Activer : maintenir 1 s. Désactiver : toucher." data-help-en="AUTO: the optimiser sets wing angle and camber. Turn on: hold 1 s. Turn off: tap."><input type="checkbox" id="chkAuto"><svg class="ico"><use href="#i-auto"/></svg>Auto</label>
+                <label class="btn-toggle" id="btnPro" data-help="PRO : écoulements CFD + décomposition portance / traînée des forces aéro." data-help-en="PRO: CFD flow + lift/drag decomposition of the aero forces."><input type="checkbox" id="chkPro"><svg class="ico"><use href="#i-flow"/></svg>Pro</label>
             </div>
 
             <!-- Windelo build: boat-model (Trimaran/KALIM) selector and the STL file picker are
@@ -990,10 +1432,20 @@
                         <path d="M 0,-12 L -3.5,-21 L -1.2,-21 L -1.2,-36 L 1.2,-36 L 1.2,-21 L 3.5,-21 Z"/>
                     </g>
                     <!-- Cardinal labels (boat-relative) -->
-                    <text class="compass-label compass-label-bow" x="0" y="-49" text-anchor="middle">BOW</text>
-                    <text class="compass-label" x="48" y="2" text-anchor="start">STB</text>
-                    <text class="compass-label" x="0" y="52" text-anchor="middle">STERN</text>
-                    <text class="compass-label" x="-48" y="2" text-anchor="end">PORT</text>
+                    <text class="compass-label compass-label-bow" x="0" y="-49" text-anchor="middle" data-fr="AVANT" data-en="BOW">AVANT</text>
+                    <text class="compass-label" x="48" y="2" text-anchor="start" data-fr="TRIB." data-en="STBD">TRIB.</text>
+                    <text class="compass-label" x="0" y="52" text-anchor="middle" data-fr="ARRIÈRE" data-en="STERN">ARRIÈRE</text>
+                    <text class="compass-label" x="-48" y="2" text-anchor="end" data-fr="BÂB." data-en="PORT">BÂB.</text>
+                    <!-- Energy Observer 3 vue du dessus (avant = haut) : 2 coques, toit, 4 ailes -->
+                    <g class="silhouette-eo3">
+                        <rect class="beam-trimaran" x="-6.6" y="-8" width="13.2" height="13" rx="1.5" fill="none"/>
+                        <path class="boat-silhouette" d="M -6.6,-13 C -5.4,-9 -5.2,-3 -5.2,2 L -5.4,8.5 L -7.8,8.5 L -8,2 C -8,-3 -7.8,-9 -6.6,-13 Z"/>
+                        <path class="boat-silhouette" d="M 6.6,-13 C 7.8,-9 8,-3 8,2 L 7.8,8.5 L 5.4,8.5 L 5.2,2 C 5.2,-3 5.4,-9 6.6,-13 Z"/>
+                        <circle cx="-3.2" cy="-2.5" r="1.1" fill="#c8d2e1" opacity="0.9"/>
+                        <circle cx="3.2"  cy="-2.5" r="1.1" fill="#c8d2e1" opacity="0.9"/>
+                        <circle cx="-3.2" cy="3.5"  r="1.1" fill="#c8d2e1" opacity="0.9"/>
+                        <circle cx="3.2"  cy="3.5"  r="1.1" fill="#c8d2e1" opacity="0.9"/>
+                    </g>
                     <!-- Trimaran silhouette vue du dessus (bow=haut, stern=bas) -->
                     <g class="silhouette-trimaran">
                         <!-- Bras avant et arrière (cross-beams) -->
@@ -1059,11 +1511,12 @@
 
             <!-- Reefing: removes the head section (1 reef) then the one below (2 reefs). -->
             <div class="section-title" data-fr="Prise de ris" data-en="Reefing">Prise de ris</div>
+            <!-- Changing the reef moves the whole wing: 1 s hold to confirm. -->
             <div class="model-toggles" id="reef-toggles">
-                <label class="btn-toggle active-model" id="btnReef0" title="Aile pleine / Full wing"><input type="radio" name="reef" value="0" checked>Plein</label>
-                <label class="btn-toggle" id="btnReef1" title="1 ris — retire la section de tête / drops the head section"><input type="radio" name="reef" value="1">1 Ris</label>
-                <label class="btn-toggle" id="btnReef2" title="2 ris — retire les deux sections du haut / drops the top two sections"><input type="radio" name="reef" value="2">2 Ris</label>
-                <label class="btn-toggle" id="btnReefAffale" title="Affaler — replie toute l'aile dans le balestron / fully douse the wing into the boom"><input type="radio" name="reef" value="4">Affaler</label>
+                <label class="btn-toggle active-model" id="btnReef0" data-hold="1000" data-hold-if="reefChange" data-help="Aile pleine. Changer de ris : maintenir 1 s." data-help-en="Full wing. Changing the reef: hold 1 s."><input type="radio" name="reef" value="0" checked>Plein</label>
+                <label class="btn-toggle" id="btnReef1" data-hold="1000" data-hold-if="reefChange" data-help="1 ris — retire la section de tête. Maintenir 1 s." data-help-en="1 reef — drops the head section. Hold 1 s."><input type="radio" name="reef" value="1">1 Ris</label>
+                <label class="btn-toggle" id="btnReef2" data-hold="1000" data-hold-if="reefChange" data-help="2 ris — retire les deux sections du haut. Maintenir 1 s." data-help-en="2 reefs — drops the top two sections. Hold 1 s."><input type="radio" name="reef" value="2">2 Ris</label>
+                <label class="btn-toggle" id="btnReefAffale" data-hold="1000" data-hold-if="reefChange" data-help="Affaler — replie toute l'aile dans le balestron. Maintenir 1 s." data-help-en="Douse — folds the whole wing into the boom. Hold 1 s."><input type="radio" name="reef" value="4">Affaler</label>
             </div>
 
             <!-- The Windelo model loads automatically: the full STL when served by the PC launcher
@@ -1087,7 +1540,9 @@
 
     <!-- === 3D VIEW PANEL === -->
     <div class="panel view-3d">
-        <div class="panel-header"><span id="titre-3d">COMPOSITE WING</span></div>
+        <div class="panel-header"><span id="titre-3d">COMPOSITE WING</span>
+            <button type="button" class="mini-btn" id="btn3dMode" data-help="Vue 3D : FLUIDE (plein débit) → ÉCO (10 images/s, moins de calcul) → PAUSE (vue arrêtée)." data-help-en="3D view: SMOOTH (full rate) → ECO (10 frames/s, less CPU) → PAUSED (view stopped).">3D : FLUIDE</button>
+        </div>
         <div class="zone-dessin">
             <canvas id="gl-3d"></canvas>
             <svg id="svg-3d" viewBox="-160 -140 580 870" preserveAspectRatio="xMidYMid meet">
@@ -1107,6 +1562,7 @@
                     </radialGradient>
                 </defs>
             </svg>
+            <div class="pause-3d" data-fr="Vue 3D en pause — touchez « 3D » en haut pour la relancer" data-en="3D view paused — tap “3D” above to resume">Vue 3D en pause — touchez « 3D » en haut pour la relancer</div>
         </div>
     </div>
 
@@ -1127,7 +1583,7 @@
         <!-- Motor link: Camber 1 (Base 2m) pilots the CubeMars AK45-36 -->
         <div class="section-title"><span data-fr="Moteur — Camber 1" data-en="Motor — Camber 1">Moteur — Camber 1</span> <span style="color:var(--acc-pro);font-size:9px;float:right;letter-spacing:0;">AK45-36</span></div>
         <div class="controle-groupe" style="margin-bottom: 0;">
-            <button id="mt-side-arm" type="button">CONNECTER MOTEUR</button>
+            <button id="mt-side-arm" type="button" data-hold="1000" data-hold-if="motorArm" data-help="Connecte puis arme le moteur du cambreur 1. Armer : maintenir 1 s (le moteur se met à suivre la cambrure 1). Désarmer : toucher." data-help-en="Connects then arms the camber 1 motor. Arm: hold 1 s (the motor starts following camber 1). Disarm: tap.">CONNECTER MOTEUR</button>
             <div id="mt-side-status" class="mt-side-status">Déconnecté</div>
             <button id="mt-side-cfg" type="button" data-fr="⚙ Réglages / télémétrie" data-en="⚙ Settings / telemetry">⚙ Réglages / télémétrie</button>
             <div class="mt-side-note" data-fr="Centrez « Base 2m » près de 0 pour armer ; il pilote alors le moteur (rampe douce). STOP dans Réglages." data-en="Centre “Base 2m” near 0 to arm; it then drives the motor (soft ramp). STOP lives in Settings.">Centrez « Base 2m » près de 0 pour armer ; il pilote alors le moteur (rampe douce). STOP dans Réglages.</div>
@@ -1187,25 +1643,22 @@
             </div>
             <!-- Pressure colour bar with numeric Cp scale -->
             <div id="cp-legend" style="margin-top:8px;">
-                <div style="font-size:9px; color:#7a8696; letter-spacing:1px; margin-bottom:2px;" data-fr="COEFFICIENT DE PRESSION Cp" data-en="PRESSURE COEFFICIENT Cp">COEFFICIENT DE PRESSION Cp</div>
-                <div style="position:relative; height:12px; border-radius:2px; overflow:hidden; border:1px solid #1c2a3d;
+                <div style="font-size:9px; color:#a4aebb; letter-spacing:1px; margin-bottom:2px;" data-fr="COEFFICIENT DE PRESSION Cp" data-en="PRESSURE COEFFICIENT Cp">COEFFICIENT DE PRESSION Cp</div>
+                <div style="position:relative; height:12px; border-radius:2px; overflow:hidden; border:1px solid #2b3038;
                             background: linear-gradient(90deg,
                                 #0066ff 0%,
                                 #4488ff 25%,
                                 #ff3300 50%,
                                 #ff9500 75%,
                                 #ffcc00 100%);"></div>
-                <div style="display:flex; justify-content:space-between; font-size:9px; color:#7a8696; margin-top:2px;">
+                <div style="display:flex; justify-content:space-between; font-size:9px; color:#a4aebb; margin-top:2px;">
                     <span>-1.5</span><span>-0.5</span><span>0</span><span>+0.5</span><span>+1.0</span>
                 </div>
-                <div style="font-size:9px; color:#4f5d70; margin-top:2px;">
+                <div style="font-size:9px; color:#95a0ad; margin-top:2px;">
                     Cp&nbsp;=&nbsp;(p − p<sub>∞</sub>) / ½ρV²
                 </div>
             </div>
         </div>
-
-        <!-- Emergency stop: cuts the motor immediately, blocks rearm, and disconnects all motors. -->
-        <button id="mt-estop" type="button" title="Arrêt d'urgence — coupe immédiatement le moteur, bloque le réarmement et déconnecte tous les moteurs">⛔ <span class="lbl">ARRÊT URGENCE</span></button>
     </div>
 
     <!-- === TELEMETRY BAR === -->
@@ -2706,11 +3159,11 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
                     box.style.cssText = 'position:fixed;left:6px;right:6px;top:env(safe-area-inset-top,0px);'
                         + 'z-index:99999;background:rgba(20,22,28,0.92);color:#cdd1d8;'
                         + 'font:10px/1.35 -apple-system,system-ui,monospace;padding:4px 8px;'
-                        + 'border:1px solid #1c2a3d;border-radius:4px;max-height:38vh;overflow:auto;'
+                        + 'border:1px solid #2b3038;border-radius:4px;max-height:38vh;overflow:auto;'
                         + 'display:none;pointer-events:auto;';
                     box.innerHTML = '<div style="font-weight:700;color:#9aa0a8;display:flex;'
                         + 'justify-content:space-between;align-items:center;cursor:pointer;">'
-                        + '<span>DIAG</span><span id="__diag_close__" style="color:#7a828f">[×]</span></div>'
+                        + '<span>DIAG</span><span id="__diag_close__" style="color:#a4aebb">[×]</span></div>'
                         + '<div id="__diag_body__"></div>';
                     if (document.body) document.body.appendChild(box);
                     else document.addEventListener('DOMContentLoaded', function () { document.body.appendChild(box); });
@@ -3201,6 +3654,9 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             },
             opt: { camberDeadbandPct: 2.5, rotationDeadbandDeg: 5.0,
                    autoSmoothAlpha: 0.012, autoSnapCamberPct: 0.05, autoSnapRotDeg: 0.05 },
+            // Helm page / marine touch layer. minTouchMs: touches shorter than this are ignored (spray, drops).
+            // windAlarmKt: apparent-wind alarm (suggests reefing / feathering). motorWarnC/CritC: motor temperature alarms.
+            helm: { minTouchMs: 40, holdMs: 1000, windAlarmKt: 25, motorWarnC: 55, motorCritC: 70 },
             render: { resolution: 30, cfdVB: {x:-40,y:-50,w:280,h:500}, cfdCssW:220, cfdCssH:420 },
             // === Banc IMU (5 IMU le long d'UN cambreur de test) ===
             // stationsU : position normalisée (0 = emplanture/corde avant → 1 = bord de fuite) de chaque IMU le long de la corde.
@@ -4864,6 +5320,9 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         let previousModeKey = "";
         let previousAeroSig = "";
         let previous3DSig = "";  // signature for 3D rebuild guard
+        let _last3DAt = 0;       // last 3D rebuild (ms) — 'eco' 3D mode throttle
+        // Forces a full 2D + 3D redraw on the next frame (after the helm page, a theme change…).
+        window.__invalidateViews = () => { previousCamberValues = ''; previousOptValuesStr = ''; previousModeKey = ''; previousAeroSig = ''; previous3DSig = ''; };
         // UI state: show lift/drag decomposition arrows in addition to resultant?
         window.showLiftDragDecomp = false;
         let portantHystActive  = false;
@@ -5100,6 +5559,13 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
                 }
             }
 
+            // Reefed sections are locked here too (the 2D block below also does it), so the lock and the
+            // motor's "Camber 1 unavailable" check stay right while the 2D view is not being rebuilt.
+            for (let k = 0; k < sliders.length; k++) sliders[k].disabled = reefCount > 0 && k <= reefCount;
+            // Helm page: the 2D and 3D views are hidden — skip their rebuild to save CPU (chartplotters
+            // have modest processors). Leaving the helm calls window.__invalidateViews() → full redraw.
+            if (bodyEl.classList.contains('helm-on')) return;
+
             // --- REGÉNÉRATION 2D (Wing profiles only - CFD is rendered on Canvas) ---
             // Re-render every frame while the motor drives Camber 1, so the base profile animates toward its target.
             // IMU overlay trigger: redraw every frame while active (live measured shape), plus one frame
@@ -5297,6 +5763,10 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             if (!_3dDirty) {
                 return; // nothing visible would change — skip the rebuild
             }
+            // 3D view mode (button in the 3D panel header): 'off' = paused, 'eco' = at most 10 rebuilds/s.
+            // A skipped frame clears the signature so the latest state is drawn on the next allowed frame.
+            if (window.__view3D === 'off' || (window.__view3D === 'eco' && _now - _last3DAt < 100)) { previous3DSig = ''; return; }
+            _last3DAt = _now;
 
             let windForceVisuel = displayAWS * 0.55;
             let offsetAxeMat = typeMastSelection === 'D' ? -50 : -50 + 42;
@@ -6029,9 +6499,9 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
                     + (e && e.stack ? ' @ ' + e.stack.split('\n')[1] : ''));
                 throw e;
             }
-            if (state.pro) {
+            if (state.pro && !bodyEl.classList.contains('helm-on') && window.__view3D !== 'off') {
                 _cfdAccum += dt * 16.666;
-                if (_cfdAccum >= 33) { cfdDrawFrame(tsNow, dt); _cfdAccum = 0; }
+                if (_cfdAccum >= (window.__view3D === 'eco' ? 100 : 33)) { cfdDrawFrame(tsNow, dt); _cfdAccum = 0; }
             }
             // Performance widgets (time-series + polar). Lightweight; the heavy work
             // is throttled internally (TS at 2 Hz, polar recompute every 2 s).
@@ -6118,7 +6588,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             speedMax = Math.max(speedMax, 5);
             const speedRange = speedMax - speedMin || 1;
             // Grid line at zero if range crosses zero
-            tsCtx.strokeStyle = '#1c2a3d';
+            tsCtx.strokeStyle = '#2b3038';
             tsCtx.lineWidth = 0.5;
             if (speedMin < 0 && speedMax > 0) {
                 const yZero = H - ((0 - speedMin) / speedRange) * H;
@@ -6396,6 +6866,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         // Hook into the animation loop indirectly: tsSample + polar refresh are called from animerEnvironnement.
         window.__perfTickHook = function (nowMs) {
             tsSample(nowMs);
+            if (bodyEl.classList.contains('helm-on')) return;   // polar + graph live on the engineering page
             polarMaybeRecompute(nowMs);
             // Re-render the operating point on the polar (cheap, just one circle move)
             if (polarCurve) polarRender();
@@ -6657,6 +7128,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       var SIM_ERPM_LAG = 0.25; // virtual-motor speed-mode first-order lag (position mode is velocity-limited, see mockWrite)
       var sim = false, vErpm = 0, vFrac = 0, vAngle = 0, vAngleTarget = 0; // virtual-motor simulation (no hardware)
       var estop = false;             // latching emergency stop: blocks all motion until explicitly reset
+      var lostCount = 0;             // unexpected link losses (unplug / stream error) — read by the alarm banner
 
       // ---- DOM ----
       var elOverlay = $('mt-overlay'), elLog = $('mt-log');
@@ -6800,6 +7272,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         try { if (reader) reader.cancel(); } catch (e) {}
         try { if (port) port.close(); } catch (e) {}
         port = writer = reader = null; rx = []; writeChain = Promise.resolve();
+        lostCount++;
         setStatus(false); log('⚠ Connexion perdue: ' + (reason || 'inconnue') + '. Moteur désarmé.');
       }
 
@@ -6880,7 +7353,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       function posAcc() { return Math.max(1, parseFloat($('mt-acc').value) || POS_ACC); }
       function currentMax() { return Math.abs(parseFloat($('mt-max').value) || MODE_DEFAULTS[mode].max); }
       function slewStep() { var l = currentMax(); return l > 0 ? l * (0.05 / RAMP_SEC) : 0; } // per 50 ms tick
-      function getState() { return { connected: !!port, armed: armed, source: source, mode: mode, max: currentMax(), unit: MODE_DEFAULTS[mode].unit, erpm: lastErpm, duty: lastDuty, volt: lastVolt, fault: lastFault, power: lastPower, tmot: lastTmot, tmos: lastTmos, angle: lastAngle, cmd: cmd, setpoint: setpoint, estop: estop }; }
+      function getState() { return { connected: !!port, armed: armed, source: source, mode: mode, max: currentMax(), unit: MODE_DEFAULTS[mode].unit, erpm: lastErpm, duty: lastDuty, volt: lastVolt, fault: lastFault, power: lastPower, tmot: lastTmot, tmos: lastTmos, angle: lastAngle, cmd: cmd, setpoint: setpoint, estop: estop, lost: lostCount, faultText: FAULTS[lastFault] || ('code ' + lastFault) }; }
       // Publish the base section's REAL camber (from motor angle) for the simulator's 2D/3D render; null when not driving.
       function updateBaseReal() {
         window.__mtBaseReal = (port && armed && source === 'camber' && mode === 'position')
@@ -6960,7 +7433,8 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       function paintEstop() {
         var b = $('mt-estop'); if (!b) return;
         b.classList.toggle('mt-estopped', estop);
-        b.querySelector('.lbl').textContent = estop ? 'RÉARMER' : 'ARRÊT URGENCE';
+        var en = document.body.classList.contains('lang-en');
+        b.querySelector('.lbl').textContent = estop ? (en ? 'RESET STOP' : 'RÉARMER') : (en ? 'EMERGENCY STOP' : 'ARRÊT URGENCE');
       }
       function applyMode() {
         mode = $('mt-mode').value;
@@ -7078,9 +7552,10 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       $('mt-stop').addEventListener('click', stopMotor);
       $('mt-clearlog').addEventListener('click', function () { elLog.textContent = ''; });
       $('mt-demo').addEventListener('click', toggleDemo);
-      // Emergency stop: engage instantly (no prompt — it's an emergency); reset is deliberate (confirm).
+      // Emergency stop: engage instantly (no prompt — it's an emergency). Reset is deliberate: the button
+      // must be held 1.5 s (data-hold-if="estop", see the touch layer) — no browser dialog on a chartplotter.
       $('mt-estop').addEventListener('click', function () {
-        if (estop) { if (window.confirm('Réarmer le moteur ? Il pourra de nouveau être piloté.')) clearEstop(); }
+        if (estop) clearEstop();
         else { emergencyStop(); disconnect(); }   // cut + disconnect all motors
       });
       paintEstop();
@@ -7179,7 +7654,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
           box.classList.remove('off', 'warn', 'crit', 'connected', 'disconnected');
           // Connection colour code: green when the motor link is up, red when down.
           box.classList.add(online ? 'connected' : 'disconnected');
-          if (!online || tempC == null || isNaN(tempC)) { val.textContent = '--'; return; }
+          if (!online || tempC == null || isNaN(tempC)) { val.textContent = document.body.classList.contains('lang-en') ? 'OFFLINE' : 'HORS LIGNE'; return; }
           val.textContent = Math.round(tempC) + ' °C';
           if (tempC >= 70) box.classList.add('crit');
           else if (tempC >= 55) box.classList.add('warn');
@@ -7196,7 +7671,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
           setHealth('health-comms', on ? s.tmos : null, on);
         }
         var langEl = document.getElementById('chkLang');
-        if (langEl) langEl.addEventListener('change', function () { paint(getState()); });
+        if (langEl) langEl.addEventListener('change', function () { paint(getState()); paintEstop(); });
         extCb = paint; paint(getState());
       })();
 
@@ -7246,6 +7721,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       var headingImu = (typeof CFG.headingImu === 'number') ? CFG.headingImu : (N - 1);  // canal pour le cap absolu (magnéto)
       var graphCh = 0, hist = [], HIST_MAX = 400;   // historique (deg) de l'IMU sélectionnée pour le graphe de calibrage
       var extCb = null, customParser = null, warnedNoParser = false;
+      var lostCount = 0;                      // unexpected link losses — read by the alarm banner
       var frameCount = 0, lastRateTs = nowMs(), rateHz = 0;
       function nowMs() { return (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now(); }
 
@@ -7266,7 +7742,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       function doZero() { for (var ch = 0; ch < N; ch++) zeroRad[ch] = axisVal(ch, axisOfChannel(ch)); publish(); log('Zéro appliqué (mise à plat des inclinaisons).'); }
 
       // ---- published state for the 2D renderer + UI callback ----
-      function getState() { return { connected: connected, sim: sim, active: !!(connected || sim), bendDeg: computeBend().map(function (a) { return a / DEG; }), section: section, drive: driveMode, camberPct: measuredCamberPct(), headingDeg: headingDeg(), rateHz: rateHz }; }
+      function getState() { return { connected: connected, sim: sim, active: !!(connected || sim), bendDeg: computeBend().map(function (a) { return a / DEG; }), section: section, drive: driveMode, camberPct: measuredCamberPct(), headingDeg: headingDeg(), rateHz: rateHz, lost: lostCount }; }
       function publish() {
         var bend = computeBend();
         window.__imuBench = { active: !!(connected || sim), connected: connected, sim: sim,
@@ -7382,7 +7858,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         port = writer = reader = null; rx = []; connected = false;
         stopSim(); setStatus(false); publish(); log('Déconnecté.');
       }
-      function lostPort() { port = writer = reader = null; rx = []; connected = false; setStatus(false); publish(); log('⚠ Connexion IMU perdue.'); }
+      function lostPort() { lostCount++; port = writer = reader = null; rx = []; connected = false; setStatus(false); publish(); log('⚠ Connexion IMU perdue.'); }
 
       // ---- simulation: synthesize a smooth progressive camber bend across the 5 stations ----
       function startSim() {
@@ -7536,6 +8012,603 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       publish(); // renderer knows IMU is idle
       if (!('serial' in navigator)) { var sb = $('imu-status'); if (sb) sb.textContent = 'Non supporté'; log('✖ Web Serial absent — utilisez Chrome/Edge, ou « Simulation ».'); }
       else log('Prêt. « Connecter » choisit le port du microcontrôleur IMU ; « Simulation » / « Démo » teste l\'affichage sans matériel.');
+    })();
+    </script>
+
+    <!-- ============ HELM PAGE + MARINE TOUCH LAYER ============
+         Drives the simulator only through its own controls (sliders, checkboxes, radios), so the helm
+         and the engineering page always agree. Reads the main script's globals (state, sliders,
+         sliderRotation, displayAWA/AWS/TWS, committedOpt*, reefCount…). -->
+    <script>
+    (function () {
+      'use strict';
+      var $ = function (id) { return document.getElementById(id); };
+      var body = document.body;
+      var HC = (typeof CONFIG !== 'undefined' && CONFIG.helm) || { minTouchMs: 40, holdMs: 1000, windAlarmKt: 25, motorWarnC: 55, motorCritC: 70 };
+      var en = function () { return body.classList.contains('lang-en'); };
+      var L = function (fr, e) { return en() ? e : fr; };
+      var DEG = Math.PI / 180;
+      function load(k, d) { try { var v = localStorage.getItem('accwing.' + k); return v == null ? d : v; } catch (e) { return d; } }
+      function save(k, v) { try { localStorage.setItem('accwing.' + k, v); } catch (e) {} }
+      function norm180(d) { d = ((d + 180) % 360 + 360) % 360 - 180; return d === -180 ? 180 : d; }
+      // Signed number with a real minus sign (−) and an explicit + for starboard / positive.
+      function fmtS(v, dec) { var r = v.toFixed(dec || 0); if (parseFloat(r) === 0) return (0).toFixed(dec || 0); return (v > 0 ? '+' : '−') + Math.abs(v).toFixed(dec || 0); }
+      function fmtN(v, dec) { return (dec ? v.toFixed(dec) : String(Math.round(v))).replace('-', '−'); }
+      function fire(el, type) { el.dispatchEvent(new Event(type, { bubbles: true })); }
+
+      // ---------- small overlay elements ----------
+      function mk(tag, id, html) { var e = document.createElement(tag); e.id = id; if (html) e.innerHTML = html; body.appendChild(e); return e; }
+      var toastEl = mk('div', 'ui-toast'), toastT = 0;
+      function toast(msg, ms) { toastEl.textContent = msg; toastEl.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove('show'); }, ms || 1800); }
+      var bubble = mk('div', 'help-bubble'), bubbleT = 0;
+      bubble.setAttribute('role', 'status');
+      function hideHelp() { bubble.classList.remove('show'); clearTimeout(bubbleT); }
+      var shield = mk('div', 'lock-shield', '<div class="lock-msg"><svg class="ico"><use href="#i-lock"/></svg><span id="lockMsg"></span></div>');
+      var dimmer = mk('div', 'ui-dimmer');
+
+      // ---------- sound (alarms + hold confirmation). Audio can only start after a user gesture. ----------
+      var actx = null;
+      function ensureAudio() {
+        try {
+          if (!actx) { var C = window.AudioContext || window.webkitAudioContext; if (C) actx = new C(); }
+          if (actx && actx.state === 'suspended') actx.resume();
+        } catch (e) {}
+      }
+      function beep(freq, dur, vol) {
+        if (!actx || actx.state !== 'running') return;
+        try {
+          var o = actx.createOscillator(), g = actx.createGain(), t0 = actx.currentTime;
+          o.type = 'square'; o.frequency.value = freq;
+          g.gain.setValueAtTime(vol || 0.12, t0); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+          o.connect(g); g.connect(actx.destination); o.start(t0); o.stop(t0 + dur + 0.02);
+        } catch (e) {}
+      }
+
+      // =====================================================================================
+      // TOUCH LAYER — hold-to-confirm, spray / multi-finger filter, help mode, screen lock
+      // =====================================================================================
+      var HOLD_IF = {
+        onHelm:      function () { return body.classList.contains('helm-on'); },
+        locked:      function () { return body.classList.contains('locked'); },
+        estop:       function () { return !!(window.MotorTest && window.MotorTest.getState().estop); },
+        autoOff:     function () { var c = $('chkAuto'); return !!(c && !c.checked); },
+        helmAutoOff: function () { return !state.auto; },
+        reefChange:  function (el) { var r = el.querySelector('input[name="reef"]'); return !!(r && !r.checked); },
+        helmReef:    function (el) { return (+el.getAttribute('data-reef')) !== reefCount; },
+        motorArm:    function () { if (!window.MotorTest) return false; var s = window.MotorTest.getState(); return s.connected && !s.estop && !(s.armed && s.source === 'camber'); }
+      };
+      function needsHold(el) {
+        if (!el || !el.hasAttribute('data-hold')) return false;
+        var f = HOLD_IF[el.getAttribute('data-hold-if')];
+        try { return f ? !!f(el) : true; } catch (e) { return true; }
+      }
+      var isEstop = function (el) { return !!(el && el.closest && el.closest('#mt-estop')); };
+      var helpExempt = function (el) { return !!(el && el.closest && el.closest('#btnHelp, #mt-estop, #help-bubble, #alarmAck')); };
+
+      var touches = {}, nTouch = 0, gestureMulti = false, lastTouchUp = { t: -1e9, dur: 1e9, multi: false };
+      var hold = null, swallowEl = null;
+      function startHold(el, e) {
+        cancelHold();
+        var ms = +el.getAttribute('data-hold') || HC.holdMs;
+        el.style.setProperty('--hold-ms', ms + 'ms');
+        void el.offsetWidth;                 // restart the fill transition
+        el.classList.add('holding');
+        hold = { el: el, id: e.pointerId, x: e.clientX, y: e.clientY,
+                 timer: setTimeout(function () { var h = hold; hold = null; if (!h) return; h.el.classList.remove('holding'); fireHeld(h.el); }, ms) };
+      }
+      function cancelHold() { if (!hold) return; clearTimeout(hold.timer); hold.el.classList.remove('holding'); hold = null; }
+      function fireHeld(el) {
+        el.__holdPass = true;
+        try { el.click(); } finally { el.__holdPass = false; }
+        // The release that follows must not toggle it back. Browsers do not always send that click,
+        // so the flag only lives until the pointer is released (see onUp).
+        el.__swallowClick = true; swallowEl = el;
+        try { if (navigator.vibrate) navigator.vibrate(40); } catch (e) {}
+        beep(1320, 0.07, 0.08);
+      }
+      function stop(e) { if (e.cancelable) e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); }
+
+      document.addEventListener('pointerdown', function (e) {
+        ensureAudio();
+        if (e.pointerType === 'touch') {
+          if (!nTouch) gestureMulti = false;
+          touches[e.pointerId] = e.timeStamp; nTouch++;
+          if (nTouch > 1) { gestureMulti = true; cancelHold(); }
+        }
+        var tgt = e.target;
+        if (body.classList.contains('help-mode') && !helpExempt(tgt)) { stop(e); return; }   // help mode: nothing moves
+        var el = tgt.closest && tgt.closest('[data-hold]');
+        if (el && e.button === 0 && !gestureMulti && needsHold(el)) startHold(el, e);
+      }, true);
+      function onUp(e) {
+        if (e.pointerType === 'touch' && touches[e.pointerId] != null) {
+          lastTouchUp = { t: e.timeStamp, dur: e.timeStamp - touches[e.pointerId], multi: gestureMulti };
+          delete touches[e.pointerId]; nTouch = Math.max(0, nTouch - 1);
+        }
+        if (hold && e.pointerId === hold.id) cancelHold();
+        if (swallowEl) { var sw = swallowEl; swallowEl = null; setTimeout(function () { sw.__swallowClick = false; }, 40); }
+      }
+      document.addEventListener('pointerup', onUp, true);
+      document.addEventListener('pointercancel', onUp, true);
+      document.addEventListener('pointermove', function (e) {
+        if (hold && e.pointerId === hold.id && (Math.abs(e.clientX - hold.x) > 24 || Math.abs(e.clientY - hold.y) > 24)) cancelHold();
+      }, true);
+      // Two fingers / palm never pinch-zoom or press anything (the E-STOP excepted).
+      document.addEventListener('touchstart', function (e) { if (e.touches.length > 1 && !isEstop(e.target) && e.cancelable) e.preventDefault(); }, { passive: false });
+
+      document.addEventListener('click', function (e) {
+        if (!e.isTrusted) return;                                   // our own programmatic clicks
+        var tgt = e.target;
+        if (body.classList.contains('help-mode') && !helpExempt(tgt)) { showHelpFor(tgt, e); stop(e); return; }
+        var el = tgt.closest && tgt.closest('[data-hold]');
+        // The click a <label> forwards to its hidden checkbox / radio follows the label's own click
+        // (already checked above); the control is toggled before this runs, so don't test it again.
+        if (el && tgt !== el && /^(INPUT|SELECT|TEXTAREA)$/.test(tgt.tagName)) return;
+        if (el && el.__swallowClick) { el.__swallowClick = false; stop(e); return; }
+        // Spray / water drops: a very short contact, or several fingers at once, activates nothing.
+        if (!isEstop(tgt) && e.timeStamp - lastTouchUp.t < 700 && (lastTouchUp.dur < HC.minTouchMs || lastTouchUp.multi)) { stop(e); return; }
+        if (el && needsHold(el)) {
+          stop(e);
+          var s = ((+el.getAttribute('data-hold') || HC.holdMs) / 1000).toString().replace('.', en() ? '.' : ',');
+          toast(L('Maintenir ' + s + ' s pour confirmer', 'Hold ' + s + ' s to confirm'));
+        }
+      }, true);
+
+      // ---------- help mode: tap anything to read what it does (replaces hover tooltips) ----------
+      function helpTextFor(el) {
+        var n = el && el.closest ? el.closest('[data-help], [title], [aria-label]') : null;
+        while (n) {
+          var t = (en() && n.getAttribute('data-help-en')) || n.getAttribute('data-help') || n.getAttribute('title') || n.getAttribute('aria-label');
+          if (t) return t;
+          n = n.parentElement ? n.parentElement.closest('[data-help], [title], [aria-label]') : null;
+        }
+        return null;
+      }
+      function showHelpFor(tgt, e) {
+        bubble.textContent = helpTextFor(tgt) || L("Pas d'aide pour cet élément.", 'No help for this item.');
+        bubble.classList.add('show');
+        var bw = bubble.offsetWidth, bh = bubble.offsetHeight, W = window.innerWidth, H = window.innerHeight;
+        var x = Math.min(Math.max(8, e.clientX - bw / 2), W - bw - 8);
+        var y = e.clientY + 22; if (y + bh > H - 8) y = Math.max(8, e.clientY - bh - 22);
+        bubble.style.left = x + 'px'; bubble.style.top = y + 'px';
+        clearTimeout(bubbleT); bubbleT = setTimeout(hideHelp, 9000);
+      }
+      function setHelp(on) {
+        body.classList.toggle('help-mode', on);
+        $('btnHelp').setAttribute('aria-pressed', on ? 'true' : 'false');
+        hideHelp(); cancelHold();
+        if (on) toast(L('Mode aide : touchez un élément. AIDE pour quitter.', 'Help mode: tap any item. HELP to leave.'), 2600);
+      }
+      $('btnHelp').addEventListener('click', function () { setHelp(!body.classList.contains('help-mode')); });
+      bubble.addEventListener('click', hideHelp);
+
+      // ---------- screen lock (spray, wiping the screen): only the E-STOP and UNLOCK stay live ----------
+      function setLocked(on) {
+        body.classList.toggle('locked', on);
+        $('btnLock').setAttribute('aria-pressed', on ? 'true' : 'false');
+        $('btnLockIco').setAttribute('href', on ? '#i-unlock' : '#i-lock');
+        paintLabels(); cancelHold();
+        if (on) { setHelp(false); toast(L('Écran verrouillé', 'Screen locked')); }
+      }
+      $('btnLock').addEventListener('click', function () { setLocked(!body.classList.contains('locked')); });
+      ['pointerdown', 'click'].forEach(function (t) {
+        shield.addEventListener(t, function (e) { stop(e); if (t === 'click') toast(L('Écran verrouillé — maintenir DÉVERR. 1,5 s', 'Screen locked — hold UNLOCK 1.5 s')); });
+      });
+
+      // =====================================================================================
+      // PAGES, THEMES, 3D MODE, LANGUAGE
+      // =====================================================================================
+      var page = load('page', 'helm') === 'eng' ? 'eng' : 'helm';
+      function setPage(p) {
+        page = p === 'eng' ? 'eng' : 'helm';
+        body.classList.toggle('helm-on', page === 'helm');
+        $('btnPageIco').setAttribute('href', page === 'helm' ? '#i-sliders' : '#i-helm');
+        paintLabels(); save('page', page); hideHelp();
+        if (page === 'eng') {
+          if (window.__invalidateViews) window.__invalidateViews();
+          requestAnimationFrame(function () { try { if (typeof initCFDCanvas === 'function') initCFDCanvas(); } catch (e) {} });
+        } else lastTiles = 0;
+      }
+      $('btnPage').addEventListener('click', function () { setPage(page === 'helm' ? 'eng' : 'helm'); });
+
+      var THEMES = ['day', 'night', 'red'], DIMS = [0, 0.25, 0.5, 0.7];
+      var theme = load('theme', 'day'); if (THEMES.indexOf(theme) < 0) theme = 'day';
+      var dimIdx = Math.max(0, Math.min(DIMS.length - 1, parseInt(load('dim', '0'), 10) || 0));
+      function applyTheme() {
+        var chk = $('chkSunMode'), sun = theme === 'day';
+        if (chk && chk.checked !== sun) { chk.checked = sun; fire(chk, 'change'); }
+        body.classList.toggle('sun-mode', sun);
+        body.classList.toggle('red-mode', theme === 'red');
+        body.classList.toggle('night-ui', !sun);
+        $('btnThemeIco').setAttribute('href', sun ? '#i-sun' : theme === 'night' ? '#i-moon' : '#i-eye');
+        dimmer.style.opacity = sun ? 0 : DIMS[dimIdx];
+        var mc = document.querySelector('meta[name="color-scheme"]'); if (mc) mc.setAttribute('content', sun ? 'light' : 'dark');
+        paintLabels(); save('theme', theme); save('dim', dimIdx);
+        if (window.__invalidateViews) window.__invalidateViews();
+      }
+      $('btnTheme').addEventListener('click', function () { theme = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length]; applyTheme(); });
+      $('btnDim').addEventListener('click', function () { dimIdx = (dimIdx + 1) % DIMS.length; applyTheme(); });
+
+      var V3 = ['full', 'eco', 'off'];
+      function apply3D(m) {
+        window.__view3D = V3.indexOf(m) < 0 ? 'full' : m;
+        body.classList.toggle('view3d-off', window.__view3D === 'off');
+        save('view3d', window.__view3D); paintLabels();
+        if (window.__invalidateViews) window.__invalidateViews();
+      }
+      $('btn3dMode').addEventListener('click', function () { apply3D(V3[(V3.indexOf(window.__view3D) + 1) % V3.length]); });
+
+      // Labels that change with state AND language (kept out of data-fr/data-en).
+      function paintLabels() {
+        $('btnPageLbl').textContent = page === 'helm' ? L('INGÉNIERIE', 'ENGINEERING') : L('BARRE', 'HELM');
+        $('btnThemeLbl').textContent = theme === 'day' ? L('JOUR', 'DAY') : theme === 'night' ? L('NUIT', 'NIGHT') : L('NUIT ROUGE', 'RED NIGHT');
+        $('btnDimLbl').textContent = Math.round((1 - DIMS[dimIdx]) * 100) + ' %';
+        var lk = body.classList.contains('locked');
+        $('btnLockLbl').textContent = lk ? L('DÉVERR.', 'UNLOCK') : L('VERROU', 'LOCK');
+        $('lockMsg').textContent = L('Écran verrouillé — maintenez DÉVERR. 1,5 s pour déverrouiller', 'Screen locked — hold UNLOCK 1.5 s to unlock');
+        $('alarmAckLbl').textContent = L('ACQUITTER', 'SILENCE');
+        var m3 = window.__view3D || 'full';
+        $('btn3dMode').textContent = '3D : ' + (m3 === 'full' ? L('FLUIDE', 'SMOOTH') : m3 === 'eco' ? L('ÉCO', 'ECO') : L('PAUSE', 'PAUSED'));
+      }
+      var chkLang = $('chkLang');
+      if (chkLang) chkLang.addEventListener('change', function () { save('lang', chkLang.checked ? 'en' : 'fr'); paintLabels(); lastTiles = 0; paintChips(); evalAlarms(); });
+
+      // =====================================================================================
+      // ENGINEERING PAGE: − / + steppers next to every slider (hold to repeat)
+      // =====================================================================================
+      // fn(mult) does one step. Tap = 1 step on release; hold = repeat after 0.45 s, ×5 after ~2 s.
+      function bindRepeat(btn, fn) {
+        var t0 = 0, del = null, rep = null, repeating = false, n = 0, pid = null;
+        function stopRep() { clearTimeout(del); clearInterval(rep); del = rep = null; }
+        btn.addEventListener('pointerdown', function (e) {
+          if (e.button !== 0 || body.classList.contains('help-mode') || body.classList.contains('locked')) return;
+          t0 = e.timeStamp; repeating = false; n = 0; pid = e.pointerId; stopRep();
+          try { btn.setPointerCapture(e.pointerId); } catch (x) {}
+          del = setTimeout(function () {
+            if (gestureMulti) return;
+            repeating = true; fn(1);
+            rep = setInterval(function () { n++; fn(n > 20 ? 5 : 1); }, 90);
+          }, 450);
+        });
+        function up(e) {
+          if (pid !== e.pointerId) return;
+          pid = null; var wasRep = repeating; stopRep(); repeating = false;
+          if (e.type === 'pointerup' && !wasRep && !gestureMulti && (e.pointerType !== 'touch' || e.timeStamp - t0 >= HC.minTouchMs)) fn(1);
+        }
+        btn.addEventListener('pointerup', up);
+        btn.addEventListener('pointercancel', up);
+        btn.addEventListener('click', function (e) { if (e.detail === 0 && e.isTrusted) fn(1); });   // keyboard Enter / Space
+      }
+      function stepSlider(input, delta, wrap) {
+        if (!input || input.disabled || state.auto || feather) return;
+        var v = Math.round(((parseFloat(input.value) || 0) + delta) * 10) / 10;
+        v = wrap ? _wrapRot(v) : Math.max(parseFloat(input.min), Math.min(parseFloat(input.max), v));
+        input.value = v; fire(input, 'input'); fire(input, 'change');
+      }
+      [['sliderRotation', 1, true], ['mAll', 0.5], ['m4', 0.5], ['m3', 0.5], ['m2', 0.5], ['m1', 0.5]].forEach(function (d) {
+        var input = $(d[0]); if (!input) return;
+        var wrap = input.closest('.slider-wrapper'); if (!wrap) return;
+        var row = document.createElement('div'); row.className = 'stp-row';
+        var unit = d[0] === 'sliderRotation' ? '°' : ' %';
+        var mi = document.createElement('button'); mi.type = 'button'; mi.className = 'stp'; mi.textContent = '−';
+        mi.setAttribute('aria-label', '−' + d[1] + unit); mi.setAttribute('data-help', '−' + String(d[1]).replace('.', ',') + unit + ' — maintenir pour répéter'); mi.setAttribute('data-help-en', '−' + d[1] + unit + ' — hold to repeat');
+        var pl = document.createElement('button'); pl.type = 'button'; pl.className = 'stp'; pl.textContent = '+';
+        pl.setAttribute('aria-label', '+' + d[1] + unit); pl.setAttribute('data-help', '+' + String(d[1]).replace('.', ',') + unit + ' — maintenir pour répéter'); pl.setAttribute('data-help-en', '+' + d[1] + unit + ' — hold to repeat');
+        wrap.parentNode.insertBefore(row, wrap); row.appendChild(mi); row.appendChild(wrap); row.appendChild(pl);
+        bindRepeat(mi, function (k) { stepSlider(input, -d[1] * k, d[2]); });
+        bindRepeat(pl, function (k) { stepSlider(input, d[1] * k, d[2]); });
+      });
+
+      // =====================================================================================
+      // HELM: modes (MANUAL / AUTO / FEATHER), steppers, quick settings, reef
+      // =====================================================================================
+      var feather = false;
+      var chkAuto = $('chkAuto'), sliderAllEl = $('mAll');
+      function setAuto(on) {
+        if (!chkAuto || chkAuto.checked === on) return;
+        chkAuto.checked = on; fire(chkAuto, 'change');        // same path as the engineering AUTO button
+      }
+      function setFeather(on) {
+        feather = !!on;
+        body.classList.toggle('helm-feather', feather);
+        if (typeof panneauControles !== 'undefined') panneauControles.classList.toggle('feather-active', feather);
+        if (feather) { setAuto(false); featherTick(); }
+        lastTiles = 0;
+      }
+      // FEATHER: wings follow the masthead apparent wind (incidence 0), all sections flat → no thrust.
+      function featherTick() {
+        if (!feather) return;
+        if (state.auto) { setFeather(false); return; }          // AUTO switched on elsewhere → leave feather
+        sliderRotation.value = _wrapRot(Math.round(displayAWA / DEG * 10) / 10);
+        if (sliders.some(function (s) { return !s.disabled && parseFloat(s.value) !== 0; }) && sliderAllEl && !sliderAllEl.disabled) {
+          sliderAllEl.value = 0; fire(sliderAllEl, 'input');
+        }
+      }
+      setInterval(featherTick, 100);
+
+      function activeSections() { var a = []; for (var i = 0; i < sliders.length; i++) if (!(reefCount > 0 && i <= reefCount)) a.push(i); return a; }
+      function meanActiveCamber(vals) {
+        var a = activeSections(); if (!a.length) return null;
+        var s = 0; a.forEach(function (i) { s += vals[i]; }); return s / a.length;
+      }
+      function nudgeRotation(d) {
+        if (state.auto || feather) return;
+        sliderRotation.value = _wrapRot(Math.round((parseFloat(sliderRotation.value) + d) * 10) / 10);
+        fire(sliderRotation, 'input'); renderNow();
+      }
+      function nudgeCamber(d) {
+        if (state.auto || feather || !sliderAllEl) return;
+        if (sliderAllEl.disabled) { toast(L('Aile affalée', 'Wing doused')); return; }
+        var m = meanActiveCamber(sliders.map(function (s) { return parseFloat(s.value) || 0; }));
+        var v = Math.round(((m == null ? 0 : m) + d) * 2) / 2;
+        v = Math.max(parseFloat(sliderAllEl.min), Math.min(parseFloat(sliderAllEl.max), v));
+        sliderAllEl.value = v; fire(sliderAllEl, 'input'); renderNow();
+      }
+      bindRepeat($('hbAngM'), function (k) { nudgeRotation(-1 * k); });
+      bindRepeat($('hbAngP'), function (k) { nudgeRotation(1 * k); });
+      bindRepeat($('hbCamM'), function (k) { nudgeCamber(-0.5 * k); });
+      bindRepeat($('hbCamP'), function (k) { nudgeCamber(0.5 * k); });
+      $('hbManual').addEventListener('click', function () { setFeather(false); setAuto(false); lastTiles = 0; });
+      $('hbAuto').addEventListener('click', function () { if (state.auto) return; setFeather(false); setAuto(true); lastTiles = 0; });
+      $('hbFeather').addEventListener('click', function () { setFeather(true); toast(L('Ailes en drapeau', 'Wings feathered')); });
+      $('hbFlat').addEventListener('click', function () {
+        if (state.auto || feather || !sliderAllEl || sliderAllEl.disabled) return;
+        sliderAllEl.value = 0; fire(sliderAllEl, 'input'); renderNow(); toast(L('Cambrure 0 %', 'Camber 0 %'));
+      });
+      $('hbOpt').addEventListener('click', function () {
+        if (state.auto || feather || committedOptRotation == null || !committedOptCamber) return;
+        sliderRotation.value = _wrapRot(committedOptRotation); fire(sliderRotation, 'input');
+        var first = -1;
+        for (var i = 0; i < sliders.length; i++) { if (sliders[i].disabled || (reefCount > 0 && i <= reefCount)) continue; sliders[i].value = committedOptCamber[i]; if (first < 0) first = i; }
+        if (first >= 0) fire(sliders[first], 'input');           // re-applies the ±5 % twist rule upward
+        renderNow();
+        toast('OPTIMUM : ' + fmtS(norm180(committedOptRotation - 90)) + '° · ' + fmtS(meanActiveCamber(committedOptCamber) || 0, 1) + ' %');
+      });
+      document.querySelectorAll('#helm [data-reef]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var r = document.querySelector('input[name="reef"][value="' + b.getAttribute('data-reef') + '"]');
+          if (!r || r.checked) return;
+          r.checked = true; fire(r, 'change'); lastTiles = 0;    // same path as the engineering reef buttons
+        });
+      });
+
+      // =====================================================================================
+      // HELM: top-down picture (boat, 4 wings at their real angle, winds, thrust, optimum)
+      // =====================================================================================
+      var SC = 3.6;                                             // SVG units per metre (40 m boat → 144)
+      var WPOS = (typeof STL_MAST !== 'undefined' && STL_MAST.positions && STL_MAST.positions.length)
+        ? STL_MAST.positions : [{ foreAftM: 1.9, athwartM: -4.5 }, { foreAftM: 1.9, athwartM: 4.5 }, { foreAftM: -6.5, athwartM: -4.5 }, { foreAftM: -6.5, athwartM: 4.5 }];
+      (function buildStatic() {
+        var g = '<circle class="h-ring" r="99"/>';
+        for (var a = 0; a < 360; a += 10) {
+          var maj = a % 30 === 0, r1 = maj ? 91 : 95, sx = Math.sin(a * DEG), cy = -Math.cos(a * DEG);
+          g += '<line class="h-tick' + (maj ? ' maj' : '') + '" x1="' + (sx * r1).toFixed(1) + '" y1="' + (cy * r1).toFixed(1) + '" x2="' + (sx * 99).toFixed(1) + '" y2="' + (cy * 99).toFixed(1) + '"/>';
+          if (maj && a % 180) g += '<text class="h-lbl" x="' + (sx * 84).toFixed(1) + '" y="' + (cy * 84).toFixed(1) + '">' + (a <= 180 ? a : 360 - a) + '</text>';
+        }
+        var w = 1.8 * SC, yb = -20 * SC, ys = 20 * SC;
+        [-6.6 * SC, 6.6 * SC].forEach(function (cx) {
+          g += '<path class="h-hull" d="M ' + cx + ',' + yb + ' C ' + (cx + w * 0.6) + ',' + (yb + 22) + ' ' + (cx + w) + ',' + (yb + 50) + ' ' + (cx + w) + ',4 L ' + (cx + w * 0.92) + ',' + ys +
+               ' L ' + (cx - w * 0.92) + ',' + ys + ' L ' + (cx - w) + ',4 C ' + (cx - w) + ',' + (yb + 50) + ' ' + (cx - w * 0.6) + ',' + (yb + 22) + ' ' + cx + ',' + yb + ' Z"/>';
+        });
+        g += '<rect class="h-hull" x="' + (-6.6 * SC + w) + '" y="-24" width="' + (2 * (6.6 * SC - w)) + '" height="66" rx="5"/>';   // bridgedeck / deckhouse
+        g += '<rect class="h-deck" x="' + (-8 * SC) + '" y="-30" width="' + (16 * SC) + '" height="88" rx="7"/>';                  // solar roof outline
+        $('hStatic').innerHTML = g;
+        var wg = '', gg = '';
+        WPOS.forEach(function (p, i) {
+          var x = ((p.athwartM || 0) * SC).toFixed(1), y = (-(p.foreAftM || 0) * SC).toFixed(1);
+          wg += '<g id="hw' + i + '" data-x="' + x + '" data-y="' + y + '" transform="translate(' + x + ',' + y + ')"><path class="h-wing"/><circle class="h-mast" r="1.7"/></g>';
+          gg += '<g id="hg' + i + '" transform="translate(' + x + ',' + y + ')"><path class="h-ghost"/></g>';
+        });
+        $('hWings').innerHTML = wg; $('hGhosts').innerHTML = gg;
+      })();
+      // Wing section seen from above (schematic 8 m chord): NACA-like thickness around a parabolic camber line (×1.2 so it reads).
+      // Leading edge up (local −y), mast at 25 % chord; + camber bulges to port of the chord, i.e. lift to port.
+      function wingPath(camPct) {
+        var C = 8 * SC, t = 0.13, k = -(camPct / 100) * 1.2, up = [], lo = [];
+        for (var i = 0; i <= 16; i++) {
+          var u = (1 - Math.cos(Math.PI * i / 16)) / 2, yy = -0.25 * C + u * C, xc = k * C * 4 * u * (1 - u);
+          var h = 5 * t * C * (0.2969 * Math.sqrt(u) - 0.126 * u - 0.3516 * u * u + 0.2843 * u * u * u - 0.1036 * u * u * u * u);
+          up.push((xc + h).toFixed(2) + ',' + yy.toFixed(2)); lo.unshift((xc - h).toFixed(2) + ',' + yy.toFixed(2));
+        }
+        return 'M ' + up.join(' L ') + ' L ' + lo.join(' L ') + ' Z';
+      }
+      var lastCamKey = '', lastGhostKey = '', thrustRef = 1;
+      var wingEls = WPOS.map(function (_, i) { return $('hw' + i); }), ghostEls = WPOS.map(function (_, i) { return $('hg' + i); });
+      function curCambers() { try { return effectiveCambers(); } catch (e) { return sliders.map(function (s) { return parseFloat(s.value) || 0; }); } }
+      function renderGraphic() {
+        var capDeg = norm180((parseFloat(sliderRotation.value) || 0) - 90);
+        var cam = meanActiveCamber(curCambers()), doused = reefCount >= 3;
+        var camKey = doused ? 'd' : (Math.round((cam || 0) * 2) / 2).toFixed(1);
+        if (camKey !== lastCamKey) {
+          lastCamKey = camKey; var d = wingPath(doused ? 0 : (cam || 0));
+          wingEls.forEach(function (g) { g.firstChild.setAttribute('d', d); g.style.opacity = doused ? 0.35 : ''; });
+        }
+        wingEls.forEach(function (g) { g.setAttribute('transform', 'translate(' + g.getAttribute('data-x') + ',' + g.getAttribute('data-y') + ') rotate(' + capDeg.toFixed(1) + ')'); });
+        if (committedOptRotation != null && committedOptCamber) {
+          var optDeg = norm180(committedOptRotation - 90), oc = meanActiveCamber(committedOptCamber) || 0;
+          var gk = (Math.round(oc * 2) / 2).toFixed(1);
+          if (gk !== lastGhostKey) { lastGhostKey = gk; var gd = wingPath(oc); ghostEls.forEach(function (g) { g.firstChild.setAttribute('d', gd); }); }
+          ghostEls.forEach(function (g, i) { g.setAttribute('transform', 'translate(' + wingEls[i].getAttribute('data-x') + ',' + wingEls[i].getAttribute('data-y') + ') rotate(' + optDeg.toFixed(1) + ')'); });
+        }
+        // Same frame as the engineering compass: bearing clockwise from the bow = angle − 90°.
+        $('hTrue').setAttribute('transform', 'rotate(' + (windAngle / DEG - 90).toFixed(1) + ')');
+        $('hApp').setAttribute('transform', 'rotate(' + (displayAWA / DEG - 90).toFixed(1) + ')');
+        // Forward thrust arrow, scaled to the largest thrust seen (slowly forgotten).
+        var th = window.globalThrust || 0;
+        thrustRef = Math.max(Math.abs(th), thrustRef * 0.9995, 1e-6);
+        var len = Math.max(-1, Math.min(1, th / thrustRef)) * 62, y0 = 10, y1 = y0 - len, hg = $('hThrust');
+        hg.classList.toggle('neg', len < 0);
+        hg.style.display = Math.abs(len) < 4 ? 'none' : '';
+        var ln = hg.firstChild, s = len >= 0 ? 1 : -1;
+        ln.setAttribute('y1', y0); ln.setAttribute('y2', (y1 + s * 6).toFixed(1));
+        hg.lastChild.setAttribute('d', 'M 0,' + (y1 - s * 2).toFixed(1) + ' L -6,' + (y1 + s * 9).toFixed(1) + ' L 6,' + (y1 + s * 9).toFixed(1) + ' Z');
+      }
+
+      // ---------- tiles (4 Hz, smoothed: numbers you can read on a moving boat) ----------
+      var sm = null, lastTiles = 0;
+      function ema(prev, v, a) { return prev == null ? v : prev + (v - prev) * a; }
+      function emaAng(prev, deg, a) { if (prev == null) return deg; return prev + norm180(deg - prev) * a; }
+      function setTxt(id, v) { var e = $(id); if (e && e.textContent !== v) e.textContent = v; }
+      function pointOfSail(twa) {
+        var a = Math.abs(twa);
+        if (a < 35) return L('face au vent', 'head to wind');
+        if (a < 60) return L('près', 'close-hauled');
+        if (a < 80) return L('bon plein', 'close reach');
+        if (a < 110) return L('travers', 'beam reach');
+        if (a < 150) return L('largue', 'broad reach');
+        return L('vent arrière', 'running');
+      }
+      function beaufort(kt) { var B = [1, 4, 7, 11, 17, 22, 28, 34, 41, 48, 56, 64]; for (var i = 0; i < B.length; i++) if (kt < B[i]) return i; return 12; }
+      function sideOf(b) { return b > 0.5 ? L('TRIB.', 'STBD') : b < -0.5 ? L('BÂB.', 'PORT') : ''; }
+      function renderTiles() {
+        var awaB = norm180(displayAWA / DEG - 90), twaB = norm180(windAngle / DEG - 90);
+        var capDeg = norm180((parseFloat(sliderRotation.value) || 0) - 90);
+        var cam = meanActiveCamber(curCambers());
+        var a = 0.35;
+        if (!sm) sm = {};
+        sm.awa = emaAng(sm.awa, awaB, a); sm.aws = ema(sm.aws, displayAWS, a); sm.tws = ema(sm.tws, displayTWS, a);
+        sm.sog = ema(sm.sog, simuBateauVitesse, a); sm.twa = emaAng(sm.twa, twaB, a);
+        setTxt('vAWA', String(Math.round(Math.abs(sm.awa)))); setTxt('sAWA', sideOf(sm.awa));
+        setTxt('subAWA', pointOfSail(sm.twa));
+        setTxt('vAWS', sm.aws.toFixed(1)); setTxt('subAWS', L('en tête de mât', 'at masthead'));
+        setTxt('vTWS', sm.tws.toFixed(1));
+        setTxt('subTWS', L('force ', 'force ') + beaufort(sm.tws) + ' · ' + Math.round(Math.abs(sm.twa)) + '° ' + sideOf(sm.twa).toLowerCase());
+        setTxt('vSOG', fmtN(sm.sog, 1));
+        var vmg = sm.sog * Math.cos(sm.twa * DEG);
+        setTxt('subSOG', 'VMG ' + (vmg >= 0 ? '↑ ' : '↓ ') + Math.abs(vmg).toFixed(1) + ' ' + L('nds', 'kn'));
+        setTxt('vWing', fmtS(capDeg));
+        setTxt('vCam', reefCount >= 3 || cam == null ? '—' : fmtS(cam, 1));
+        var coach = state.coach && committedOptRotation != null && committedOptCamber;
+        var optDeg = coach ? norm180(committedOptRotation - 90) : 0;
+        setTxt('subWing', feather ? L('en drapeau', 'feathered') : state.auto ? L('réglé par AUTO', 'set by AUTO') + (coach ? ' · opt. ' + fmtS(optDeg) + '°' : '')
+                         : coach ? 'opt. ' + fmtS(optDeg) + '° · Δ ' + fmtS(norm180(capDeg - optDeg)) + '°' : '');
+        var reefTxt = reefCount >= 3 ? L('aile affalée', 'wing doused') : reefCount === 2 ? L('2 ris', '2 reefs') : reefCount === 1 ? L('1 ris', '1 reef') : '';
+        setTxt('subCam', reefCount >= 3 ? reefTxt : [coach && !feather ? 'opt. ' + fmtS(meanActiveCamber(committedOptCamber) || 0, 1) + ' %' : '', reefTxt].filter(Boolean).join(' · '));
+        $('tAWS').classList.toggle('alert', windHigh);
+        var sail = $('valSailMode'); setTxt('hAllure', sail ? sail.textContent : '--');
+      }
+      // Controls follow the state (also when it is changed from the engineering page).
+      function renderControls() {
+        var auto = !!state.auto, lockedOut = auto || feather;
+        $('hbManual').classList.toggle('sel', !auto && !feather);
+        $('hbAuto').classList.toggle('sel', auto);
+        $('hbFeather').classList.toggle('sel', feather);
+        ['hbAngM', 'hbAngP', 'hbCamM', 'hbCamP', 'hbFlat', 'hbOpt'].forEach(function (id) { $(id).classList.toggle('dis', lockedOut); });
+        if (sliderAllEl && sliderAllEl.disabled) ['hbCamM', 'hbCamP', 'hbFlat'].forEach(function (id) { $(id).classList.add('dis'); });
+        document.querySelectorAll('#helm [data-reef]').forEach(function (b) { b.classList.toggle('sel', +b.getAttribute('data-reef') === reefCount); });
+        var capDeg = norm180((parseFloat(sliderRotation.value) || 0) - 90);
+        setTxt('hvAng', fmtS(capDeg) + '°');
+        var cam = meanActiveCamber(curCambers());
+        setTxt('hvCam', reefCount >= 3 || cam == null ? '—' : fmtS(cam, 1) + ' %');
+        $('hvAng').classList.toggle('dim', lockedOut); $('hvCam').classList.toggle('dim', lockedOut);
+        var mb = $('hModeBadge'), mode = feather ? 'feather' : auto ? 'auto' : 'manual';
+        if (mb.getAttribute('data-mode') !== mode || mb.getAttribute('data-lang') !== (en() ? 'en' : 'fr')) {
+          mb.setAttribute('data-mode', mode); mb.setAttribute('data-lang', en() ? 'en' : 'fr');
+          mb.innerHTML = '<svg class="ico"><use href="#' + (mode === 'feather' ? 'i-flag' : mode === 'auto' ? 'i-auto' : 'i-hand') + '"/></svg>' +
+            (mode === 'feather' ? L('DRAPEAU', 'FEATHER') : mode === 'auto' ? 'AUTO' : L('MANUEL', 'MANUAL'));
+        }
+      }
+      function renderNow() { if (body.classList.contains('helm-on')) { try { renderGraphic(); renderControls(); } catch (e) {} } }
+      var lastG = 0;
+      function helmFrame(ts) {
+        requestAnimationFrame(helmFrame);
+        if (!body.classList.contains('helm-on') || ts - lastG < 50) return;    // ≤ 20 fps is plenty here
+        lastG = ts;
+        try {
+          renderGraphic(); renderControls();
+          if (ts - lastTiles > 250) { lastTiles = ts; renderTiles(); }
+        } catch (e) { if (window.__diag) window.__diag.log('err', 'helm: ' + (e && e.message ? e.message : e)); }
+      }
+      requestAnimationFrame(helmFrame);
+
+      // =====================================================================================
+      // STATUS CHIPS + ALARMS (2 Hz)
+      // =====================================================================================
+      function chip(id, cls, txt) { var c = $(id); c.classList.remove('ok', 'warn', 'crit'); if (cls) c.classList.add(cls); setTxt(id + 'V', txt); }
+      function paintChips() {
+        chip('chipMode', feather || state.auto ? 'ok' : '', feather ? L('DRAPEAU', 'FEATHER') : state.auto ? 'AUTO' : L('MANUEL', 'MANUAL'));
+        var m = window.MotorTest ? window.MotorTest.getState() : null;
+        if (!m || !m.connected) chip('chipMotor', m && m.estop ? 'crit' : '', m && m.estop ? L('ARRÊT URG.', 'E-STOP') : L('HORS LIGNE', 'OFFLINE'));
+        else if (m.estop) chip('chipMotor', 'crit', L('ARRÊT URG.', 'E-STOP'));
+        else if (m.fault) chip('chipMotor', 'crit', L('DÉFAUT', 'FAULT'));
+        else if (m.armed) chip('chipMotor', 'warn', L('ARMÉ', 'ARMED'));
+        else chip('chipMotor', 'ok', L('CONNECTÉ', 'CONNECTED'));
+        var im = window.ImuBench ? window.ImuBench.getState() : null;
+        if (im && im.connected) chip('chipImu', 'ok', L('CONNECTÉ', 'CONNECTED'));
+        else if (im && im.sim) chip('chipImu', 'warn', 'SIMULATION');
+        else chip('chipImu', '', L('HORS LIGNE', 'OFFLINE'));
+        chip('chipData', 'warn', 'SIMULATION');
+      }
+      var acked = {}, windHigh = false, motorLostSeen = null, motorLost = false, imuLostSeen = null, imuLost = false, lastBeep = 0;
+      function evalAlarms() {
+        var list = [];
+        var m = window.MotorTest ? window.MotorTest.getState() : null;
+        if (m) {
+          if (motorLostSeen == null) motorLostSeen = m.lost;
+          if (m.lost > motorLostSeen) { motorLostSeen = m.lost; motorLost = true; delete acked.mlost; }
+          if (m.connected) motorLost = false;
+          if (m.estop) list.push({ key: 'estop', sev: 'info', title: L("ARRÊT D'URGENCE ACTIF — moteur coupé", 'EMERGENCY STOP ACTIVE — motor cut'),
+            more: L('Réarmer : maintenir RÉARMER 1,5 s (en haut à droite).', 'To reset: hold RESET STOP 1.5 s (top right).') });
+          if (m.connected && m.fault) list.push({ key: 'mfault', sev: 'crit', title: L('Défaut moteur cambreur 1 : ', 'Camber 1 motor fault: ') + m.faultText,
+            more: L('Vérifiez le moteur ; passez en DRAPEAU si besoin.', 'Check the motor; switch to FEATHER if needed.') });
+          var temp = Math.max(m.tmot || 0, m.tmos || 0);
+          if (m.connected && temp >= HC.motorCritC) list.push({ key: 'mtemp', sev: 'crit', title: L('Surchauffe moteur cambreur 1 : ', 'Camber 1 motor overheating: ') + Math.round(temp) + ' °C',
+            more: L('Limitez les réglages et laissez refroidir.', 'Limit trimming and let it cool down.') });
+          else if (m.connected && temp >= HC.motorWarnC) list.push({ key: 'mtempw', sev: 'warn', title: L('Moteur cambreur 1 chaud : ', 'Camber 1 motor hot: ') + Math.round(temp) + ' °C',
+            more: L('Surveillez la température.', 'Keep an eye on the temperature.') });
+          if (motorLost) list.push({ key: 'mlost', sev: 'crit', title: L('Liaison moteur perdue — moteur désarmé', 'Motor link lost — motor disarmed'),
+            more: L('Vérifiez câble USB et alimentation, puis reconnectez (page Ingénierie).', 'Check the USB cable and power, then reconnect (Engineering page).') });
+        }
+        var im = window.ImuBench ? window.ImuBench.getState() : null;
+        if (im) {
+          if (imuLostSeen == null) imuLostSeen = im.lost || 0;
+          if ((im.lost || 0) > imuLostSeen) { imuLostSeen = im.lost; imuLost = true; delete acked.ilost; }
+          if (im.connected) imuLost = false;
+          if (imuLost) list.push({ key: 'ilost', sev: 'warn', title: L('Liaison IMU perdue', 'IMU link lost'), more: L('Reconnectez le banc IMU (page Ingénierie).', 'Reconnect the IMU bench (Engineering page).') });
+        }
+        var aws = displayAWS || 0;
+        windHigh = windHigh ? aws >= HC.windAlarmKt - 2 : aws >= HC.windAlarmKt;   // 2 kn hysteresis
+        if (windHigh) list.push({ key: 'wind', sev: 'warn', title: L('Vent fort : ', 'Strong wind: ') + Math.round(aws) + ' ' + L('nds apparents', 'kn apparent'),
+          more: L('Prenez un ris ou passez les ailes en DRAPEAU.', 'Reef, or switch the wings to FEATHER.') });
+        var keys = {}; list.forEach(function (a) { keys[a.key] = 1; });
+        Object.keys(acked).forEach(function (k) { if (!keys[k]) delete acked[k]; });   // cleared alarms re-arm
+        var rank = { crit: 0, warn: 1, info: 2 };
+        list.sort(function (a, b) { return rank[a.sev] - rank[b.sev]; });
+        var bar = $('alarm-bar');
+        if (!list.length) { bar.hidden = true; return; }
+        var top = list[0];
+        bar.hidden = false;
+        bar.className = top.sev + (acked[top.key] ? ' acked' : '');
+        setTxt('alarmTitle', top.title);
+        setTxt('alarmMore', top.more + (list.length > 1 ? L(' (+' + (list.length - 1) + ' autre' + (list.length > 2 ? 's' : '') + ')', ' (+' + (list.length - 1) + ' more)') : ''));
+        var loud = list.filter(function (a) { return a.sev !== 'info' && !acked[a.key]; });
+        var now = Date.now();
+        if (loud.length) {
+          var crit = loud.some(function (a) { return a.sev === 'crit'; });
+          if (now - lastBeep > (crit ? 1500 : 4000)) {
+            lastBeep = now;
+            if (crit) { beep(1000, 0.18, 0.14); setTimeout(function () { beep(1000, 0.18, 0.14); }, 260); }
+            else beep(760, 0.22, 0.1);
+          }
+        }
+      }
+      $('alarmAck').addEventListener('click', function () {
+        // Silence everything currently shown; the banner stays while the problem lasts.
+        var m = window.MotorTest ? window.MotorTest.getState() : null;
+        ['estop', 'mfault', 'mtemp', 'mtempw', 'mlost', 'ilost', 'wind'].forEach(function (k) { acked[k] = true; });
+        if (m && m.connected) motorLost = false;
+        evalAlarms();
+      });
+      setInterval(function () { try { paintChips(); evalAlarms(); } catch (e) { if (window.__diag) window.__diag.log('err', 'alarms: ' + (e && e.message ? e.message : e)); } }, 500);
+
+      // =====================================================================================
+      // START-UP: restore display choices, language and page
+      // =====================================================================================
+      if (load('lang', 'fr') === 'en' && chkLang && !chkLang.checked) { chkLang.checked = true; fire(chkLang, 'change'); }
+      apply3D(load('view3d', 'full'));
+      applyTheme();
+      setPage(page);
+      paintChips(); evalAlarms();
     })();
     </script>
 </body>
