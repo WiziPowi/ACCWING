@@ -1070,7 +1070,28 @@
         background:var(--u-panel2); border:1.5px solid var(--u-line); color:var(--u-fg); display:inline-flex; gap:6px; align-items:center; }
       .hbadge .ico { width:1.1em; height:1.1em; }
       .hbadge.mode { margin-left:auto; background:var(--u-sel-bg); color:var(--u-sel-fg); border-color:var(--u-sel-bg); }
-      .helm-legend { position:absolute; left:10px; right:10px; bottom:8px; display:flex; flex-wrap:wrap; gap:4px 14px;
+      /* Wing selector: a column in the free margin left of the (square) picture; a row under it on narrow screens. */
+      .hwing-sel { position:absolute; left:10px; top:48px; bottom:10px; display:flex; flex-direction:column; justify-content:center;
+        gap:6px; z-index:2; }
+      .hws { width:clamp(60px, 6vw, 88px); height:clamp(40px, 6.6vh, 62px); flex:none; border-radius:10px; border:2px solid var(--u-line);
+        background:var(--u-panel2); color:var(--u-fg); display:flex; flex-direction:column; align-items:center; justify-content:center;
+        gap:2px; padding:0 4px; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; font-family:var(--ui-font); }
+      .hws b { font:800 clamp(17px, 2.7vh, 26px)/1 var(--ui-font); }
+      .hws[data-wsel="all"] b { font-size:clamp(12px, 1.8vh, 16px); letter-spacing:.5px; }
+      .hws small { font:800 10px/1 var(--ui-font); color:var(--u-fg2); letter-spacing:.3px; white-space:nowrap; }
+      .hws.sel { background:var(--u-sel-bg); color:var(--u-sel-fg); border-color:var(--u-sel-bg); }
+      .hws.sel small { color:inherit; opacity:.85; }
+      [data-wsel][hidden] { display:none !important; }
+      .wing-sel .btn-toggle { padding:6px 4px; }
+      .hg-sfx { color:var(--u-fg); }
+      #helm-svg .hnum circle.n { fill:var(--u-panel); stroke:var(--u-wing-edge); stroke-width:1; }
+      #helm-svg .hnum text { fill:var(--u-fg); font:800 6px var(--ui-font); text-anchor:middle; dominant-baseline:central; pointer-events:none; }
+      #helm-svg .hnum.sel circle.n { fill:var(--u-sel-bg); stroke:var(--u-sel-bg); }
+      #helm-svg .hnum.sel text { fill:var(--u-sel-fg); }
+      #helm-svg .hnum circle.hit { fill:transparent; cursor:pointer; }
+      #helm-svg .hwg.dim { opacity:.4; }
+      #helm-svg .hwg.sel .h-wing { stroke:var(--u-opt); stroke-width:1.6; }
+      .helm-legend { position:absolute; left:auto; right:10px; bottom:8px; display:flex; flex-direction:column; align-items:flex-end; gap:3px;
         font:700 clamp(11px, 1.6vh, 14px)/1.2 var(--ui-font); color:var(--u-fg2); pointer-events:none; }
       .helm-legend span { display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
       .helm-legend svg { width:22px; height:12px; }
@@ -1118,10 +1139,15 @@
       #helm-svg .h-thrust { stroke:var(--u-thrust); stroke-width:3.2; fill:none; stroke-linecap:round; }
       #helm-svg .h-thrust-head { fill:var(--u-thrust); }
       #helm-svg .neg .h-thrust { stroke:var(--u-warn); } #helm-svg .neg .h-thrust-head { fill:var(--u-warn); }
-      body:not(.coach-active) #helm-svg .h-ghost, body.helm-feather #helm-svg .h-ghost,
+      body:not(.coach-active) #helm-svg .h-ghost,
       body:not(.coach-active) .helm-legend .lg-opt { display:none; }
       /* Half-screen split / tablet portrait (561–860 px): same two columns, controls on 3 rows. */
       @media (max-width:860px) {
+        .helm-view { flex-direction:column; justify-content:flex-start; }
+        #helm-svg { flex:1 1 auto; min-height:0; height:auto; }
+        .hwing-sel { position:static; flex-direction:row; width:100%; padding:0 8px 8px; gap:5px; }
+        .hws { flex:1 1 0; width:auto; height:50px; }
+        .helm-legend { display:none; }
         #helm { grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); }
         .tile { padding:6px 10px; }
         .tile-k { font-size:12px; letter-spacing:.2px; }
@@ -1289,6 +1315,14 @@
                 <g id="hTrue"><path class="h-true" d="M 0,-76 L -8,-89 L -2.6,-89 L -2.6,-108 L 2.6,-108 L 2.6,-89 L 8,-89 Z"/></g>
             </svg>
             <div class="helm-badges"><span class="hbadge" id="hAllure">--</span><span class="hbadge mode" id="hModeBadge">MANUEL</span></div>
+            <!-- Wing selector: every button below acts on the selected wing(s). Tapping a wing in the picture selects it too. -->
+            <div class="hwing-sel" role="group" aria-label="Ailes">
+                <button type="button" class="hws" data-wsel="all" data-help="Toutes les ailes : les boutons agissent sur les 4 ailes (− / + décalent chaque aile de la même valeur)." data-help-en="All wings: the buttons act on all 4 wings (− / + shift each wing by the same amount)."><b data-fr="TOUTES" data-en="ALL">TOUTES</b><small id="hwsAll"></small></button>
+                <button type="button" class="hws" data-wsel="0" data-help="Aile 1 — avant bâbord. Les boutons n'agissent que sur elle." data-help-en="Wing 1 — forward port. The buttons act on it only."><b>1</b><small id="hws0"></small></button>
+                <button type="button" class="hws" data-wsel="1" data-help="Aile 2 — avant tribord. Les boutons n'agissent que sur elle." data-help-en="Wing 2 — forward starboard. The buttons act on it only."><b>2</b><small id="hws1"></small></button>
+                <button type="button" class="hws" data-wsel="2" data-help="Aile 3 — arrière bâbord. Les boutons n'agissent que sur elle." data-help-en="Wing 3 — aft port. The buttons act on it only."><b>3</b><small id="hws2"></small></button>
+                <button type="button" class="hws" data-wsel="3" data-help="Aile 4 — arrière tribord. Les boutons n'agissent que sur elle." data-help-en="Wing 4 — aft starboard. The buttons act on it only."><b>4</b><small id="hws3"></small></button>
+            </div>
             <div class="helm-legend">
                 <span><svg viewBox="0 0 22 12"><path d="M2 6h12M14 1l7 5-7 5z" fill="var(--u-wind)" stroke="var(--u-wind)" stroke-width="2.5"/></svg><b data-fr="Vent réel" data-en="True wind">Vent réel</b></span>
                 <span><svg viewBox="0 0 22 12"><path d="M4 1.5l14 4.5-14 4.5z" fill="var(--u-panel)" stroke="var(--u-wind2)" stroke-width="2"/></svg><b data-fr="Vent apparent" data-en="Apparent wind">Vent apparent</b></span>
@@ -1319,12 +1353,12 @@
                 <div class="tile-sub" id="subTWS"></div>
             </div>
             <div class="tile" id="tWing" data-help="Angle des ailes par rapport à l'axe du bateau (+ = vers tribord). En mode Coach, la ligne du bas donne l'angle optimal." data-help-en="Wing angle from the boat axis (+ = towards starboard). In Coach mode the bottom line gives the optimal angle.">
-                <div class="tile-k" data-fr="ANGLE AILES" data-en="WING ANGLE">ANGLE AILES</div>
+                <div class="tile-k"><span data-fr="ANGLE" data-en="ANGLE">ANGLE</span> <span id="kWing">AILES</span></div>
                 <div class="tile-v"><span class="num" id="vWing">--</span><span class="unit">°</span></div>
                 <div class="tile-sub" id="subWing"></div>
             </div>
             <div class="tile" id="tCam" data-help="Cambrure moyenne des sections actives (le signe indique le côté du creux). En mode Coach, la ligne du bas donne la cambrure optimale." data-help-en="Mean camber of the active sections (the sign gives the side of the curve). In Coach mode the bottom line gives the optimal camber.">
-                <div class="tile-k" data-fr="CAMBRURE" data-en="CAMBER">CAMBRURE</div>
+                <div class="tile-k"><span data-fr="CAMBRURE" data-en="CAMBER">CAMBRURE</span> <span id="kCam"></span></div>
                 <div class="tile-v"><span class="num" id="vCam">--</span><span class="unit">%</span></div>
                 <div class="tile-sub" id="subCam"></div>
             </div>
@@ -1332,7 +1366,7 @@
 
         <section class="helm-controls">
             <div class="hgroup g-mode">
-                <div class="hg-k" data-fr="MODE" data-en="MODE">MODE</div>
+                <div class="hg-k"><span data-fr="MODE" data-en="MODE">MODE</span> <span class="hg-sfx"></span></div>
                 <div class="hg-row">
                     <button type="button" class="hb" id="hbManual" data-help="MANUEL : vous réglez l'angle et la cambrure avec − / +." data-help-en="MANUAL: you set angle and camber with − / +."><svg class="ico"><use href="#i-hand"/></svg><span data-fr="MANUEL" data-en="MANUAL">MANUEL</span></button>
                     <button type="button" class="hb" id="hbAuto" data-hold="1000" data-hold-if="helmAutoOff" data-help="AUTO : l'optimiseur règle angle et cambrure en continu. Maintenir 1 s pour activer." data-help-en="AUTO: the optimiser keeps setting angle and camber. Hold 1 s to turn on."><svg class="ico"><use href="#i-auto"/></svg><span>AUTO</span></button>
@@ -1340,7 +1374,7 @@
                 </div>
             </div>
             <div class="hgroup g-angle">
-                <div class="hg-k" data-fr="ANGLE AILES" data-en="WING ANGLE">ANGLE AILES</div>
+                <div class="hg-k"><span data-fr="ANGLE" data-en="ANGLE">ANGLE</span> <span class="hg-sfx"></span></div>
                 <div class="hg-row">
                     <button type="button" class="hb hb-step" id="hbAngM" data-help="Tourne les ailes de 1° vers bâbord. Maintenir pour répéter." data-help-en="Turns the wings 1° to port. Hold to repeat." aria-label="−1°">−</button>
                     <output class="hval" id="hvAng">--</output>
@@ -1348,7 +1382,7 @@
                 </div>
             </div>
             <div class="hgroup g-cam">
-                <div class="hg-k" data-fr="CAMBRURE" data-en="CAMBER">CAMBRURE</div>
+                <div class="hg-k"><span data-fr="CAMBRURE" data-en="CAMBER">CAMBRURE</span> <span class="hg-sfx"></span></div>
                 <div class="hg-row">
                     <button type="button" class="hb hb-step" id="hbCamM" data-help="Cambrure −0,5 % sur toutes les sections. Maintenir pour répéter." data-help-en="Camber −0.5 % on all sections. Hold to repeat." aria-label="−0.5%">−</button>
                     <output class="hval" id="hvCam">--</output>
@@ -1356,14 +1390,14 @@
                 </div>
             </div>
             <div class="hgroup g-quick">
-                <div class="hg-k" data-fr="RÉGLAGE RAPIDE" data-en="QUICK SET">RÉGLAGE RAPIDE</div>
+                <div class="hg-k"><span data-fr="RÉGLAGE RAPIDE" data-en="QUICK SET">RÉGLAGE RAPIDE</span> <span class="hg-sfx"></span></div>
                 <div class="hg-row">
                     <button type="button" class="hb" id="hbFlat" data-help="À PLAT : cambrure 0 % sur toutes les sections." data-help-en="FLAT: 0 % camber on all sections."><svg class="ico"><use href="#i-flat"/></svg><span data-fr="À PLAT" data-en="FLAT">À PLAT</span></button>
                     <button type="button" class="hb" id="hbOpt" data-help="OPTIMUM : applique une fois l'angle et la cambrure calculés par l'optimiseur (reste en manuel)." data-help-en="OPTIMUM: applies the optimiser's angle and camber once (stays in manual)."><svg class="ico"><use href="#i-star"/></svg><span>OPTIMUM</span></button>
                 </div>
             </div>
             <div class="hgroup g-reef">
-                <div class="hg-k" data-fr="RIS — maintenir 1 s" data-en="REEF — hold 1 s">RIS — maintenir 1 s</div>
+                <div class="hg-k"><span data-fr="RIS — maintenir 1 s" data-en="REEF — hold 1 s">RIS — maintenir 1 s</span> <span class="hg-sfx"></span></div>
                 <div class="hg-row">
                     <button type="button" class="hb" data-reef="0" data-hold="1000" data-hold-if="helmReef" data-help="Aile pleine. Maintenir 1 s." data-help-en="Full wing. Hold 1 s."><span data-fr="PLEIN" data-en="FULL">PLEIN</span></button>
                     <button type="button" class="hb" data-reef="1" data-hold="1000" data-hold-if="helmReef" data-help="1 ris : retire la section de tête. Maintenir 1 s." data-help-en="1 reef: drops the head section. Hold 1 s."><span data-fr="1 RIS" data-en="1 REEF">1 RIS</span></button>
@@ -1386,6 +1420,17 @@
                 <label class="btn-toggle active-coach" id="btnCoach" data-help="COACH : affiche l'optimum (repères cyan) sans toucher aux réglages." data-help-en="COACH: shows the optimum (cyan markers) without changing the settings."><input type="checkbox" id="chkCoach" checked><svg class="ico"><use href="#i-target"/></svg>Coach</label>
                 <label class="btn-toggle" id="btnAuto" data-hold="1000" data-hold-if="autoOff" data-help="AUTO : l'optimiseur règle l'angle et la cambrure de l'aile. Activer : maintenir 1 s. Désactiver : toucher." data-help-en="AUTO: the optimiser sets wing angle and camber. Turn on: hold 1 s. Turn off: tap."><input type="checkbox" id="chkAuto"><svg class="ico"><use href="#i-auto"/></svg>Auto</label>
                 <label class="btn-toggle" id="btnPro" data-help="PRO : écoulements CFD + décomposition portance / traînée des forces aéro." data-help-en="PRO: CFD flow + lift/drag decomposition of the aero forces."><input type="checkbox" id="chkPro"><svg class="ico"><use href="#i-flow"/></svg>Pro</label>
+            </div>
+
+            <!-- Wing selector: AUTO, rotation, camber and reef below act on the selected wing(s);
+                 the sliders show the selected wing (with TOUTES: the first one in manual). -->
+            <div class="section-title" data-fr="Aile(s) réglée(s)" data-en="Wing(s) controlled">Aile(s) réglée(s)</div>
+            <div class="model-toggles wing-sel" id="wingSelEng">
+                <button type="button" class="btn-toggle active-model" data-wsel="all" data-help="Les réglages ci-dessous s'appliquent aux 4 ailes." data-help-en="The settings below apply to all 4 wings."><span data-fr="Toutes" data-en="All">Toutes</span></button>
+                <button type="button" class="btn-toggle" data-wsel="0" data-help="Aile 1 — avant bâbord (le moteur du banc pilote son cambreur 1)." data-help-en="Wing 1 — forward port (the bench motor drives its camber 1).">1</button>
+                <button type="button" class="btn-toggle" data-wsel="1" data-help="Aile 2 — avant tribord." data-help-en="Wing 2 — forward starboard.">2</button>
+                <button type="button" class="btn-toggle" data-wsel="2" data-help="Aile 3 — arrière bâbord." data-help-en="Wing 3 — aft port.">3</button>
+                <button type="button" class="btn-toggle" data-wsel="3" data-help="Aile 4 — arrière tribord." data-help-en="Wing 4 — aft starboard.">4</button>
             </div>
 
             <!-- Windelo build: boat-model (Trimaran/KALIM) selector and the STL file picker are
@@ -3275,9 +3320,33 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         let cfdStyle = 'clouds';
 
         const state = { coach: true, auto: false, pro: false };
+        // state.auto is not stored: it says whether ALL the selected wings are in AUTO (each wing has its
+        // own mode — see WINGS). setMode({auto}) switches the selected wing(s) to / out of AUTO.
         function setMode(patch) {
+            if ('auto' in patch) {
+                const on = !!patch.auto; delete patch.auto;
+                selectedWings().forEach(k => { const w = WINGS[k]; if (on) { if (w.mode !== 'auto') { w.mode = 'auto'; w.sh = null; } } else if (w.mode === 'auto') w.mode = 'manual'; });
+            }
             Object.assign(state, patch);
+            syncModeState();
+            // Don't let a failure in the simulation update prevent the visual toggle.
+            try { mettreAJour(); }
+            catch (e) {
+                console.error('mettreAJour failed:', e);
+                if (window.__diag) window.__diag.log('err', 'mettreAJour: ' + (e && e.message ? e.message : e) + ' | ' + (e && e.stack ? e.stack.split('\n')[1] : ''));
+            }
+        }
+        // Mode buttons + slider locks follow the selected wing(s): locked when they are all in AUTO
+        // (auto-active) or all feathered (feather-active).
+        function syncModeState() {
+            const sel = selectedWings();
+            const allAuto = sel.length > 0 && sel.every(k => WINGS[k].mode === 'auto');
+            const allFeather = sel.length > 0 && sel.every(k => WINGS[k].mode === 'feather');
+            state.auto = allAuto;
             if (state.auto) state.coach = true;
+            if (chkAuto) chkAuto.checked = state.auto;
+            if (chkCoach) chkCoach.checked = state.coach;
+            panneauControles.classList.toggle('feather-active', allFeather);
             btnCoach.classList.toggle('active-coach', state.coach);
             btnAuto .classList.toggle('active-auto',  state.auto);
             btnPro  .classList.toggle('active-pro',   state.pro);
@@ -3287,12 +3356,6 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             btnCoach.setAttribute('aria-pressed', state.coach);
             btnAuto .setAttribute('aria-pressed', state.auto);
             btnPro  .setAttribute('aria-pressed', state.pro);
-            // Don't let a failure in the simulation update prevent the visual toggle.
-            try { mettreAJour(); }
-            catch (e) {
-                console.error('mettreAJour failed:', e);
-                if (window.__diag) window.__diag.log('err', 'mettreAJour: ' + (e && e.message ? e.message : e) + ' | ' + (e && e.stack ? e.stack.split('\n')[1] : ''));
-            }
         }
         // Listen to native checkbox 'change' events (more reliable than 'click' on iOS
         // restricted webviews like WhatsApp's Quick Look — the OS handles label taps).
@@ -3316,7 +3379,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             applyLang(chkLang.checked ? 'en' : 'fr');
         });
 
-        if (chkCoach) chkCoach.addEventListener('change', () => setMode({ coach: chkCoach.checked, auto: state.auto && !chkCoach.checked ? false : state.auto }));
+        if (chkCoach) chkCoach.addEventListener('change', () => setMode(chkCoach.checked ? { coach: true } : { coach: false, auto: false }));   // AUTO needs Coach
         if (chkAuto)  chkAuto .addEventListener('change', () => { setMode({ auto: chkAuto.checked }); /* setMode forces coach on when auto on */ chkCoach.checked = state.coach; });
         if (chkPro)   chkPro  .addEventListener('change', () => {
             // Pro mode now also drives lift/drag decomposition (was a separate L/D button).
@@ -3352,55 +3415,100 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         // (it used to be −180…180, so the wing stopped at +90°). Angles written to it are wrapped here.
         const _wrapRot = (d) => { while (d > 270) d -= 360; while (d < -90) d += 360; return d; };
 
-        // Reefing state: 0 = full wing, 1 = head section furled, 2 = top two furled.
-        // Changing it feeds the 3D-geometry signature (currentCamberValues) so the wing,
-        // mast height, 2D stack and aero area all rebuild on the next frame.
-        let reefCount = 0;     // target reef (0/1/2), set by the buttons
-        let reefAnim = 0;      // animated current reef — eases toward reefCount for a smooth furl
+        // ===== PER-WING STATE (EO3: 4 wings) =====
+        // Each wing has its own mode, angle, cambers and reef. The page controls (rotation and camber
+        // sliders, reef buttons, AUTO) show the DISPLAYED wing and act on the SELECTED wing(s)
+        // (selector TOUTES / 1 / 2 / 3 / 4). Physics, AUTO, feather, 3D and the helm all read WINGS.
+        // Numbering (STL_MAST.positions): 1 = forward port, 2 = forward starboard, 3 = aft port, 4 = aft starboard.
+        //   mode : 'manual' | 'auto' (optimiser) | 'feather' (head to the apparent wind, flat — no thrust)
+        //   rot  : angle in the slider's physics frame (−90…270; boat axis = 90)
+        //   cams : raw camber per section, bôme → head (%)      reef : 0, 1, 2 or 4 (douse)
+        const WINGS = [0, 1, 2, 3].map(() => ({ mode: 'manual', rot: 90, cams: [0, 0, 0, 0], reef: 0, reefAnim: 0, sh: null }));
+        const MOTOR_WING = 0;            // the CubeMars bench motor drives camber 1 of wing 1
+        let wingSel = 'all';             // 'all' or a wing index
+        let _lastWingCount = 1;          // the EO3 model (4 wings) loads after start-up
+        window.WINGS = WINGS;
+        function activeWingCount() {     // 4 on the EO3 model, 1 on the generic wing (before / without the STL)
+            return (window.active3DModel && window.active3DModel !== 'wing' && STL_MAST.positions && STL_MAST.positions.length)
+                ? Math.min(WINGS.length, STL_MAST.positions.length) : 1;
+        }
+        function selectedWings() {
+            const n = activeWingCount();
+            if (wingSel === 'all' || wingSel >= n) { const a = []; for (let k = 0; k < n; k++) a.push(k); return a; }
+            return [wingSel];
+        }
+        // The wing the page controls show: the selected one, or — with TOUTES — the first selected wing in
+        // MANUAL (so a slider never fights an AUTO / feathered wing), else wing 1.
+        function displayWingIdx() {
+            const n = activeWingCount();
+            if (wingSel !== 'all' && wingSel < n) return wingSel;
+            for (let k = 0; k < n; k++) if (WINGS[k].mode === 'manual') return k;
+            return 0;
+        }
+        const _manualSel = () => selectedWings().filter(k => WINGS[k].mode === 'manual');
+
+        // Reefing state of the DISPLAYED wing (mirrors WINGS[displayed].reef / .reefAnim) — read by the
+        // 2D view, the generic-wing 3D path and the reef buttons. 0 = full, 1 = head furled, 2 = top two, 4 = doused.
+        let reefCount = 0;
+        let reefAnim = 0;
         window.reefCount = 0;
-        document.querySelectorAll('input[name="reef"]').forEach(r => {
-            r.addEventListener('change', (e) => {
-                reefCount = parseInt(e.target.value, 10) || 0;
-                window.reefCount = reefCount;
-                document.querySelectorAll('#reef-toggles .btn-toggle').forEach(b => b.classList.remove('active-model'));
-                const lbl = e.target.closest('.btn-toggle');
-                if (lbl) lbl.classList.add('active-model');
-                // Prise de ris ⇒ borne le slider maître « toutes sections ». Quand un ris est pris, le
-                // plus bas cambreur actif est plafonné à ±LIMITE_TORSION (5%) au-dessus du cambreur replié
-                // (0%) ; le maître pilotant tous les cambreurs à la même valeur ne peut donc pas dépasser 5%.
-                // À l'affalage (reefCount 4) : maître désactivé (les cambreurs individuels le sont déjà).
-                const sliderAll = document.getElementById('mAll');
-                if (sliderAll) {
-                    const affale = reefCount >= 3;                       // bouton « Affaler » = valeur 4
-                    const cap = (reefCount >= 1 && !affale) ? LIMITE_TORSION : 15;
-                    sliderAll.min = -cap; sliderAll.max = cap;
-                    sliderAll.disabled = affale;
-                    const v = parseFloat(sliderAll.value) || 0, vc = Math.max(-cap, Math.min(cap, v));
-                    if (vc !== v) {
-                        sliderAll.value = vc;
-                        const valAll = document.getElementById('valAll'); if (valAll) valAll.textContent = vc.toFixed(1) + '%';
-                        sliderAll.dispatchEvent(new Event('input', { bubbles: true }));   // propage la valeur bornée aux cambreurs actifs
-                    }
-                    const grp = sliderAll.closest('.controle-groupe'); if (grp) grp.style.opacity = affale ? '0.35' : '';
-                }
+        // Reef buttons + master camber limits follow the displayed wing. propagate: clamp the master
+        // slider and push the clamped value to the wing(s) (only on a user reef change).
+        function paintReefUI(r, propagate) {
+            reefCount = r; window.reefCount = r;
+            document.querySelectorAll('input[name="reef"]').forEach(inp => {
+                const on = (parseInt(inp.value, 10) || 0) === r;
+                inp.checked = on;
+                const lbl = inp.closest('.btn-toggle'); if (lbl) lbl.classList.toggle('active-model', on);
             });
+            // Prise de ris ⇒ borne le slider maître « toutes sections ». Quand un ris est pris, le
+            // plus bas cambreur actif est plafonné à ±LIMITE_TORSION (5%) au-dessus du cambreur replié
+            // (0%) ; le maître pilotant tous les cambreurs à la même valeur ne peut donc pas dépasser 5%.
+            // À l'affalage (reefCount 4) : maître désactivé (les cambreurs individuels le sont déjà).
+            const sliderAll = document.getElementById('mAll');
+            if (sliderAll) {
+                const affale = r >= 3;                       // bouton « Affaler » = valeur 4
+                const cap = (r >= 1 && !affale) ? LIMITE_TORSION : 15;
+                sliderAll.min = -cap; sliderAll.max = cap;
+                sliderAll.disabled = affale;
+                const v = parseFloat(sliderAll.value) || 0, vc = Math.max(-cap, Math.min(cap, v));
+                if (vc !== v) {
+                    sliderAll.value = vc;
+                    const valAll = document.getElementById('valAll'); if (valAll) valAll.textContent = vc.toFixed(1) + '%';
+                    if (propagate) sliderAll.dispatchEvent(new Event('input', { bubbles: true }));   // propage la valeur bornée aux cambreurs actifs
+                }
+                const grp = sliderAll.closest('.controle-groupe'); if (grp) grp.style.opacity = affale ? '0.35' : '';
+            }
+        }
+        // Reef the selected wing(s). Folded sections go flat at once; the rest keep the ≤5 % rule.
+        function setWingsReef(r) {
+            selectedWings().forEach(k => {
+                const w = WINGS[k]; w.reef = r;
+                for (let i = 0; i < w.cams.length; i++) if (r > 0 && i <= r) w.cams[i] = 0;
+            });
+            paintReefUI(WINGS[displayWingIdx()].reef, true);
+        }
+        document.querySelectorAll('input[name="reef"]').forEach(inp => {
+            inp.addEventListener('change', (e) => { if (e.target.checked) setWingsReef(parseInt(e.target.value, 10) || 0); });
         });
 
-        // Effective camber used by the wing + aero: reefed (folded) sections are forced to 0%,
+        // Effective camber of wing k used by the wing + aero: reefed (folded) sections are forced to 0%,
         // then the ≤5% twist rule is cascaded from the foot upward, so there is no abrupt jump
         // between a folded (0%) cambreur and the flying ones above it.
-        function effectiveCambers() {
+        function effectiveCambersOf(w, k) {
             const LIM = CONFIG.modes.torsionLimitPct;   // 5%
-            const v = sliders.map(s => parseFloat(s.value) || 0);
-            // When the motor pilots Camber 1, the base section reflects the motor's REAL position (lags the command).
-            if (typeof window.__mtBaseReal === 'number') v[0] = window.__mtBaseReal;
-            for (let i = 0; i < v.length; i++) if (reefCount > 0 && i <= reefCount) v[i] = 0;   // a reef flattens the bôme + folded cambreurs (1 ris ⇒ C1 & C2 flat)
+            const v = w.cams.slice();
+            // When the motor pilots Camber 1 of its wing, that section reflects the motor's REAL position (lags the command).
+            if (k === MOTOR_WING && typeof window.__mtBaseReal === 'number') v[0] = window.__mtBaseReal;
+            for (let i = 0; i < v.length; i++) if (w.reef > 0 && i <= w.reef) v[i] = 0;   // a reef flattens the bôme + folded cambreurs (1 ris ⇒ C1 & C2 flat)
             for (let i = 1; i < v.length; i++) {
                 if (v[i] > v[i - 1] + LIM) v[i] = v[i - 1] + LIM;
                 else if (v[i] < v[i - 1] - LIM) v[i] = v[i - 1] - LIM;
             }
             return v;
         }
+        // Displayed wing (2D view, helm readouts).
+        function effectiveCambers() { const k = displayWingIdx(); return effectiveCambersOf(WINGS[k], k); }
 
         const textVent = document.getElementById('valVent');
         const textVentApp = document.getElementById('valVentApp');
@@ -5443,67 +5551,57 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             if (_rdiff > 180) _rdiff -= 360; if (_rdiff < -180) _rdiff += 360;
             if (Math.abs(_rdiff) > ROTATION_DEADBAND) committedOptRotation = optimalRotationDeg;
 
-            if (state.auto) {
-                // Exponential smoothing on a high-precision *shadow* (sub-step accumulator),
-                // so the convergence rate isn't capped by the slider's step=0.1 grid.
-                // Lower ALPHA → slower, regardless of how close we are to the target.
+            // --- Per-wing modes. AUTO wings ease toward the optimum (exponential smoothing, ALPHA per
+            //     frame; the model keeps full precision, the sliders only show it). Feathered wings follow
+            //     the apparent wind at the masthead (incidence 0) with all sections flat → no thrust. ---
+            {
                 const ALPHA = CONFIG.opt.autoSmoothAlpha;
-                const HALF  = 0.05;       // half-step snap threshold
-                if (!window._autoShadow) window._autoShadow = { m: [null,null,null,null], rot: null };
-                // Re-sync shadow if the slider was moved manually while auto was off.
-                for (let i = 0; i < 4; i++) {
-                    const cur = parseFloat(sliders[i].value);
-                    if (window._autoShadow.m[i] === null || Math.abs(window._autoShadow.m[i] - cur) > 0.5)
-                        window._autoShadow.m[i] = cur;
+                const HALF  = 0.05;       // snap threshold
+                const approach = (cur, target, diff) => Math.abs(diff) <= HALF ? target : cur + diff * ALPHA;
+                const _nW = activeWingCount();
+                for (let k = 0; k < _nW; k++) {
+                    const w = WINGS[k];
+                    if (w.mode === 'auto') {
+                        const nv = w.cams.map((c, i) => approach(c, committedOptCamber[i], committedOptCamber[i] - c));
+                        // Cambreurs repliés (ris) forcés à 0 AVANT la cascade ±5%, pour que le 1er cambreur actif
+                        // au-dessus du repli soit borné à ±5% de 0 (sinon AUTO dépasse la limite près du ris).
+                        if (w.reef > 0) for (let i = 0; i < nv.length && i <= w.reef; i++) nv[i] = 0;
+                        for (let i = 0; i < 3; i++) { if (nv[i+1] > nv[i] + LIMITE_TORSION) nv[i+1] = nv[i] + LIMITE_TORSION; else if (nv[i+1] < nv[i] - LIMITE_TORSION) nv[i+1] = nv[i] - LIMITE_TORSION; }
+                        for (let i = 3; i > 0; i--) { if (nv[i-1] > nv[i] + LIMITE_TORSION) nv[i-1] = nv[i] + LIMITE_TORSION; else if (nv[i-1] < nv[i] - LIMITE_TORSION) nv[i-1] = nv[i] - LIMITE_TORSION; }
+                        w.cams = nv;
+                        let rotDiff = committedOptRotation - w.rot;
+                        if (rotDiff > 180) rotDiff -= 360; if (rotDiff < -180) rotDiff += 360;
+                        w.rot = _wrapRot(approach(w.rot, committedOptRotation, rotDiff));
+                    } else if (w.mode === 'feather') {
+                        w.rot = _wrapRot(displayAWA * 180 / Math.PI);
+                        w.cams = [0, 0, 0, 0];
+                    }
+                    // Verrou DUR des cambreurs repliés par un ris : 0 % à CHAQUE frame, quel que soit le mode
+                    // (écrase l'optimiseur AUTO et l'utilisateur). Cambreurs repliés = indices 0..reef.
+                    if (w.reef > 0) for (let i = 0; i < w.cams.length && i <= w.reef; i++) w.cams[i] = 0;
                 }
-                {
-                    const cur = parseFloat(sliderRotation.value);
-                    if (window._autoShadow.rot === null || Math.abs(window._autoShadow.rot - cur) > 1.0)
-                        window._autoShadow.rot = cur;
-                }
-                const approach = (shadow, target, diff) => {
-                    if (Math.abs(diff) <= HALF) return target;
-                    return shadow + diff * ALPHA;
-                };
-
-                let newVals = [];
-                for (let i = 0; i < 4; i++) {
-                    const sh = window._autoShadow.m[i];
-                    newVals.push(approach(sh, committedOptCamber[i], committedOptCamber[i] - sh));
-                }
-                // Cambreurs repliés (ris) forcés à 0 AVANT la cascade ±5%, pour que le 1er cambreur actif
-                // au-dessus du repli soit borné à ±5% de 0 (sinon AUTO dépasse la limite près du ris).
-                if (reefCount > 0) for (let i = 0; i < newVals.length && i <= reefCount; i++) newVals[i] = 0;
-                for (let i = 0; i < 3; i++) { if (newVals[i+1] > newVals[i] + LIMITE_TORSION) newVals[i+1] = newVals[i] + LIMITE_TORSION; else if (newVals[i+1] < newVals[i] - LIMITE_TORSION) newVals[i+1] = newVals[i] - LIMITE_TORSION; }
-                for (let i = 3; i > 0; i--) { if (newVals[i-1] > newVals[i] + LIMITE_TORSION) newVals[i-1] = newVals[i] + LIMITE_TORSION; else if (newVals[i-1] < newVals[i] - LIMITE_TORSION) newVals[i-1] = newVals[i] - LIMITE_TORSION; }
-                for (let i = 0; i < 4; i++) {
-                    sliders[i].value = newVals[i];      // browser rounds to step 0.1 visually
-                    window._autoShadow.m[i] = newVals[i]; // shadow keeps full precision
-                }
-
-                let rotDiff = committedOptRotation - window._autoShadow.rot;
-                if (rotDiff > 180) rotDiff -= 360; if (rotDiff < -180) rotDiff += 360;
-                let nextRot = approach(window._autoShadow.rot, committedOptRotation, rotDiff);
-                nextRot = _wrapRot(nextRot);
-                sliderRotation.value = nextRot;
-                window._autoShadow.rot = nextRot;
             }
-
-            // Verrou DUR des cambreurs repliés par un ris : tout forcé à 0% à CHAQUE frame (mettreAJour
-            // tourne dans la boucle rAF). S'exécute APRÈS le bloc auto → écrase l'optimiseur AUTO ET
-            // l'utilisateur (sliders déjà disabled). On neutralise slider + shadow auto + cibles + label,
-            // pour que personne ne puisse les bouger. Cambreurs repliés = indices 0..reefCount.
+            // When the EO3 model arrives (1 → 4 wings), the new wings start from wing 1's setting.
+            if (activeWingCount() !== _lastWingCount) {
+                const nWC = activeWingCount();
+                for (let k = _lastWingCount; k < nWC; k++) { const w0 = WINGS[0]; Object.assign(WINGS[k], { mode: w0.mode, rot: w0.rot, cams: w0.cams.slice(), reef: w0.reef, reefAnim: w0.reefAnim }); }
+                _lastWingCount = nWC;
+                paintWingSel(); syncModeState();
+            }
+            // --- Model → page controls: the sliders and reef buttons show the displayed wing. ---
+            const _dW = WINGS[displayWingIdx()];
+            if (Math.abs((parseFloat(sliderRotation.value) || 0) - _dW.rot) > 0.05) sliderRotation.value = _dW.rot;
+            for (let i = 0; i < 4; i++) if (Math.abs((parseFloat(sliders[i].value) || 0) - _dW.cams[i]) > 0.05) sliders[i].value = _dW.cams[i];
+            if (reefCount !== _dW.reef) paintReefUI(_dW.reef, false);
+            reefAnim = _dW.reefAnim;
             if (reefCount > 0) {
                 for (let i = 0; i < sliders.length && i <= reefCount; i++) {
-                    if (parseFloat(sliders[i].value) !== 0) sliders[i].value = 0;
-                    if (window._autoShadow && window._autoShadow.m) window._autoShadow.m[i] = 0;
-                    if (committedOptCamber && committedOptCamber[i] != null) committedOptCamber[i] = 0;
-                    if (optCamberVals && optCamberVals[i] != null) optCamberVals[i] = 0;
+                    if (optCamberVals && optCamberVals[i] != null) optCamberVals[i] = 0;   // optimum markers of the shown wing
                     const _l = document.getElementById('val' + (i + 1)); if (_l) _l.textContent = '0.0%';
                 }
             }
 
-            let capDeg = (parseFloat(sliderRotation.value) || 0) - 90;
+            let capDeg = _dW.rot - 90;
             let capRad = capDeg * Math.PI / 180;
             valRotationText.textContent = capDeg.toFixed(1) + "°";
 
@@ -5757,7 +5855,8 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
                 (window.active3DModel || 'wing') + '|' +                // wing ↔ imported STL switch re-renders
                 window.__lang + '|' +                                   // re-render on language change
                 (GL3D.canvas ? (GL3D.canvas.clientWidth + 'x' + GL3D.canvas.clientHeight) : '0') + '|' +
-                reefAnim.toFixed(3); // animate the furl: re-render each frame while reefAnim eases
+                reefAnim.toFixed(3) + '|' +  // animate the furl: re-render each frame while reefAnim eases
+                WINGS.map(w => w.rot.toFixed(1) + ',' + w.cams.map(c => c.toFixed(1)).join(',') + ',' + w.reefAnim.toFixed(3)).join(';');   // every wing
             const _3dDirty = baseGeoChanged || _3dSig !== previous3DSig;
             previous3DSig = _3dSig;
             if (!_3dDirty) {
@@ -5981,6 +6080,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
                 }
             });
 
+            let _wingSets = null;   // EO3: one tris set per wing (each with its own angle / camber / reef)
             if (_stl) {
                 // STL model active: the imported hull replaces the procedural hull, and the
                 // composite wing is mapped onto the STL spar (see STL_WING). The live wing
@@ -6026,10 +6126,12 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
                     const _mIdx = _uArr.length - 1;
                     const _interp4 = (arr, u) => { const t = u * 3, i = Math.min(Math.floor(t), 2), f = t - i; return arr[i] + (arr[i + 1] - arr[i]) * f; };
                     const _camRake = STL_WING.camberRakeDeg || [4.5, 5.6, 10.24, 34.88];
-                    const _sv = sliders.map(s => parseFloat(s.value) || 0);                       // [bôme, c1, c2, c3]
-                    const _vHead = Math.max(-15, Math.min(15, _sv[3] + (_sv[3] - _sv[2]) * 0.2)); // follower head: gentle extrapolation of the trend
-                    window.__stlCambers = _sv.concat([_vHead]);                                    // shared with the 2D view
                     const _pivot3D = (typeMastSelection === 'D' ? -50 : -50 + 42);
+                    // One wing's tris (into `out`) from ITS raw cambers [bôme, c1, c2, c3], reef and angle —
+                    // every EO3 wing has its own. The parameters shadow the displayed-wing globals of the
+                    // same name (reefAnim, reefCount, capRad), so the build below reads the wing's values.
+                    const _buildStlWing = (_sv, reefAnim, reefCount, capRad, out) => {
+                    const _vHead = Math.max(-15, Math.min(15, _sv[3] + (_sv[3] - _sv[2]) * 0.2)); // follower head: gentle extrapolation of the trend
                     // Prise de ris fold metrics (computed up-front so the camber can flatten with the fold):
                     // the wing descends by the cumulative folded gaps; a cambreur whose nominal y is pushed
                     // past the boom is "folded inside" → its camber must ease to 0 (= the flattened bôme).
@@ -6113,7 +6215,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
                     if (_headDrop) _shiftRib(_stlWingRibs[_stlWingRibs.length - 1], _headDrop);
                     const _boomDrop = (STL_WING.boomDropM || 0) * _stlRig.upm;
                     if (_boomDrop) _shiftRib(_stlWingRibs[0], _boomDrop);
-                    pushWingTris(_stlWingRibs, 0, _glTris, (typeMastSelection === 'D'), resolution, STL_WING.skinColor);
+                    pushWingTris(_stlWingRibs, 0, out, (typeMastSelection === 'D'), resolution, STL_WING.skinColor);
 
                     // Masthead wing part: a panel above the head cambreur — horizontal (0°) from
                     // its trailing edge (queue), then dropping to the mast at the masthead — closing
@@ -6133,14 +6235,23 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
                         const _dd = c => _dayMode() ? _darkenHex(c, 0.5) : c;
                         const _EXT = _dd(_sk || '#6e737d'), _INT = _dd(_sk || '#8c9ba5'), _NEZ = _dd(_sk || '#b4b4b4');
                         for (let j = 0; j < resolution; j++) {
-                            _glTris.push({ pts: [_head.ext[j], _head.ext[j + 1], _apex], color: _EXT });   // extrados → apex
-                            _glTris.push({ pts: [_head.int[j + 1], _head.int[j], _apex], color: _INT });   // intrados → apex
+                            out.push({ pts: [_head.ext[j], _head.ext[j + 1], _apex], color: _EXT });   // extrados → apex
+                            out.push({ pts: [_head.int[j + 1], _head.int[j], _apex], color: _INT });   // intrados → apex
                         }
                         if (_head.nez && _head.nez.length) {                  // leading-edge fairing → apex
                             for (let j = 0; j < _head.nez.length - 1; j++)
-                                _glTris.push({ pts: [_head.nez[j], _head.nez[j + 1], _apex], color: _NEZ });
+                                out.push({ pts: [_head.nez[j], _head.nez[j + 1], _apex], color: _NEZ });
                         }
                     }
+                    };   // end _buildStlWing
+                    _wingSets = [];
+                    for (let k = 0, n = activeWingCount(); k < n; k++) {
+                        const w = WINGS[k], arr = [];
+                        _buildStlWing(w.cams, w.reefAnim, w.reef, w.rot * Math.PI / 180, arr);
+                        _wingSets.push(arr);
+                    }
+                    const _dsv = WINGS[displayWingIdx()].cams;                                       // shared with the 2D view
+                    window.__stlCambers = _dsv.concat([Math.max(-15, Math.min(15, _dsv[3] + (_dsv[3] - _dsv[2]) * 0.2))]);
                 }
             } else if (_useGL) {
                 // Option C: triangulate the wing skins directly from the 3D surfaceProfiles
@@ -6240,12 +6351,14 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             // Multi-rig STL boats: in STL mode _glTris holds only the spar + wing (the hull is the static
             // mesh), so the rig is copied to every position in STL_MAST.positions.
             if (_stl && _stlRig && STL_MAST.positions && STL_MAST.positions.length) {
-                const rig = _glTris, upm = _stlRig.upm, bow = STL_MAST.bowZ || 1;
+                const mast = _glTris, upm = _stlRig.upm, bow = STL_MAST.bowZ || 1;
                 _glTris = [];
-                for (const P of STL_MAST.positions) {
+                STL_MAST.positions.forEach((P, k) => {
                     const ox = (P.athwartM || 0) * upm, oz = (P.foreAftM || 0) * bow * upm;
-                    for (const t of rig) _glTris.push({ color: t.color, pts: t.pts.map(q => ({ x: q.x + ox, y: q.y, z: q.z + oz })) });
-                }
+                    const wing = (_wingSets && (_wingSets[k] || _wingSets[0])) || [];
+                    for (const set of [mast, wing])
+                        for (const t of set) _glTris.push({ color: t.color, pts: t.pts.map(q => ({ x: q.x + ox, y: q.y, z: q.z + oz })) });
+                });
             }
             if (_useGL) GL3D.render(_glTris, _glLines, angleCam, elevationCam);
         }
@@ -6257,11 +6370,14 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             dt = Math.min(2.5, Math.max(0.3, dt));
             cfdLastTimestamp = tsNow;
 
-            // Reefing animation: ease the current reef toward the target each frame (~0.5 s furl).
-            if (Math.abs(reefAnim - reefCount) > 1e-4) {
-                reefAnim += (reefCount - reefAnim) * Math.min(1, 0.14 * dt);
-                if (Math.abs(reefAnim - reefCount) < 0.012) reefAnim = reefCount;
+            // Reefing animation: each wing eases its own reef toward its target (~0.5 s furl).
+            for (const _w of WINGS) {
+                if (Math.abs(_w.reefAnim - _w.reef) > 1e-4) {
+                    _w.reefAnim += (_w.reef - _w.reefAnim) * Math.min(1, 0.14 * dt);
+                    if (Math.abs(_w.reefAnim - _w.reef) < 0.012) _w.reefAnim = _w.reef;
+                }
             }
+            reefAnim = WINGS[displayWingIdx()].reefAnim;   // displayed wing (2D view, generic-wing 3D)
 
             // Wind direction follows the compass target deterministically (no random gusts).
             // Handle angle wrap so the smoothing always takes the short path.
@@ -6276,28 +6392,17 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             simuVentVitesse10m += (targetVentVitesse10m - simuVentVitesse10m) * (1 - Math.exp(-2 * dt / 60));
 
             let b_vx = 0, b_vy = +simuBateauVitesse;
-            let capRad = parseFloat(sliderRotation.value) * Math.PI / 180;
 
             const RHO_AIR = CONFIG.sim.rhoAir, KT_TO_MS = CONFIG.sim.ktToMs, CHORD_M = CONFIG.wing.chord_m;
             const SPANS_M = CONFIG.sections.spans_m;
             const SIM_FORCE_SCALE = CONFIG.sim.forceScale;
 
-            let totalForceX = 0, totalForceY = 0;
-            let cop_num_y = 0, cop_denom = 0;
-
-            window.ribAeroData = [];
             window.isPortantMode = false;
-            // Smooth scalar in [0,1] driving the visual turbulence transition.
-            // 0 = fully attached / lifting flow, 1 = fully separated portant flow.
-            let frameMaxPortant = 0;
 
-            // First pass: per-strip lift + profile drag (no induced drag yet).
-            // We collect everything we need to compute global induced drag after the loop.
-            let stripCache = [];
-            let qA_total = 0;       // Σ q_i · A_i  — used for global wing-CL definition
-            let lift_total_signed = 0; // Σ q_i · CL_i · A_i  — total lift magnitude (signed)
-
-            for(let i=0; i<4; i++) {
+            // Apparent wind at each section height (wind gradient + boat speed). It is the same for
+            // every wing: wing-to-wing interference (wake / downwash) is not modelled.
+            const secWind = [];
+            for (let i = 0; i < 4; i++) {
                 let localTWS = simuVentVitesse10m * Math.pow(hauteurs_mat[i] / 10.0, 0.14);
                 let tw_vx = -localTWS * Math.cos(windAngle), tw_vy = -localTWS * Math.sin(windAngle);
                 let l_aw_vx = tw_vx - b_vx, l_aw_vy = tw_vy - b_vy;
@@ -6312,126 +6417,83 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
                 let localPortant = Math.abs(localRelA) < 0.87;
                 if (localPortant) window.isPortantMode = true;
 
-                let localAoA = localAWA - capRad;
-                localAoA = Math.atan2(Math.sin(localAoA), Math.cos(localAoA));
-                let absLocalAoA = Math.abs(localAoA);
-
-                // Turbulence strength: based purely on wing AoA vs apparent wind.
-                // Ramp from 0 (below stall ~17°) to 1 (full stall ~57°).
-                let localPortantStrength = Math.max(0, Math.min(1, (absLocalAoA - 0.30) / 0.70));
-                if (localPortantStrength > frameMaxPortant) frameMaxPortant = localPortantStrength;
-
-                // --- Reynolds-corrected profile drag for this strip ---
-                let chord_m_i = cordes[i] * CHORD_M;
                 let AWS_ms = localAWS * KT_TO_MS;
-                let Re_i = AWS_ms * chord_m_i / AERO.NU_AIR;
-                let { CL, CD, effAoA, stalled } = aeroCoeffs(localAoA, effectiveCambers()[i], localAWS); // 3e arg = AWS local (kt) -> Cd_fric CFD
-
-                let q = 0.5 * RHO_AIR * AWS_ms * AWS_ms;
-                // Furl ramps area→0 smoothly: head (i=3) over reefAnim 0→1, section 2 over 1→2.
-                let _furl = i === 0 ? (1 - Math.max(0, Math.min(1, reefAnim)))
-                          : i === 1 ? (1 - Math.max(0, Math.min(1, reefAnim - 1)))
-                          : (1 - Math.max(0, Math.min(1, reefAnim - 2))); // sections 2 & 3 furl over reefAnim 2→3 (full at affalage = 4)
-                let area_i = chord_m_i * SPANS_M[i] * _furl;
-
-                // --- Apparent wind unit vector (direction of airflow relative to wing) ---
-                let inv = 1 / (localAWS || 1);
-                let aw_dir_x = l_aw_vx * inv, aw_dir_y = l_aw_vy * inv;
-
-                stripCache.push({
-                    CL, CDp: CD, effAoA, stalled,
-                    q, area: area_i, AWS_ms, Re: Re_i,
-                    aw_dir_x, aw_dir_y,
-                    portant: localPortant,
-                });
-
-                qA_total          += q * area_i;
-                lift_total_signed += q * CL * area_i;
+                let inv = 1 / (localAWS || 1);   // apparent wind unit vector (direction of airflow)
+                secWind.push({ AWS: localAWS, AWA: localAWA, AWS_ms, q: 0.5 * RHO_AIR * AWS_ms * AWS_ms,
+                               aw_dir_x: l_aw_vx * inv, aw_dir_y: l_aw_vy * inv, portant: localPortant });
             }
 
-            // --- Global induced drag (Prandtl) ---
-            // Definition of wing-level CL with respect to total dynamic-pressure-weighted area:
-            //     CL_wing = Σ(q_i·CL_i·A_i) / Σ(q_i·A_i)
-            // Induced drag coefficient: CDi = CL_wing² / (π·e·AR)
-            // Total induced drag force: Di = CDi · Σ(q_i·A_i)
-            // We distribute Di to each strip in proportion to q_i·A_i, applied along
-            // the strip's apparent-wind direction (induced drag is parallel to local flow).
-            let CL_wing = qA_total > 1e-9 ? (lift_total_signed / qA_total) : 0;
-            let CDi_wing = 0; // trainee induite deja incluse dans la matrice CFD (Cd total)
-
-            // Second pass: convert each strip's coefficients to forces, including its share
-            // of induced drag.
-            for (let i = 0; i < 4; i++) {
-                const s = stripCache[i];
-                let qA_i = s.q * s.area;
-                let lift_coef_force   = s.q * s.CL  * s.area;                    // raw N before scale
-                let dragP_coef_force  = s.q * s.CDp * s.area;                    // profile drag, raw N
-                // Strip's share of induced drag, weighted by q·A (so high-q strips carry more):
-                let dragI_coef_force  = qA_total > 1e-9 ? CDi_wing * qA_i : 0;
-
-                let lift  = lift_coef_force  * SIM_FORCE_SCALE;
-                let dragP = dragP_coef_force * SIM_FORCE_SCALE;
-                let dragI = dragI_coef_force * SIM_FORCE_SCALE;
-                let drag  = dragP + dragI;
-
-                // Drag along apparent wind, lift perpendicular (CW rotation)
-                let drag_fx = drag * s.aw_dir_x;
-                let drag_fy = drag * s.aw_dir_y;
-                let lift_dir_x = s.aw_dir_y, lift_dir_y = -s.aw_dir_x;
-                let lift_fx = lift * lift_dir_x;
-                let lift_fy = lift * lift_dir_y;
-
-                // Résultante = Lift − Drag (drag contribution flipped by ×-1 in this sum).
-                let stripFx = lift_fx - drag_fx;
-                let stripFy = lift_fy - drag_fy;
-                let stripMag = Math.sqrt(stripFx*stripFx + stripFy*stripFy);
-
-                // Effective CD seen by this strip (profile + induced share), useful for D/L UI
-                let CD_eff = s.CDp + (qA_total > 1e-9 ? CDi_wing : 0);
-
-                window.ribAeroData.push({
-                    fx: stripFx, fy: stripFy,
-                    liftX: lift_fx, liftY: lift_fy,
-                    dragX: drag_fx, dragY: drag_fy,
-                    cl: s.CL, cd: CD_eff, cdp: s.CDp, cdi: CDi_wing,
-                    aoa: s.effAoA, portant: s.portant, stalled: s.stalled,
-                    Re: s.Re,
-                });
-
-                totalForceX += stripFx;
-                totalForceY += stripFy;
-
-                cop_num_y += stripMag * y3D_pos[i];
-                cop_denom += stripMag;
+            // Aero force of ONE wing (4 strips) from its own angle, cambers and reef.
+            // Lift ⟂ apparent wind (CW rotation), drag along it; the CFD matrix already includes the
+            // induced drag (CDi = 0 here). Résultante = Lift − Drag (drag flipped by ×−1 in this sum).
+            function wingAero(w, k) {
+                const capRadW = w.rot * Math.PI / 180, camsW = effectiveCambersOf(w, k);
+                let fx = 0, fy = 0, copN = 0, copD = 0, maxP = 0, qA = 0, liftQA = 0;
+                const rib = [];
+                for (let i = 0; i < 4; i++) {
+                    const sw = secWind[i];
+                    let localAoA = sw.AWA - capRadW;
+                    localAoA = Math.atan2(Math.sin(localAoA), Math.cos(localAoA));
+                    // Turbulence strength: ramp from 0 (below stall ~17°) to 1 (full stall ~57°).
+                    maxP = Math.max(maxP, Math.max(0, Math.min(1, (Math.abs(localAoA) - 0.30) / 0.70)));
+                    const chord_m_i = cordes[i] * CHORD_M;
+                    const Re_i = sw.AWS_ms * chord_m_i / AERO.NU_AIR;
+                    const { CL, CD, effAoA, stalled } = aeroCoeffs(localAoA, camsW[i], sw.AWS); // 3e arg = AWS local (kt) -> Cd_fric CFD
+                    // Furl ramps area→0 smoothly: head (i=3) over reefAnim 0→1, section 2 over 1→2.
+                    const _furl = i === 0 ? (1 - Math.max(0, Math.min(1, w.reefAnim)))
+                                : i === 1 ? (1 - Math.max(0, Math.min(1, w.reefAnim - 1)))
+                                : (1 - Math.max(0, Math.min(1, w.reefAnim - 2))); // sections 2 & 3 furl over reefAnim 2→3 (full at affalage = 4)
+                    const area_i = chord_m_i * SPANS_M[i] * _furl;
+                    qA += sw.q * area_i; liftQA += sw.q * CL * area_i;
+                    const lift = sw.q * CL * area_i * SIM_FORCE_SCALE, drag = sw.q * CD * area_i * SIM_FORCE_SCALE;
+                    const drag_fx = drag * sw.aw_dir_x, drag_fy = drag * sw.aw_dir_y;
+                    const lift_fx = lift * sw.aw_dir_y, lift_fy = lift * -sw.aw_dir_x;
+                    const stripFx = lift_fx - drag_fx, stripFy = lift_fy - drag_fy;
+                    const stripMag = Math.sqrt(stripFx*stripFx + stripFy*stripFy);
+                    rib.push({ fx: stripFx, fy: stripFy, liftX: lift_fx, liftY: lift_fy, dragX: drag_fx, dragY: drag_fy,
+                               cl: CL, cd: CD, cdp: CD, cdi: 0, aoa: effAoA, portant: sw.portant, stalled, Re: Re_i });
+                    fx += stripFx; fy += stripFy;
+                    copN += stripMag * y3D_pos[i]; copD += stripMag;
+                }
+                return { fx, fy, rib, maxPortant: maxP, CL: qA > 1e-9 ? liftQA / qA : 0, copY: copD > 1e-6 ? copN / copD : y3D_pos[1] };
             }
-            window.globalCLWing = CL_wing;
-            window.globalCDiWing = CDi_wing;
 
-            let y_cop = cop_denom > 1e-6 ? cop_num_y / cop_denom : y3D_pos[1];
-            window.globalCOPY = y_cop;
-
-            // Wing count for this boat model. KALIM has 2 wings producing identical force,
-            // so dynamics integrate N_WINGS · (per-wing force). We keep `totalForceX/Y` and
-            // `ribAeroData` at *per-wing* magnitude so the Pro overlay can draw a force
-            // vector centred on each wing rather than a single doubled vector at the boat axis.
+            // Wing count: 4 on the EO3 (each wing its own state); the generic wing (and KALIM's two
+            // synchronised wings) all use wing 1's state.
             const N_WINGS = (window.active3DModel && window.active3DModel !== 'wing' && STL_MAST.positions && STL_MAST.positions.length)
                 ? STL_MAST.positions.length : ((window.boatModel || 'trimaran') === 'kalim') ? 2 : 1;
             window.boatWingCount = N_WINGS;
+            const _perWing = activeWingCount() > 1;
+            const _aero = [];
+            let totalForceX = 0, totalForceY = 0;
+            for (let n = 0; n < N_WINGS; n++) {
+                const k = _perWing ? Math.min(n, WINGS.length - 1) : 0;
+                const r = wingAero(WINGS[k], k);
+                _aero.push(r);
+                totalForceX += r.fx; totalForceY += r.fy;
+            }
+            window.wingAero = _aero;                                  // per wing (helm, diagnostics)
+            // Displayed wing: per-strip data, CL, centre of pressure and flow turbulence for the 2D/3D views.
+            const _dispAero = _aero[Math.min(_perWing ? displayWingIdx() : 0, _aero.length - 1)];
+            window.ribAeroData = _dispAero.rib;
+            window.globalCLWing = _dispAero.CL;
+            window.globalCDiWing = 0;
+            window.globalCOPY = _dispAero.copY;
+            let frameMaxPortant = _dispAero.maxPortant;
 
             // Temporally-smoothed portant strength feeds the visual turbulence renderer.
             if (typeof window.portantStrength !== 'number') window.portantStrength = 0;
             window.portantStrength += (frameMaxPortant - window.portantStrength) * 0.06;
 
-            // --- Total thrust vector: project total aero force onto boat forward axis (+Y) ---
-            // Multiply per-wing forces by the wing count when feeding the boat-speed integrator.
-            let thrust = -(totalForceY * N_WINGS), sideForce = totalForceX * N_WINGS;
+            // --- Total thrust: the wings' summed aero force projected on the boat's forward axis (+Y) ---
+            let thrust = -totalForceY, sideForce = totalForceX;
             // --- Windage aéro de la plateforme (coques hors d'eau + nacelle + roof) ---
             // Traînée pure le long du vent apparent au niveau du pont (section 0, ~2 m). Indépendant des
             // réglages de l'aile (constante additive → ne change pas l'argmax de l'optimiseur AUTO).
             // Freine au près (AWS de face), pousse un peu au portant. S'applique même aile affalée.
             // Convention identique à la traînée des sections : contribution thrust = +D·aw_dir_y.
-            if (CONFIG.sim.windageCdA && stripCache.length) {
-                const s0 = stripCache[0];
+            if (CONFIG.sim.windageCdA && secWind.length) {
+                const s0 = secWind[0];
                 const wDrag = 0.5 * RHO_AIR * s0.AWS_ms * s0.AWS_ms * CONFIG.sim.windageCdA * SIM_FORCE_SCALE;
                 thrust    += wDrag * s0.aw_dir_y;
                 sideForce -= wDrag * s0.aw_dir_x;
@@ -6446,8 +6508,8 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
 
             simuBateauVitesse += acceleration * dt;
 
-            window.globalForceX = totalForceX;
-            window.globalForceY = totalForceY;
+            window.globalForceX = _dispAero.fx;   // per-wing (displayed wing) — the Pro overlay draws it at each mast
+            window.globalForceY = _dispAero.fy;
             window.globalThrust = thrust;
 
             const _kn = ' ' + t('knots');
@@ -6514,6 +6576,17 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             if (!document.hidden) requestAnimationFrame(animerEnvironnement);
         });
 
+        // Page controls → model: a slider move sets that value on every selected wing in MANUAL
+        // (wings in AUTO / feather keep their own setting). Cambers are pushed as a set because the
+        // ≤5 % rule below may move the neighbouring sliders too.
+        function pushSliderCams() {
+            const v = sliders.map(s => parseFloat(s.value) || 0);
+            _manualSel().forEach(k => { WINGS[k].cams = v.slice(); });
+        }
+        sliderRotation.addEventListener('input', () => {
+            const v = parseFloat(sliderRotation.value) || 0;
+            _manualSel().forEach(k => { WINGS[k].rot = v; });
+        });
         sliders.forEach((slider, index) => {
             slider.addEventListener('input', () => {
                 if(state.auto) return;
@@ -6526,6 +6599,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
                     if (vCur > vPrev + LIMITE_TORSION) sliders[i].value = vPrev + LIMITE_TORSION;
                     else if (vCur < vPrev - LIMITE_TORSION) sliders[i].value = vPrev - LIMITE_TORSION;
                 }
+                pushSliderCams();
             });
         });
 
@@ -6540,8 +6614,96 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
                 s.value = v;
                 const lbl = document.getElementById('val' + (i + 1)); if (lbl) lbl.textContent = v.toFixed(1) + '%';
             });
+            // Each selected manual wing: same value on its own active (non-reefed) sections.
+            _manualSel().forEach(k => { const w = WINGS[k]; w.cams = w.cams.map((c, i) => (w.reef > 0 && i <= w.reef) ? 0 : v); });
             try { mettreAJour(); } catch (_) {}
         });
+
+        // ===== Wing selector + actions on the selected wing(s) — used by the helm and engineering pages =====
+        // Show wing k's values in the sliders / reef buttons (the master slider shows its mean camber).
+        function showWingInControls() {
+            const k = displayWingIdx(), w = WINGS[k];
+            sliderRotation.value = w.rot;
+            sliders.forEach((s, i) => { s.value = w.cams[i]; });
+            paintReefUI(w.reef, false);
+            reefAnim = w.reefAnim;
+            if (sliderAll) {
+                const act = w.cams.filter((_, i) => !(w.reef > 0 && i <= w.reef));
+                const m = act.length ? act.reduce((a, b) => a + b, 0) / act.length : 0;
+                sliderAll.value = Math.round(m * 10) / 10;
+                const valAll = document.getElementById('valAll'); if (valAll) valAll.textContent = (Math.round(m * 10) / 10).toFixed(1) + '%';
+            }
+        }
+        function paintWingSel() {
+            const n = activeWingCount();
+            document.querySelectorAll('[data-wsel]').forEach(b => {
+                const v = b.getAttribute('data-wsel'), k = v === 'all' ? 'all' : +v;
+                const on = k === wingSel || (k === 'all' && wingSel !== 'all' && wingSel >= n);
+                b.classList.toggle('sel', on);
+                if (b.classList.contains('btn-toggle')) b.classList.toggle('active-model', on);
+                b.setAttribute('aria-pressed', on ? 'true' : 'false');
+                b.hidden = k !== 'all' && k >= n;
+            });
+            bodyEl.classList.toggle('wing-single', wingSel !== 'all' && wingSel < n);
+        }
+        function setWingSel(sel) {
+            wingSel = (sel === 'all' || sel == null) ? 'all' : Math.max(0, Math.min(WINGS.length - 1, sel | 0));
+            showWingInControls();
+            syncModeState();
+            paintWingSel();
+            if (window.__invalidateViews) window.__invalidateViews();
+            try { mettreAJour(); } catch (_) {}
+        }
+        document.addEventListener('click', (e) => {
+            const b = e.target.closest && e.target.closest('[data-wsel]');
+            if (!b) return;
+            const v = b.getAttribute('data-wsel');
+            setWingSel(v === 'all' ? 'all' : +v);
+        });
+        // Camber limit of a wing: ±5 % above a reef (first flying section next to a folded one), ±15 % otherwise.
+        const _camCap = (w) => (w.reef >= 1 && w.reef < 3) ? LIMITE_TORSION : 15;
+        const _activeIdx = (w) => w.cams.map((_, i) => i).filter(i => !(w.reef > 0 && i <= w.reef));
+        window.Wings = {
+            list: WINGS, count: activeWingCount, selected: selectedWings, display: displayWingIdx,
+            manualSelected: _manualSel, get sel() { return wingSel; }, setSel: setWingSel,
+            meanCamber(w) { const a = _activeIdx(w); return a.length ? a.reduce((s, i) => s + w.cams[i], 0) / a.length : null; },
+            // MANUAL / AUTO / FEATHER on the selected wing(s).
+            setMode(mode) {
+                selectedWings().forEach(k => { const w = WINGS[k]; if (w.mode !== mode) { w.mode = mode; w.sh = null; } });
+                syncModeState(); showWingInControls();
+            },
+            // Relative nudges keep each wing's own offset (e.g. +1° on all four).
+            nudgeRot(d) { _manualSel().forEach(k => { const w = WINGS[k]; w.rot = _wrapRot(Math.round((w.rot + d) * 10) / 10); }); },
+            nudgeCam(d) {
+                _manualSel().forEach(k => {
+                    const w = WINGS[k]; if (w.reef >= 3) return;          // doused
+                    const m = this.meanCamber(w), cap = _camCap(w);
+                    const v = Math.max(-cap, Math.min(cap, Math.round(((m == null ? 0 : m) + d) * 2) / 2));
+                    w.cams = w.cams.map((c, i) => (w.reef > 0 && i <= w.reef) ? 0 : v);
+                });
+                showWingInControls();
+            },
+            flat() { _manualSel().forEach(k => { WINGS[k].cams = [0, 0, 0, 0]; }); showWingInControls(); },
+            // Apply the optimiser's angle + cambers once (reefed sections flat, ≤5 % twist rule).
+            optimum() {
+                if (committedOptRotation == null || !committedOptCamber) return false;
+                _manualSel().forEach(k => {
+                    const w = WINGS[k], v = committedOptCamber.slice();
+                    for (let i = 0; i < v.length; i++) if (w.reef > 0 && i <= w.reef) v[i] = 0;
+                    for (let i = 1; i < v.length; i++) { if (v[i] > v[i - 1] + LIMITE_TORSION) v[i] = v[i - 1] + LIMITE_TORSION; else if (v[i] < v[i - 1] - LIMITE_TORSION) v[i] = v[i - 1] - LIMITE_TORSION; }
+                    w.cams = v; w.rot = _wrapRot(committedOptRotation);
+                });
+                showWingInControls();
+                return true;
+            },
+            setReef(r) {
+                // Same path as the engineering reef buttons (the motor listens to their change event).
+                const inp = document.querySelector('input[name="reef"][value="' + r + '"]');
+                if (inp) { inp.checked = true; inp.dispatchEvent(new Event('change', { bubbles: true })); }
+                else setWingsReef(r);
+            },
+            optimumAvailable() { return committedOptRotation != null && !!committedOptCamber; }
+        };
 
         // --- Forward-declare polar state vars BEFORE the TWS slider that touches them. ---
         let polarDirty = true, polarLastTWS = -1, polarCurve = null, polarMaxSpeed = 10;
@@ -7133,6 +7295,12 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       // ---- DOM ----
       var elOverlay = $('mt-overlay'), elLog = $('mt-log');
       var elM1 = $('m1'), elChkAuto = $('chkAuto');   // host-app controls (cached once; never re-created)
+      // The bench motor drives camber 1 of WING 1. The sliders may show another wing (wing selector),
+      // so its camber, reef and mode are read from the per-wing model (window.WINGS), not the slider.
+      function mWing() { return (window.WINGS && window.WINGS[0]) || null; }
+      function motorCam() { var w = mWing(); return w ? (w.cams[0] || 0) : (parseFloat(elM1.value) || 0); }
+      function motorReefed() { var w = mWing(); return w ? w.reef > 0 : (!elM1 || elM1.disabled); }
+      function motorAutomatic() { var w = mWing(); return w ? w.mode !== 'manual' : !!(elChkAuto && elChkAuto.checked); }   // AUTO or feather
       function log(m) { if (!elLog) return; elLog.textContent += m + '\n'; elLog.scrollTop = elLog.scrollHeight; }
       function hex(b) { var s = ''; for (var i = 0; i < b.length; i++) { s += (b[i] < 16 ? '0' : '') + b[i].toString(16); s += ' '; } return s.toUpperCase().trim(); }
       function fmt(x, n) { return (x).toFixed(n === undefined ? 1 : n); }
@@ -7367,11 +7535,11 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         if (estop) { write(CMD.duty(0)); cmd = 0; return; } // emergency: assert zero torque, command no motion
         if (armed && source === 'camber') {
           // Safety (per-tick, independent of event listeners):
-          if (!elM1 || elM1.disabled) { setArmed(false); log('○ Camber 1 indisponible (ris) — moteur désarmé.'); }
-          // AUTO active without explicit authorisation must never drive the motor → disarm.
-          else if (elChkAuto && elChkAuto.checked && !autoDriveAllowed()) { setArmed(false); log('○ AUTO actif sans autorisation — moteur désarmé.'); }
+          if (motorReefed()) { setArmed(false); log('○ Camber 1 indisponible (ris) — moteur désarmé.'); }
+          // AUTO / feather on wing 1 without explicit authorisation must never drive the motor → disarm.
+          else if (motorAutomatic() && !autoDriveAllowed()) { setArmed(false); log('○ Aile 1 en AUTO / drapeau sans autorisation — moteur désarmé.'); }
           // Poll Camber 1 every tick so BOTH manual drags and (authorised) AUTO-optimiser changes drive the motor.
-          else feedFraction((parseFloat(elM1.value) || 0) / CAMBER_FULL);
+          else feedFraction(motorCam() / CAMBER_FULL);
         }
         // Position mode: send the absolute angle directly — the motor's velocity/accel make the (constant-speed) move,
         // so no software slew. Disarmed → hold the last commanded angle.
@@ -7473,13 +7641,13 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         if (!on) { setArmed(false); log('○ Moteur désarmé (Camber).'); return true; }
         if (estop) { log('⛔ Arrêt d’urgence actif — cliquez « Réarmer » d’abord.'); notify(); return false; }
         if (!port) { log('⚠ Connectez le moteur d’abord (⚙ Réglages → Connecter).'); notify(); return false; }
-        if (!elM1 || elM1.disabled) { log('⚠ « Camber 1 » indisponible (ris engagé) — désengagez avant d’armer.'); notify(); return false; }
-        var autoOn = !!(elChkAuto && elChkAuto.checked);
+        if (motorReefed()) { log('⚠ « Camber 1 » (aile 1) indisponible (ris engagé) — désengagez avant d’armer.'); notify(); return false; }
+        var autoOn = motorAutomatic();
         if (autoOn && !autoDriveAllowed()) { log('⚠ AUTO actif : cochez « ⚠ AUTO pilote le moteur » ou désactivez AUTO.'); notify(); return false; }
         if (!autoOn) {
           // Manual: require Camber 1 centred (anti-jump). In AUTO-drive the optimiser owns the slider, so the slew protects instead.
-          var frac = (parseFloat(elM1.value) || 0) / CAMBER_FULL;
-          if (Math.abs(frac) > CAMBER_ARM_DB) { log('⚠ Centrez « Camber 1 » (Base 2m) près de 0 avant d’armer (anti à-coup).'); notify(); return false; }
+          var frac = motorCam() / CAMBER_FULL;
+          if (Math.abs(frac) > CAMBER_ARM_DB) { log('⚠ Centrez « Camber 1 » (Base 2m) de l’aile 1 près de 0 avant d’armer (anti à-coup).'); notify(); return false; }
         }
         // Start the command from where the motor already is (position) so it ramps smoothly (no jump).
         setpoint = 0; cmd = (mode === 'position') ? lastAngle : 0; setArmed(true, 'camber');
@@ -7591,11 +7759,11 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
 
         // Camber-1 movement → motor setpoint (only while camber-armed).
         if (elM1) elM1.addEventListener('input', function () {
-          if (armed && source === 'camber') feedFraction((parseFloat(elM1.value) || 0) / CAMBER_FULL);
+          if (armed && source === 'camber') feedFraction(motorCam() / CAMBER_FULL);
         });
         // Switching to AUTO: if AUTO-drive is authorised the motor follows the optimiser; otherwise disarm for safety.
         if (elChkAuto) elChkAuto.addEventListener('change', function () {
-          if (!this.checked || !(armed && source === 'camber')) return;
+          if (!motorAutomatic() || !(armed && source === 'camber')) return;
           if (autoDriveAllowed()) log('▸ AUTO actif — le moteur suit l’optimiseur.');
           else { setArmed(false); log('○ AUTO activé — pilotage Camber désarmé (cochez « ⚠ AUTO pilote le moteur » pour le suivi auto).'); }
         });
@@ -7607,7 +7775,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             log('⚠ AUTO-pilotage AUTORISÉ — le moteur suivra l’optimiseur quand AUTO est actif et le moteur armé.');
           } else {
             log('AUTO-pilotage retiré.');
-            if (armed && source === 'camber' && elChkAuto && elChkAuto.checked) { setArmed(false); log('○ Désarmé (AUTO-pilotage retiré).'); }
+            if (armed && source === 'camber' && motorAutomatic()) { setArmed(false); log('○ Désarmé (AUTO-pilotage retiré).'); }
           }
         });
         // Reefing disables #m1 → disarm synchronously (before the next frame disables it).
@@ -8074,7 +8242,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         autoOff:     function () { var c = $('chkAuto'); return !!(c && !c.checked); },
         helmAutoOff: function () { return !state.auto; },
         reefChange:  function (el) { var r = el.querySelector('input[name="reef"]'); return !!(r && !r.checked); },
-        helmReef:    function (el) { return (+el.getAttribute('data-reef')) !== reefCount; },
+        helmReef:    function (el) { var r = +el.getAttribute('data-reef'); return window.Wings.selected().some(function (k) { return window.Wings.list[k].reef !== r; }); },
         motorArm:    function () { if (!window.MotorTest) return false; var s = window.MotorTest.getState(); return s.connected && !s.estop && !(s.armed && s.source === 'camber'); }
       };
       function needsHold(el) {
@@ -8280,7 +8448,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         btn.addEventListener('click', function (e) { if (e.detail === 0 && e.isTrusted) fn(1); });   // keyboard Enter / Space
       }
       function stepSlider(input, delta, wrap) {
-        if (!input || input.disabled || state.auto || feather) return;
+        if (!input || input.disabled || !window.Wings.manualSelected().length) return;
         var v = Math.round(((parseFloat(input.value) || 0) + delta) * 10) / 10;
         v = wrap ? _wrapRot(v) : Math.max(parseFloat(input.min), Math.min(parseFloat(input.max), v));
         input.value = v; fire(input, 'input'); fire(input, 'change');
@@ -8300,80 +8468,47 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       });
 
       // =====================================================================================
-      // HELM: modes (MANUAL / AUTO / FEATHER), steppers, quick settings, reef
+      // HELM: wing selector, modes (MANUAL / AUTO / FEATHER), steppers, quick settings, reef.
+      // Everything acts on the SELECTED wing(s) through window.Wings (main script).
       // =====================================================================================
-      var feather = false;
-      var chkAuto = $('chkAuto'), sliderAllEl = $('mAll');
-      function setAuto(on) {
-        if (!chkAuto || chkAuto.checked === on) return;
-        chkAuto.checked = on; fire(chkAuto, 'change');        // same path as the engineering AUTO button
-      }
-      function setFeather(on) {
-        feather = !!on;
-        body.classList.toggle('helm-feather', feather);
-        if (typeof panneauControles !== 'undefined') panneauControles.classList.toggle('feather-active', feather);
-        if (feather) { setAuto(false); featherTick(); }
-        lastTiles = 0;
-      }
-      // FEATHER: wings follow the masthead apparent wind (incidence 0), all sections flat → no thrust.
-      function featherTick() {
-        if (!feather) return;
-        if (state.auto) { setFeather(false); return; }          // AUTO switched on elsewhere → leave feather
-        sliderRotation.value = _wrapRot(Math.round(displayAWA / DEG * 10) / 10);
-        if (sliders.some(function (s) { return !s.disabled && parseFloat(s.value) !== 0; }) && sliderAllEl && !sliderAllEl.disabled) {
-          sliderAllEl.value = 0; fire(sliderAllEl, 'input');
-        }
-      }
-      setInterval(featherTick, 100);
+      var W = window.Wings, WL = W.list;
+      var MODE_TXT = { manual: ['MANUEL', 'MANUAL'], auto: ['AUTO', 'AUTO'], feather: ['DRAPEAU', 'FEATHER'] };
+      var MODE_SHORT = { manual: ['MAN', 'MAN'], auto: ['AUTO', 'AUTO'], feather: ['DRAP', 'FEAT'] };
+      function modeTxt(m, short) { var t = (short ? MODE_SHORT : MODE_TXT)[m]; return t ? (en() ? t[1] : t[0]) : L('MIXTE', 'MIXED'); }
+      function modesOf(list) { var m = {}; list.forEach(function (k) { m[WL[k].mode] = 1; }); var a = Object.keys(m); return a.length === 1 ? a[0] : 'mixed'; }
+      function allWings() { var a = []; for (var k = 0; k < W.count(); k++) a.push(k); return a; }
+      function isSingle() { return W.sel !== 'all' && W.sel < W.count(); }
+      function wingName(k) { return L('AILE ', 'WING ') + (k + 1); }
+      function selLabel() { return isSingle() ? wingName(W.sel) : (W.count() > 1 ? L('TOUTES', 'ALL') : ''); }
+      function reefShort(r) { return r >= 3 ? L('·AFF', '·DSE') : r > 0 ? '·' + r + 'R' : ''; }
 
-      function activeSections() { var a = []; for (var i = 0; i < sliders.length; i++) if (!(reefCount > 0 && i <= reefCount)) a.push(i); return a; }
-      function meanActiveCamber(vals) {
-        var a = activeSections(); if (!a.length) return null;
-        var s = 0; a.forEach(function (i) { s += vals[i]; }); return s / a.length;
-      }
-      function nudgeRotation(d) {
-        if (state.auto || feather) return;
-        sliderRotation.value = _wrapRot(Math.round((parseFloat(sliderRotation.value) + d) * 10) / 10);
-        fire(sliderRotation, 'input'); renderNow();
-      }
+      function nudgeRotation(d) { W.nudgeRot(d); renderNow(); }
       function nudgeCamber(d) {
-        if (state.auto || feather || !sliderAllEl) return;
-        if (sliderAllEl.disabled) { toast(L('Aile affalée', 'Wing doused')); return; }
-        var m = meanActiveCamber(sliders.map(function (s) { return parseFloat(s.value) || 0; }));
-        var v = Math.round(((m == null ? 0 : m) + d) * 2) / 2;
-        v = Math.max(parseFloat(sliderAllEl.min), Math.min(parseFloat(sliderAllEl.max), v));
-        sliderAllEl.value = v; fire(sliderAllEl, 'input'); renderNow();
+        if (!W.manualSelected().some(function (k) { return WL[k].reef < 3; })) { toast(L('Aile affalée', 'Wing doused')); return; }
+        W.nudgeCam(d); renderNow();
       }
       bindRepeat($('hbAngM'), function (k) { nudgeRotation(-1 * k); });
       bindRepeat($('hbAngP'), function (k) { nudgeRotation(1 * k); });
       bindRepeat($('hbCamM'), function (k) { nudgeCamber(-0.5 * k); });
       bindRepeat($('hbCamP'), function (k) { nudgeCamber(0.5 * k); });
-      $('hbManual').addEventListener('click', function () { setFeather(false); setAuto(false); lastTiles = 0; });
-      $('hbAuto').addEventListener('click', function () { if (state.auto) return; setFeather(false); setAuto(true); lastTiles = 0; });
-      $('hbFeather').addEventListener('click', function () { setFeather(true); toast(L('Ailes en drapeau', 'Wings feathered')); });
+      $('hbManual').addEventListener('click', function () { W.setMode('manual'); lastTiles = 0; });
+      $('hbAuto').addEventListener('click', function () { if (state.auto) return; W.setMode('auto'); lastTiles = 0; });
+      $('hbFeather').addEventListener('click', function () { W.setMode('feather'); lastTiles = 0; toast(selLabel() + (selLabel() ? ' : ' : '') + L('en drapeau', 'feathered')); });
       $('hbFlat').addEventListener('click', function () {
-        if (state.auto || feather || !sliderAllEl || sliderAllEl.disabled) return;
-        sliderAllEl.value = 0; fire(sliderAllEl, 'input'); renderNow(); toast(L('Cambrure 0 %', 'Camber 0 %'));
+        if (!W.manualSelected().length) return;
+        W.flat(); renderNow(); toast(L('Cambrure 0 %', 'Camber 0 %') + (selLabel() ? ' — ' + selLabel() : ''));
       });
       $('hbOpt').addEventListener('click', function () {
-        if (state.auto || feather || committedOptRotation == null || !committedOptCamber) return;
-        sliderRotation.value = _wrapRot(committedOptRotation); fire(sliderRotation, 'input');
-        var first = -1;
-        for (var i = 0; i < sliders.length; i++) { if (sliders[i].disabled || (reefCount > 0 && i <= reefCount)) continue; sliders[i].value = committedOptCamber[i]; if (first < 0) first = i; }
-        if (first >= 0) fire(sliders[first], 'input');           // re-applies the ±5 % twist rule upward
+        if (!W.manualSelected().length || !W.optimum()) return;
         renderNow();
-        toast('OPTIMUM : ' + fmtS(norm180(committedOptRotation - 90)) + '° · ' + fmtS(meanActiveCamber(committedOptCamber) || 0, 1) + ' %');
+        toast('OPTIMUM : ' + fmtS(norm180(committedOptRotation - 90)) + '° · ' + fmtS(W.meanCamber({ cams: committedOptCamber, reef: 0 }) || 0, 1) + ' %' + (selLabel() ? ' — ' + selLabel() : ''));
       });
       document.querySelectorAll('#helm [data-reef]').forEach(function (b) {
-        b.addEventListener('click', function () {
-          var r = document.querySelector('input[name="reef"][value="' + b.getAttribute('data-reef') + '"]');
-          if (!r || r.checked) return;
-          r.checked = true; fire(r, 'change'); lastTiles = 0;    // same path as the engineering reef buttons
-        });
+        b.addEventListener('click', function () { W.setReef(+b.getAttribute('data-reef')); lastTiles = 0; });
       });
 
       // =====================================================================================
-      // HELM: top-down picture (boat, 4 wings at their real angle, winds, thrust, optimum)
+      // HELM: top-down picture (boat, each wing at its own angle and camber, winds, thrust, optimum)
       // =====================================================================================
       var SC = 3.6;                                             // SVG units per metre (40 m boat → 144)
       var WPOS = (typeof STL_MAST !== 'undefined' && STL_MAST.positions && STL_MAST.positions.length)
@@ -8393,14 +8528,20 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         g += '<rect class="h-hull" x="' + (-6.6 * SC + w) + '" y="-24" width="' + (2 * (6.6 * SC - w)) + '" height="66" rx="5"/>';   // bridgedeck / deckhouse
         g += '<rect class="h-deck" x="' + (-8 * SC) + '" y="-30" width="' + (16 * SC) + '" height="88" rx="7"/>';                  // solar roof outline
         $('hStatic').innerHTML = g;
-        var wg = '', gg = '';
+        var wg = '', gg = '', ng = '';
         WPOS.forEach(function (p, i) {
           var x = ((p.athwartM || 0) * SC).toFixed(1), y = (-(p.foreAftM || 0) * SC).toFixed(1);
-          wg += '<g id="hw' + i + '" data-x="' + x + '" data-y="' + y + '" transform="translate(' + x + ',' + y + ')"><path class="h-wing"/><circle class="h-mast" r="1.7"/></g>';
+          wg += '<g id="hw' + i + '" class="hwg" data-x="' + x + '" data-y="' + y + '" transform="translate(' + x + ',' + y + ')"><path class="h-wing"/></g>';
           gg += '<g id="hg' + i + '" transform="translate(' + x + ',' + y + ')"><path class="h-ghost"/></g>';
+          // wing number on the mast; the larger transparent circle is the touch target (selects the wing)
+          ng += '<g id="hn' + i + '" class="hnum" data-wtap="' + i + '" transform="translate(' + x + ',' + y + ')"><circle class="hit" r="13"/><circle class="n" r="4.8"/><text>' + (i + 1) + '</text></g>';
         });
-        $('hWings').innerHTML = wg; $('hGhosts').innerHTML = gg;
+        $('hWings').innerHTML = wg + ng; $('hGhosts').innerHTML = gg;
       })();
+      $('hWings').addEventListener('click', function (e) {
+        var t = e.target.closest && e.target.closest('[data-wtap]');
+        if (t) W.setSel(+t.getAttribute('data-wtap'));
+      });
       // Wing section seen from above (schematic 8 m chord): NACA-like thickness around a parabolic camber line (×1.2 so it reads).
       // Leading edge up (local −y), mast at 25 % chord; + camber bulges to port of the chord, i.e. lift to port.
       function wingPath(camPct) {
@@ -8412,28 +8553,35 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         }
         return 'M ' + up.join(' L ') + ' L ' + lo.join(' L ') + ' Z';
       }
-      var lastCamKey = '', lastGhostKey = '', thrustRef = 1;
+      var lastGhostKey = '', thrustRef = 1;
       var wingEls = WPOS.map(function (_, i) { return $('hw' + i); }), ghostEls = WPOS.map(function (_, i) { return $('hg' + i); });
-      function curCambers() { try { return effectiveCambers(); } catch (e) { return sliders.map(function (s) { return parseFloat(s.value) || 0; }); } }
+      var numEls = WPOS.map(function (_, i) { return $('hn' + i); });
       function renderGraphic() {
-        var capDeg = norm180((parseFloat(sliderRotation.value) || 0) - 90);
-        var cam = meanActiveCamber(curCambers()), doused = reefCount >= 3;
-        var camKey = doused ? 'd' : (Math.round((cam || 0) * 2) / 2).toFixed(1);
-        if (camKey !== lastCamKey) {
-          lastCamKey = camKey; var d = wingPath(doused ? 0 : (cam || 0));
-          wingEls.forEach(function (g) { g.firstChild.setAttribute('d', d); g.style.opacity = doused ? 0.35 : ''; });
+        var n = W.count(), sel = W.selected(), single = isSingle();
+        var hasOpt = committedOptRotation != null && committedOptCamber, optDeg = hasOpt ? norm180(committedOptRotation - 90) : 0;
+        if (hasOpt) {
+          var gk = (Math.round((W.meanCamber({ cams: committedOptCamber, reef: 0 }) || 0) * 2) / 2).toFixed(1);
+          if (gk !== lastGhostKey) { lastGhostKey = gk; var gd = wingPath(+gk); ghostEls.forEach(function (g) { g.firstChild.setAttribute('d', gd); }); }
         }
-        wingEls.forEach(function (g) { g.setAttribute('transform', 'translate(' + g.getAttribute('data-x') + ',' + g.getAttribute('data-y') + ') rotate(' + capDeg.toFixed(1) + ')'); });
-        if (committedOptRotation != null && committedOptCamber) {
-          var optDeg = norm180(committedOptRotation - 90), oc = meanActiveCamber(committedOptCamber) || 0;
-          var gk = (Math.round(oc * 2) / 2).toFixed(1);
-          if (gk !== lastGhostKey) { lastGhostKey = gk; var gd = wingPath(oc); ghostEls.forEach(function (g) { g.firstChild.setAttribute('d', gd); }); }
-          ghostEls.forEach(function (g, i) { g.setAttribute('transform', 'translate(' + wingEls[i].getAttribute('data-x') + ',' + wingEls[i].getAttribute('data-y') + ') rotate(' + optDeg.toFixed(1) + ')'); });
+        for (var k = 0; k < wingEls.length; k++) {
+          var g = wingEls[k], gh = ghostEls[k], nm = numEls[k], show = k < n;
+          g.style.display = nm.style.display = show ? '' : 'none';
+          gh.style.display = show && hasOpt && WL[k].mode !== 'feather' ? '' : 'none';
+          if (!show) continue;
+          var w = WL[k], cam = W.meanCamber(w), doused = w.reef >= 3;
+          var key = doused ? 'd' : (Math.round((cam || 0) * 2) / 2).toFixed(1);
+          if (g.__key !== key) { g.__key = key; g.firstChild.setAttribute('d', wingPath(doused ? 0 : (cam || 0))); g.style.opacity = doused ? 0.35 : ''; }
+          var xy = 'translate(' + g.getAttribute('data-x') + ',' + g.getAttribute('data-y') + ') ';
+          g.setAttribute('transform', xy + 'rotate(' + norm180(w.rot - 90).toFixed(1) + ')');
+          if (hasOpt) gh.setAttribute('transform', xy + 'rotate(' + optDeg.toFixed(1) + ')');
+          var isSel = sel.indexOf(k) >= 0;
+          g.classList.toggle('sel', single && isSel); g.classList.toggle('dim', single && !isSel);
+          nm.classList.toggle('sel', single && isSel);
         }
         // Same frame as the engineering compass: bearing clockwise from the bow = angle − 90°.
         $('hTrue').setAttribute('transform', 'rotate(' + (windAngle / DEG - 90).toFixed(1) + ')');
         $('hApp').setAttribute('transform', 'rotate(' + (displayAWA / DEG - 90).toFixed(1) + ')');
-        // Forward thrust arrow, scaled to the largest thrust seen (slowly forgotten).
+        // Total forward thrust (all wings), scaled to the largest thrust seen (slowly forgotten).
         var th = window.globalThrust || 0;
         thrustRef = Math.max(Math.abs(th), thrustRef * 0.9995, 1e-6);
         var len = Math.max(-1, Math.min(1, th / thrustRef)) * 62, y0 = 10, y1 = y0 - len, hg = $('hThrust');
@@ -8462,8 +8610,8 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       function sideOf(b) { return b > 0.5 ? L('TRIB.', 'STBD') : b < -0.5 ? L('BÂB.', 'PORT') : ''; }
       function renderTiles() {
         var awaB = norm180(displayAWA / DEG - 90), twaB = norm180(windAngle / DEG - 90);
-        var capDeg = norm180((parseFloat(sliderRotation.value) || 0) - 90);
-        var cam = meanActiveCamber(curCambers());
+        var all = allWings(), dk = W.display(), dw = WL[dk];
+        var capDeg = norm180(dw.rot - 90), cam = W.meanCamber(dw);
         var a = 0.35;
         if (!sm) sm = {};
         sm.awa = emaAng(sm.awa, awaB, a); sm.aws = ema(sm.aws, displayAWS, a); sm.tws = ema(sm.tws, displayTWS, a);
@@ -8476,36 +8624,61 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         setTxt('vSOG', fmtN(sm.sog, 1));
         var vmg = sm.sog * Math.cos(sm.twa * DEG);
         setTxt('subSOG', 'VMG ' + (vmg >= 0 ? '↑ ' : '↓ ') + Math.abs(vmg).toFixed(1) + ' ' + L('nds', 'kn'));
+        // Wings that differ from each other → the big number is the shown wing, the bottom line lists all of them.
+        var rots = all.map(function (k) { return norm180(WL[k].rot - 90); }), cams = all.map(function (k) { return W.meanCamber(WL[k]); });
+        var rotDiff = Math.max.apply(null, rots) - Math.min.apply(null, rots) > 0.5;
+        var camDiff = cams.some(function (c) { return Math.abs((c == null ? 0 : c) - (cams[0] == null ? 0 : cams[0])) > 0.25; }) ||
+                      all.some(function (k) { return WL[k].reef !== WL[all[0]].reef; });
+        var modeDiff = modesOf(all) === 'mixed';
+        setTxt('kWing', isSingle() || rotDiff || modeDiff ? wingName(dk) : L('AILES', 'WINGS'));
+        setTxt('kCam', isSingle() || camDiff || modeDiff ? '· ' + wingName(dk) : '');
         setTxt('vWing', fmtS(capDeg));
-        setTxt('vCam', reefCount >= 3 || cam == null ? '—' : fmtS(cam, 1));
+        setTxt('vCam', dw.reef >= 3 || cam == null ? '—' : fmtS(cam, 1));
         var coach = state.coach && committedOptRotation != null && committedOptCamber;
         var optDeg = coach ? norm180(committedOptRotation - 90) : 0;
-        setTxt('subWing', feather ? L('en drapeau', 'feathered') : state.auto ? L('réglé par AUTO', 'set by AUTO') + (coach ? ' · opt. ' + fmtS(optDeg) + '°' : '')
-                         : coach ? 'opt. ' + fmtS(optDeg) + '° · Δ ' + fmtS(norm180(capDeg - optDeg)) + '°' : '');
-        var reefTxt = reefCount >= 3 ? L('aile affalée', 'wing doused') : reefCount === 2 ? L('2 ris', '2 reefs') : reefCount === 1 ? L('1 ris', '1 reef') : '';
-        setTxt('subCam', reefCount >= 3 ? reefTxt : [coach && !feather ? 'opt. ' + fmtS(meanActiveCamber(committedOptCamber) || 0, 1) + ' %' : '', reefTxt].filter(Boolean).join(' · '));
+        if (all.length > 1 && (rotDiff || modeDiff)) {
+          setTxt('subWing', all.map(function (k, i) { return (k + 1) + ':' + (WL[k].mode === 'feather' ? '⚑' : fmtS(rots[i])); }).join(' '));
+        } else {
+          setTxt('subWing', dw.mode === 'feather' ? L('en drapeau', 'feathered') : dw.mode === 'auto' ? L('réglé par AUTO', 'set by AUTO') + (coach ? ' · opt. ' + fmtS(optDeg) + '°' : '')
+                           : coach ? 'opt. ' + fmtS(optDeg) + '° · Δ ' + fmtS(norm180(capDeg - optDeg)) + '°' : '');
+        }
+        if (all.length > 1 && camDiff) {
+          setTxt('subCam', all.map(function (k, i) { return (k + 1) + ':' + (WL[k].reef >= 3 ? L('aff.', 'dsd') : fmtS(cams[i] || 0, 0)); }).join(' '));
+        } else {
+          var r = dw.reef, reefTxt = r >= 3 ? L('aile affalée', 'wing doused') : r === 2 ? L('2 ris', '2 reefs') : r === 1 ? L('1 ris', '1 reef') : '';
+          setTxt('subCam', r >= 3 ? reefTxt : [coach && dw.mode !== 'feather' ? 'opt. ' + fmtS(W.meanCamber({ cams: committedOptCamber, reef: 0 }) || 0, 1) + ' %' : '', reefTxt].filter(Boolean).join(' · '));
+        }
         $('tAWS').classList.toggle('alert', windHigh);
         var sail = $('valSailMode'); setTxt('hAllure', sail ? sail.textContent : '--');
       }
       // Controls follow the state (also when it is changed from the engineering page).
       function renderControls() {
-        var auto = !!state.auto, lockedOut = auto || feather;
-        $('hbManual').classList.toggle('sel', !auto && !feather);
-        $('hbAuto').classList.toggle('sel', auto);
-        $('hbFeather').classList.toggle('sel', feather);
-        ['hbAngM', 'hbAngP', 'hbCamM', 'hbCamP', 'hbFlat', 'hbOpt'].forEach(function (id) { $(id).classList.toggle('dis', lockedOut); });
-        if (sliderAllEl && sliderAllEl.disabled) ['hbCamM', 'hbCamP', 'hbFlat'].forEach(function (id) { $(id).classList.add('dis'); });
-        document.querySelectorAll('#helm [data-reef]').forEach(function (b) { b.classList.toggle('sel', +b.getAttribute('data-reef') === reefCount); });
-        var capDeg = norm180((parseFloat(sliderRotation.value) || 0) - 90);
-        setTxt('hvAng', fmtS(capDeg) + '°');
-        var cam = meanActiveCamber(curCambers());
-        setTxt('hvCam', reefCount >= 3 || cam == null ? '—' : fmtS(cam, 1) + ' %');
-        $('hvAng').classList.toggle('dim', lockedOut); $('hvCam').classList.toggle('dim', lockedOut);
-        var mb = $('hModeBadge'), mode = feather ? 'feather' : auto ? 'auto' : 'manual';
-        if (mb.getAttribute('data-mode') !== mode || mb.getAttribute('data-lang') !== (en() ? 'en' : 'fr')) {
-          mb.setAttribute('data-mode', mode); mb.setAttribute('data-lang', en() ? 'en' : 'fr');
-          mb.innerHTML = '<svg class="ico"><use href="#' + (mode === 'feather' ? 'i-flag' : mode === 'auto' ? 'i-auto' : 'i-hand') + '"/></svg>' +
-            (mode === 'feather' ? L('DRAPEAU', 'FEATHER') : mode === 'auto' ? 'AUTO' : L('MANUEL', 'MANUAL'));
+        var sel = W.selected(), mode = modesOf(sel), man = W.manualSelected();
+        var noMan = man.length === 0, noCam = noMan || !man.some(function (k) { return WL[k].reef < 3; });
+        $('hbManual').classList.toggle('sel', mode === 'manual');
+        $('hbAuto').classList.toggle('sel', mode === 'auto');
+        $('hbFeather').classList.toggle('sel', mode === 'feather');
+        ['hbAngM', 'hbAngP', 'hbOpt'].forEach(function (id) { $(id).classList.toggle('dis', noMan); });
+        ['hbCamM', 'hbCamP', 'hbFlat'].forEach(function (id) { $(id).classList.toggle('dis', noCam); });
+        document.querySelectorAll('#helm [data-reef]').forEach(function (b) {
+          var r = +b.getAttribute('data-reef');
+          b.classList.toggle('sel', sel.length > 0 && sel.every(function (k) { return WL[k].reef === r; }));
+        });
+        var dw = WL[W.display()], cam = W.meanCamber(dw);
+        setTxt('hvAng', fmtS(norm180(dw.rot - 90)) + '°');
+        setTxt('hvCam', dw.reef >= 3 || cam == null ? '—' : fmtS(cam, 1) + ' %');
+        $('hvAng').classList.toggle('dim', noMan); $('hvCam').classList.toggle('dim', noCam);
+        var sfx = W.count() > 1 ? '— ' + selLabel() : '';
+        document.querySelectorAll('#helm .hg-sfx').forEach(function (e) { if (e.textContent !== sfx) e.textContent = sfx; });
+        // selector: each wing's mode (+ reef) under its number
+        for (var k = 0; k < WL.length; k++) setTxt('hws' + k, modeTxt(WL[k].mode, true) + reefShort(WL[k].reef));
+        var allM = modesOf(allWings());
+        setTxt('hwsAll', allM === 'mixed' ? L('MIXTE', 'MIXED') : modeTxt(allM, true));
+        var mb = $('hModeBadge'), key = mode + (en() ? 'en' : 'fr') + selLabel();
+        if (mb.getAttribute('data-key') !== key) {
+          mb.setAttribute('data-key', key);
+          mb.innerHTML = (mode === 'mixed' ? '' : '<svg class="ico"><use href="#' + (mode === 'feather' ? 'i-flag' : mode === 'auto' ? 'i-auto' : 'i-hand') + '"/></svg>') +
+            modeTxt(mode) + (isSingle() ? ' · ' + (W.sel + 1) : '');
         }
       }
       function renderNow() { if (body.classList.contains('helm-on')) { try { renderGraphic(); renderControls(); } catch (e) {} } }
@@ -8526,7 +8699,8 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       // =====================================================================================
       function chip(id, cls, txt) { var c = $(id); c.classList.remove('ok', 'warn', 'crit'); if (cls) c.classList.add(cls); setTxt(id + 'V', txt); }
       function paintChips() {
-        chip('chipMode', feather || state.auto ? 'ok' : '', feather ? L('DRAPEAU', 'FEATHER') : state.auto ? 'AUTO' : L('MANUEL', 'MANUAL'));
+        var am = modesOf(allWings());
+        chip('chipMode', am === 'manual' ? '' : 'ok', modeTxt(am));
         var m = window.MotorTest ? window.MotorTest.getState() : null;
         if (!m || !m.connected) chip('chipMotor', m && m.estop ? 'crit' : '', m && m.estop ? L('ARRÊT URG.', 'E-STOP') : L('HORS LIGNE', 'OFFLINE'));
         else if (m.estop) chip('chipMotor', 'crit', L('ARRÊT URG.', 'E-STOP'));

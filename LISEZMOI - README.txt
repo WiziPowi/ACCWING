@@ -89,6 +89,23 @@ pointilles), 6 grands chiffres et de gros boutons.
 Bouton INGENIERIE (en haut) : l'ancienne page complete (moteur, IMU,
 vues 2D/3D, polaire). Maintenir 1 s pour y aller ; BARRE pour revenir.
 
+Reglage aile par aile : selecteur TOUTES / 1 / 2 / 3 / 4 (a gauche
+de la vue de dessus sur la page Barre, sous COACH/AUTO/PRO sur la page
+Ingenierie ; toucher une aile sur la vue la selectionne aussi).
+Tous les boutons (mode, angle, cambrure, reglage rapide, ris)
+agissent sur la ou les ailes selectionnees ; avec TOUTES, - / +
+decalent chaque aile de la meme valeur. Chaque aile a son propre mode
+(ex. 3 ailes en AUTO, 1 en DRAPEAU), son angle, sa cambrure et son ris ;
+la poussee totale est la somme des 4 ailes.
+  1 = avant babord, 2 = avant tribord, 3 = arriere babord,
+  4 = arriere tribord. Le moteur du banc pilote le cambreur 1 de l'aile 1.
+Limite : l'interaction entre ailes (sillage) n'est pas modelisee.
+
+Per-wing control: ALL / 1 / 2 / 3 / 4 selector; every button acts on
+the selected wing(s). Each wing has its own mode, angle, camber and
+reef; total thrust is the sum of the four. Wing-to-wing wake effects
+are not modelled.
+
 Securites tactiles :
   - Actions qui font bouger l'aile = MAINTENIR 1 s : AUTO (activation),
     ris / affaler, armer le moteur, aller a la page Ingenierie.
