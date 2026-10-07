@@ -1,80 +1,59 @@
 ================================================================
-  SIMULATEUR ACCWING / WINDELO  —  COMMENT LANCER
-  ACCWING / WINDELO SIMULATOR  —  HOW TO LAUNCH
+  IHM ENERGY OBSERVER 3 (V1) - ACCWING  -  COMMENT L'OUVRIR
+  ENERGY OBSERVER 3 HMI (V1) - ACCWING  -  HOW TO OPEN IT
 ================================================================
 
---- IMPORTANT ---------------------------------------------------
-Gardez TOUS les fichiers ensemble dans le meme dossier.
-Keep ALL files together in the same folder.
-
-  - IHM_EO3_V1.html                    (la page / the page)
-  - 3D Windelo pour IHM test.stl        (le modele 3D / the 3D model)
-  - Lancer Windelo.bat                  (Windows)
-  - windelo_server.ps1                  (Windows, requis par le .bat)
-  - Lancer Windelo (Mac).zip            (macOS)
-
-Pourquoi un lanceur ? Le modele 3D (STL) ne se charge PAS si on
-ouvre la page directement (file://). Le lanceur demarre un petit
-serveur local (http://localhost) : le STL se charge alors tout seul.
-Why a launcher? The 3D model won't load if the page is opened
-directly (file://). The launcher starts a small local server
-(http://localhost) so the STL loads automatically.
+Un seul fichier : IHM_EO3_V1.html. Le modele 3D de l'EO3 y est
+integre : pas de lanceur, pas de serveur, pas d'Internet.
+One single file: IHM_EO3_V1.html. The EO3 3D model is built in:
+no launcher, no server, no Internet needed.
 
 ================================================================
-  WINDOWS
+  PC / MAC / JETSON
 ================================================================
-1. Double-cliquez :  Lancer Windelo.bat
-2. Une petite fenetre "Serveur ACCWing" s'ouvre : LAISSEZ-LA OUVERTE.
-3. Le navigateur s'ouvre sur la page, le modele se charge tout seul.
-4. Pour arreter : fermez la fenetre du serveur.
+Ouvrez IHM_EO3_V1.html dans Chrome ou Edge (Chromium sur le Jetson) :
+double-clic, ou glisser le fichier dans la fenetre du navigateur.
+* Chrome / Edge / Chromium sont necessaires pour le moteur et l'IMU
+  (Web Serial) ; l'affichage seul marche aussi dans Safari / Firefox.
+* Jetson (Linux) : pour acceder aux ports serie USB, l'utilisateur
+  doit etre dans le groupe dialout (sudo usermod -aG dialout $USER,
+  puis se reconnecter). Avec le Chromium "snap", il peut aussi falloir
+  sudo snap connect chromium:raw-usb
+* Jetson : lancer Chromium avec un profil persistant (pas en
+  navigation privee) pour garder les reglages (seuils AUTO, theme,
+  langue).
 
-Rien a installer (utilise PowerShell, deja present sur Windows).
-Nothing to install (uses PowerShell, built into Windows).
-
-================================================================
-  macOS
-================================================================
-1. Double-cliquez :  Lancer Windelo (Mac).zip
-   -> cela extrait le fichier "Lancer Windelo.command" (deja executable).
-2. Double-cliquez :  Lancer Windelo.command
-3. Une fenetre Terminal s'ouvre : LAISSEZ-LA OUVERTE.
-   Le navigateur s'ouvre sur la page, le modele se charge tout seul.
-4. Pour arreter : fermez la fenetre du Terminal (ou Ctrl+C).
-
-* 1re fois seulement : si macOS affiche "developpeur non identifie",
-  faites CLIC DROIT sur "Lancer Windelo.command" > Ouvrir.
-* Necessite python3 OU ruby. Sur un Mac sans outils de developpement,
-  le script l'indique : lancez une fois  xcode-select --install
-  puis relancez.
-
-First time only: if macOS says "unidentified developer", RIGHT-CLICK
-"Lancer Windelo.command" > Open. Needs python3 or ruby; if missing,
-run once:  xcode-select --install  then try again.
+Open IHM_EO3_V1.html in Chrome or Edge (Chromium on the Jetson):
+double-click it or drop it on the browser window. Chrome / Edge /
+Chromium are needed for the motor and IMU (Web Serial); the display
+alone also works in Safari / Firefox. Jetson (Linux): the user must
+be in the dialout group to reach USB serial ports; the snap Chromium
+may also need "sudo snap connect chromium:raw-usb". Use a persistent
+Chromium profile (not incognito) so the settings are kept.
 
 ================================================================
   TELEPHONE / TABLETTE  -  PHONE / TABLET
 ================================================================
-Sur telephone, le fichier HTML suffit : pas de lanceur. Le modele
-3D y est integre (version allegee).
 1. Copiez "IHM_EO3_V1.html" sur le telephone
    (Fichiers / Documents, e-mail, AirDrop, WhatsApp...).
 2. Ouvrez-le (iPhone : app Fichiers ; Android : ouvrir avec Chrome).
 3. Onglets en haut : Controles / Profils 2D / Aile 3D / Systeme.
-* Si le modele n'est pas integre, le bouton "Charger le STL..."
-  permet de choisir le fichier STL sur le telephone.
-* Le pilotage moteur / IMU (Web Serial) reste prevu pour PC.
+* Le pilotage moteur / IMU (Web Serial) est prevu pour PC / Jetson.
 
-On a phone the HTML file is enough: no launcher. A lighter copy
-of the 3D model is embedded in it. Copy the file to the phone and
-open it (iPhone: Files app; Android: open with Chrome). Tabs at
-the top: Controls / 2D / 3D / System. If the model is not
-embedded, "Charger le STL..." lets you pick the STL on the phone.
-Motor / IMU control (Web Serial) is still meant for a PC.
+Copy the file to the phone and open it (iPhone: Files app; Android:
+open with Chrome). Tabs at the top: Controls / 2D / 3D / System.
+Motor / IMU control (Web Serial) is meant for a PC / the Jetson.
 
-Mettre a jour le modele integre / update the embedded model
+Mettre a jour le modele 3D integre / update the built-in 3D model
 (python3 + pip install numpy fast-simplification) :
-    python3 tools/embed_stl.py "3D Windelo pour IHM test.stl"
-    (option --tris 60000 pour plus de detail / for more detail)
+    python3 tools/eo3_model.py eo3.stl
+    python3 tools/embed_stl.py eo3.stl
+    (ou un autre STL / or any other STL ; --tris 60000 = plus de detail)
+
+Les anciens lanceurs (Lancer Windelo.bat, windelo_server.ps1,
+Lancer Windelo (Mac).zip) et "3D Windelo pour IHM test.stl" ne
+servent plus. The old launchers and the Windelo STL are no longer
+needed.
 
 ================================================================
   ECRAN DE BARRE (tactile, mer / Garmin)  -  HELM SCREEN
@@ -226,8 +205,9 @@ A FAIRE COTE BATEAU (cybersecurite, hors de ce fichier) :
   - NMEA 2000 n'a pas d'authentification : controler la plausibilite
     du vent / de la vitesse (bornes, variations) avant de laisser AUTO
     agir.
-  - Lanceurs (.bat / .ps1 / .command) : le petit serveur doit ecouter
-    sur 127.0.0.1 seulement (jamais sur le reseau du bateau).
+  - Si la page est servie par un serveur (Jetson / boitier) : ne servir
+    que ce fichier, en lecture seule, sur le reseau de bord seulement
+    (jamais vers Internet).
 
 Motor bench driver: the e-stop stays latched across reconnects (only
 RESET, held 1.5 s, clears it); arming needs live telemetry and no
@@ -240,15 +220,15 @@ Boat side: safety must live in the controller (limits, watchdog,
 hard-wired e-stop), not the screen; keep the control network apart
 from guest/marina Wi-Fi and the Internet; authenticate commands;
 sanity-check NMEA 2000 data (no authentication on the bus); signed
-updates; the launcher's local server must listen on 127.0.0.1 only.
+updates; if the page is served (Jetson / box), serve this file only,
+read-only, on the boat network only (never to the Internet).
 
 ================================================================
   MOTEUR / WEB SERIAL
 ================================================================
 Le pilotage du moteur (CubeMars AK45-36) necessite un navigateur
-Chromium : Chrome, Edge ou Brave (pas Safari ni Firefox). Le lanceur
-essaie d'ouvrir Chrome/Edge/Brave en priorite.
+Chromium : Chrome, Edge, Brave ou Chromium (pas Safari ni Firefox).
 
 Motor control (CubeMars AK45-36) needs a Chromium browser: Chrome,
-Edge or Brave (not Safari/Firefox). The launcher opens one if present.
+Edge, Brave or Chromium (not Safari/Firefox).
 ================================================================

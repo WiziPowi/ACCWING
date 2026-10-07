@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Embed a lighter copy of the Windelo STL inside the simulator HTML (phone / file:// support).
+"""Embed a lighter copy of the boat STL (EO3) inside IHM_EO3_V1.html, so the page needs no server.
 
-Intégre une version allégée du modèle 3D dans le fichier HTML, pour qu'il fonctionne sur
-téléphone sans lanceur ni serveur local.
+Intègre une version allégée du modèle 3D dans le fichier HTML : il s'ouvre directement
+(double-clic, téléphone, Jetson), sans lanceur ni serveur local.
 
-    python3 tools/embed_stl.py "3D Windelo pour IHM test.stl"            # ~40 000 triangles
-    python3 tools/embed_stl.py "3D Windelo pour IHM test.zip" --tris 60000
+    python3 tools/eo3_model.py eo3.stl && python3 tools/embed_stl.py eo3.stl   # EO3 model
+    python3 tools/embed_stl.py other_boat.stl                            # ~40 000 triangles
+    python3 tools/embed_stl.py other_boat.zip --tris 60000
     python3 tools/embed_stl.py --remove                                  # take the copy out again
 
 The STL (binary or ASCII, or a .zip holding one) is welded, decimated with quadric error

@@ -8,7 +8,7 @@
          (no external scripts, fonts, frames or connections). The onboard server should send the same policy
          as an HTTP header, plus frame-ancestors 'none'. -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; object-src 'none'; frame-src 'none'; worker-src 'none'; base-uri 'none'; form-action 'none'">
-    <title>Simulateur ACCWing V2 — Pilote Auto &amp; Écoulements CFD</title>
+    <title>IHM Energy Observer 3 — V1</title>
     <style>
         /* No external font import — falls back to system-ui/Consolas via font-family stacks below. */
 
@@ -1616,9 +1616,8 @@
                 <button type="button" class="btn-toggle" id="atReset" data-help="Remet les seuils d'origine (2,5 % · 5° · portant 130° / 120°)." data-help-en="Restores the original thresholds (2.5 % · 5° · downwind 130° / 120°)."><span data-fr="Valeurs par défaut" data-en="Default values">Valeurs par défaut</span></button>
             </div>
 
-            <!-- The Windelo model loads automatically: the full STL when served by the PC launcher
-                 (http://localhost), otherwise the lighter copy embedded in this file (phone, file://).
-                 The picker below only appears if neither is available. -->
+            <!-- The EO3 3D model is built into this file (tools/eo3_model.py + tools/embed_stl.py), so the page
+                 needs no launcher or server. The picker below only appears if that copy is missing. -->
             <div id="stl-status" class="stl-status"></div>
             <label id="stl-load-btn" class="btn-toggle" style="display:none"><input type="file"><span data-fr="Charger le STL…" data-en="Load the STL…">Charger le STL…</span></label>
         </div>
@@ -4711,7 +4710,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
                     if (!r.ok) throw new Error('HTTP ' + r.status);
                     entry.source = 'url';
                     return await r.arrayBuffer();
-                } catch (e) { if (!entry.embedded) throw e; }   // launcher without the STL → embedded copy
+                } catch (e) { if (!entry.embedded) throw e; }   // STL not reachable → built-in copy
             }
             if (entry.embedded) { entry.source = 'embedded'; return _embeddedSTLBuffer(); }
             throw new Error('no-source');
