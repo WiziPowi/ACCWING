@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="color-scheme" content="dark">
+    <!-- Security: the page may only run its own inline code and only talk to the place it was served from
+         (no external scripts, fonts, frames or connections). The onboard server should send the same policy
+         as an HTTP header, plus frame-ancestors 'none'. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; object-src 'none'; frame-src 'none'; worker-src 'none'; base-uri 'none'; form-action 'none'">
     <title>Simulateur ACCWing V2 — Pilote Auto &amp; Écoulements CFD</title>
     <style>
         /* No external font import — falls back to system-ui/Consolas via font-family stacks below. */
@@ -990,6 +994,8 @@
       .hbtn.lang-toggle { margin:0; font-size:15px; letter-spacing:1px; }
       .ico { width:1.3em; height:1.3em; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex:none; }
       #btnDim { display:none; }
+      /* Engineering page: the way back to the Helm page is the one coloured button in the header. */
+      body:not(.helm-on) #btnPage { background:var(--u-thrust); border-color:var(--u-thrust); color:var(--u-bg); }
       body.night-ui #btnDim { display:inline-flex; }
       /* Emergency stop */
       #mt-estop { display:inline-flex; align-items:center; gap:8px; width:auto; min-width:150px; height:auto; min-height:0; margin:0;
@@ -1239,6 +1245,7 @@
             <!-- Luminance → red only (keeps night vision): R' = 0.45R + 0.9G + 0.25B, G' = B' = 0 -->
             <filter id="nv-red" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0.45 0.9 0.25 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"/></filter>
             <symbol id="i-helm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/><path d="M12 1.5v3.5M12 19v3.5M1.5 12H5M19 12h3.5M4.6 4.6l2.5 2.5M16.9 16.9l2.5 2.5M4.6 19.4l2.5-2.5M16.9 7.1l2.5-2.5"/></symbol>
+            <symbol id="i-back" viewBox="0 0 24 24"><path d="M10 5 3 12l7 7"/><path d="M3.5 12H21"/></symbol>
             <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M3 6h11M18 6h3M3 12h4M11 12h10M3 18h13M20 18h1"/><circle cx="16" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></symbol>
             <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></symbol>
             <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></symbol>
@@ -1269,7 +1276,7 @@
             <span class="chip" id="chipData" data-help="Source du vent et de la vitesse. SIMULATION : valeurs calculées par le simulateur — sur le bateau elles viendront du réseau NMEA 2000 via le boîtier de bord (voir LISEZMOI)." data-help-en="Source of wind and boat speed. SIMULATION: values computed by the simulator — on board they will come from the NMEA 2000 network through the onboard box (see README)."><i class="cdot"></i><span class="chip-k" data-fr="DONNÉES" data-en="DATA">DONNÉES</span><span class="chip-v" id="chipDataV">SIMULATION</span></span>
         </div>
         <div class="hdr-actions">
-            <button type="button" class="hbtn" id="btnPage" data-hold="1000" data-hold-if="onHelm" data-help="Page Barre ⇄ page Ingénierie (réglages moteur, IMU, vues 2D/3D, polaire). Vers l'ingénierie : maintenir 1 s." data-help-en="Helm page ⇄ Engineering page (motor, IMU, 2D/3D views, polar). To engineering: hold 1 s."><svg class="ico"><use id="btnPageIco" href="#i-sliders"/></svg><span class="hlbl" id="btnPageLbl">INGÉNIERIE</span></button>
+            <button type="button" class="hbtn" id="btnPage" data-hold="1000" data-hold-if="onHelm" data-help="Page Barre ⇄ page Ingénierie (réglages moteur, IMU, vues 2D/3D, polaire). Vers l'ingénierie : maintenir 1 s. Retour à la Barre : toucher ce bouton (ou le geste RETOUR du téléphone)." data-help-en="Helm page ⇄ Engineering page (motor, IMU, 2D/3D views, polar). To engineering: hold 1 s. Back to the Helm: tap this button (or the phone's BACK gesture)."><svg class="ico"><use id="btnPageIco" href="#i-sliders"/></svg><span class="hlbl" id="btnPageLbl">INGÉNIERIE</span></button>
             <button type="button" class="hbtn" id="btnTheme" data-help="Affichage : JOUR (contraste maximal en plein soleil) → NUIT → NUIT ROUGE (préserve la vision de nuit)." data-help-en="Display: DAY (maximum contrast in sunlight) → NIGHT → RED NIGHT (keeps night vision)."><svg class="ico"><use id="btnThemeIco" href="#i-sun"/></svg><span class="hlbl" id="btnThemeLbl">JOUR</span></button>
             <button type="button" class="hbtn" id="btnDim" data-help="Atténuation de l'écran la nuit : 100 → 75 → 50 → 30 %." data-help-en="Night dimming: 100 → 75 → 50 → 30 %."><svg class="ico"><use href="#i-dim"/></svg><span class="hlbl" id="btnDimLbl">100 %</span></button>
             <label class="hbtn lang-toggle" data-help="Langue : français / anglais." data-help-en="Language: French / English.">
@@ -4521,7 +4528,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         }
 
         // ---- Model registry + sidebar toggles ----
-        const stlModels = {};                 // key -> { key, name, fileName, url?, file? }
+        const stlModels = Object.create(null); // key -> { key, name, fileName, url?, file? }
         const _model3dToggles = document.getElementById('model3d-toggles');
         const _stlStatusEl    = document.getElementById('stl-status');
         const _stlLoadBtn      = document.getElementById('stl-load-btn');
@@ -4723,7 +4730,8 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             if (!j || !Array.isArray(j.models)) return;
             j.models.forEach(mdl => {
                 if (!mdl || !mdl.file) return;
-                const key = mdl.key || _slugFromName(mdl.file);
+                if (typeof mdl.file !== 'string' || /^[a-z][a-z0-9+.-]*:|^\/\/|\.\./i.test(mdl.file)) return;   // same folder only
+                const key = /^[A-Za-z0-9_-]+$/.test(mdl.key || '') ? mdl.key : _slugFromName(mdl.file);
                 _registerModel({ key, name: mdl.name || _labelFromFile(mdl.file), fileName: mdl.file, url: mdl.file });
             });
         }).catch(() => {});
@@ -7275,15 +7283,18 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         out[2 + len] = (c >> 8) & 0xFF; out[3 + len] = c & 0xFF; out[4 + len] = 0x03;
         return out;
       }
-      function i32(v) { v = v | 0; return [(v >>> 24) & 0xFF, (v >>> 16) & 0xFF, (v >>> 8) & 0xFF, v & 0xFF]; }
+      // 32-bit big-endian field; null when the value is not a finite int32 (NaN, Infinity, overflow).
+      function i32(v) { v = Math.round(v); if (!(v >= -2147483648 && v <= 2147483647)) return null; return [(v >>> 24) & 0xFF, (v >>> 16) & 0xFF, (v >>> 8) & 0xFF, v & 0xFF]; }
+      // Command frame, or null if any field is invalid: write() then sends nothing (never a wrapped or NaN value).
+      function cmdFrame(id, vals) { var d = [id]; for (var k = 0; k < vals.length; k++) { var b = i32(vals[k]); if (!b) return null; d = d.concat(b); } return frame(d); }
       var CMD = {
         getValues: function () { return frame([0x04]); },
-        duty:      function (d) { return frame([0x05].concat(i32(Math.round(d * 100000)))); },
-        current:   function (a) { return frame([0x06].concat(i32(Math.round(a * 1000)))); },
-        rpm:       function (e) { return frame([0x08].concat(i32(Math.round(e)))); },
+        duty:      function (d) { return cmdFrame(0x05, [Math.max(-1, Math.min(1, d)) * 100000]); },
+        current:   function (a) { return cmdFrame(0x06, [a * 1000]); },
+        rpm:       function (e) { return cmdFrame(0x08, [e]); },
         origin:    function () { return frame([0x5F, 0x01]); },
         // COMM_SET_POS_SPD (0x5B): position(deg×1000) + speed(ERPM) + accel. Range ±2.1M° (vs ±2147° for 0x09).
-        posSpd:    function (deg, spd, acc) { return frame([0x5B].concat(i32(Math.round(deg * 1000)), i32(Math.round(spd)), i32(Math.round(acc)))); }
+        posSpd:    function (deg, spd, acc) { return cmdFrame(0x5B, [deg * 1000, spd, acc]); }
       };
       var FAULTS = ['OK', 'Survoltage', 'Sous-tension', 'Défaut driver', 'Surintensité', 'Surchauffe MOS',
         'Surchauffe moteur', 'Driver survolt.', 'Driver sous-tens.', 'MCU sous-tens.', 'Watchdog reset',
@@ -7310,6 +7321,10 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       var SIM_ERPM_LAG = 0.25; // virtual-motor speed-mode first-order lag (position mode is velocity-limited, see mockWrite)
       var sim = false, vErpm = 0, vFrac = 0, vAngle = 0, vAngleTarget = 0; // virtual-motor simulation (no hardware)
       var estop = false;             // latching emergency stop: blocks all motion until explicitly reset
+      var posHeld = false;           // Position mode: an angle has been commanded on this connection (until then nothing is sent)
+      var telemSeen = false;         // a valid telemetry frame has arrived on this connection
+      var TELEM_FRESH_MS = 1000;     // the motor must have answered within this time to be armed / stay armed
+      var txPending = 0, txGen = 0;  // queued writes; txGen++ drops everything still queued (stop frames jump the queue)
       var lostCount = 0;             // unexpected link losses (unplug / stream error) — read by the alarm banner
 
       // ---- DOM ----
@@ -7321,7 +7336,12 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       function motorCam() { var w = mWing(); return w ? (w.cams[0] || 0) : (parseFloat(elM1.value) || 0); }
       function motorReefed() { var w = mWing(); return w ? w.reef > 0 : (!elM1 || elM1.disabled); }
       function motorAutomatic() { var w = mWing(); return w ? w.mode !== 'manual' : !!(elChkAuto && elChkAuto.checked); }   // AUTO or feather
-      function log(m) { if (!elLog) return; elLog.textContent += m + '\n'; elLog.scrollTop = elLog.scrollHeight; }
+      function log(m) {
+        if (!elLog) return;
+        var t = elLog.textContent + m + '\n';
+        if (t.length > 20000) t = t.slice(t.indexOf('\n', t.length - 15000) + 1);   // keep the latest lines only
+        elLog.textContent = t; elLog.scrollTop = elLog.scrollHeight;
+      }
       function hex(b) { var s = ''; for (var i = 0; i < b.length; i++) { s += (b[i] < 16 ? '0' : '') + b[i].toString(16); s += ' '; } return s.toUpperCase().trim(); }
       function fmt(x, n) { return (x).toFixed(n === undefined ? 1 : n); }
       function setStatus(on) {
@@ -7329,7 +7349,8 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         s.textContent = on ? 'Connecté' : 'Déconnecté';
         s.className = 'mt-badge ' + (on ? 'on' : 'off');
         $('mt-connect').textContent = on ? 'Déconnecter' : 'Connecter';
-        if (on) { estop = false; paintEstop(); } // fresh session starts un-stopped
+        // The emergency stop stays latched across reconnects: only RÉARMER (held 1.5 s) clears it.
+        posHeld = false; telemSeen = false;
         if (!on) {
           armed = false; cmd = 0; source = 'panel';
           sim = false; vErpm = 0; vFrac = 0; vAngle = 0; vAngleTarget = 0; // wipe virtual-motor state
@@ -7339,14 +7360,39 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       }
 
       // ---- serialized writes (avoid overlapping writer.write) ----
-      function write(bytes) {
-        if (!writer) return writeChain;
+      // periodic = keep-alive setpoint / telemetry poll: dropped (not queued) while the link is congested,
+      // so a stalled write can never release a burst of stale motion commands later.
+      function write(bytes, periodic) {
+        if (!writer || !bytes) return writeChain;
+        if (periodic && txPending > 1) return writeChain;
+        var gen = txGen; txPending++;
         writeChain = writeChain.then(function () {
-          if (!writer) return;
+          if (!writer || gen !== txGen) return;               // dropped by a stop
           return writer.write(bytes).then(function () { if ($('mt-loghex').checked) log('TX ' + hex(bytes)); })
             .catch(function (e) { log('TX err: ' + e.message); });
-        });
+        }).then(function () { txPending = Math.max(0, txPending - 1); });   // reset by disconnect / link loss
         return writeChain;
+      }
+      // Stop frames jump the queue: everything still queued is dropped and the stops go out at once.
+      function writeStopNow() {
+        if (!writer) return Promise.resolve();
+        txGen++;
+        var w = writer;
+        return Promise.all([CMD.duty(0), CMD.current(0), CMD.duty(0)].map(function (f) {
+          try { return Promise.resolve(w.write(f)).catch(function () {}); } catch (e) { return Promise.resolve(); }
+        }));
+      }
+      function withTimeout(pr, ms) { return Promise.race([pr, new Promise(function (r) { setTimeout(r, ms); })]); }
+      function telemFresh() { return telemSeen && Date.now() - lastTelem <= TELEM_FRESH_MS; }
+      function overTemp() { var c = (typeof CONFIG !== 'undefined' && CONFIG.helm && CONFIG.helm.motorCritC) || 70; return Math.max(lastTmot, lastTmos) >= c; }
+      // Conditions shared by every arming path. Returns why arming is refused, or null.
+      function armBlocker() {
+        if (estop) return '⛔ Arrêt d’urgence actif — maintenez « RÉARMER » 1,5 s d’abord.';
+        if (!port) return '⚠ Connectez le moteur d’abord (⚙ Réglages → Connecter).';
+        if (!telemFresh()) return '⚠ Le moteur ne répond pas (aucune télémétrie) — armement refusé. Vérifiez baud 921600 · mode Servo · TX/RX · alimentation.';
+        if (lastFault !== 0) return '⚠ Défaut moteur « ' + (FAULTS[lastFault] || ('code ' + lastFault)) + ' » — armement refusé.';
+        if (overTemp()) return '⚠ Moteur trop chaud (' + Math.round(Math.max(lastTmot, lastTmos)) + ' °C) — armement refusé.';
+        return null;
       }
 
       // ---- simulation: a virtual motor that consumes real command frames & echoes telemetry ----
@@ -7357,7 +7403,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         writer = { write: mockWrite, releaseLock: function () {} };
         rx = []; lastTelem = Date.now(); noTelemWarned = false;
         txTimer = setInterval(sendSetpoint, 50);
-        telTimer = setInterval(function () { write(CMD.getValues()); }, 100);
+        telTimer = setInterval(function () { write(CMD.getValues(), true); }, 100);
         watchTimer = setInterval(telemetryWatchdog, 1000);
         setStatus(true);
         log('✔ SIMULATION active — moteur virtuel (aucun matériel). Décochez « Simulation » pour le vrai moteur.');
@@ -7418,7 +7464,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
           rx = []; lastTelem = Date.now(); noTelemWarned = false;
           startRead();
           txTimer = setInterval(sendSetpoint, 50);   // keep-alive / consigne @20 Hz
-          telTimer = setInterval(function () { write(CMD.getValues()); }, 100); // telemetry request @10 Hz
+          telTimer = setInterval(function () { write(CMD.getValues(), true); }, 100); // telemetry request @10 Hz
           watchTimer = setInterval(telemetryWatchdog, 1000);
           // Auto-cleanup if the adapter is physically unplugged.
           if (!disconnectHooked && navigator.serial.addEventListener) {
@@ -7429,6 +7475,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
           }
           setStatus(true);
           log('✔ Connecté @ ' + baud + ' baud. Réglez le mode, ARMEZ, puis utilisez le curseur.');
+          if (estop) log('⛔ Arrêt d’urgence toujours actif — maintenez « RÉARMER » 1,5 s avant d’armer.');
         } catch (e) {
           var hint = /open|access|busy|already/i.test(e.message || '') ? ' (port occupé ? fermez CubeMarsTool / le logiciel natif)' : '';
           log('✖ Ouverture échouée: ' + (e.message || e) + hint);
@@ -7445,38 +7492,46 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       }
       async function disconnect() {
         stopTimers(); readAbort = true;   // stop keep-alive FIRST so no tick queues a command after the stop frames
-        try { if (writer) { await write(CMD.duty(0)); await write(CMD.current(0)); } } catch (e) {}
-        try { if (reader) { await reader.cancel(); } } catch (e) {}
+        // Every step is time-limited: a stalled port must not leave the motor connected.
+        try { await withTimeout(writeStopNow(), 300); } catch (e) {}
+        try { if (reader) { await withTimeout(reader.cancel(), 300); } } catch (e) {}
         try { if (writer) { writer.releaseLock(); } } catch (e) {}
-        try { if (port) { await port.close(); } } catch (e) {}
-        port = writer = reader = null; rx = []; writeChain = Promise.resolve();
+        try { if (port) { await withTimeout(port.close(), 500); } } catch (e) {}
+        port = writer = reader = null; rx = []; writeChain = Promise.resolve(); txPending = 0;
         setStatus(false); log('Déconnecté.');
       }
-      // Unexpected loss (unplug / driver crash): disarm, drop everything, no writes to a dead port.
+      // Unexpected loss (unplug / read error): disarm at once, then — in case the port is still alive (a read
+      // error, not an unplug) — tell the motor to stop, and close the port so it can be reopened without a reload.
       function lostPort(reason) {
         if (!port && !writer) return;
         stopTimers(); readAbort = true;   // stop ticks before tearing down so none queues onto a dead port
-        try { if (writer) writer.releaseLock(); } catch (e) {}
-        try { if (reader) reader.cancel(); } catch (e) {}
-        try { if (port) port.close(); } catch (e) {}
-        port = writer = reader = null; rx = []; writeChain = Promise.resolve();
+        var p = port, w = writer, r = reader;
+        port = writer = reader = null; rx = []; writeChain = Promise.resolve(); txPending = 0; txGen++;
         lostCount++;
         setStatus(false); log('⚠ Connexion perdue: ' + (reason || 'inconnue') + '. Moteur désarmé.');
+        (async function () {
+          try { if (w) await withTimeout(Promise.all([w.write(CMD.duty(0)), w.write(CMD.current(0))]), 300); } catch (e) {}
+          try { if (w) w.releaseLock(); } catch (e) {}
+          try { if (r) await withTimeout(r.cancel(), 300); } catch (e) {}
+          try { if (r) r.releaseLock(); } catch (e) {}
+          try { if (p && p.close) await withTimeout(p.close(), 500); } catch (e) {}
+        })();
       }
 
       // ---- read loop + frame parser ----
       function startRead() {
-        readAbort = false; reader = port.readable.getReader();
+        readAbort = false;
+        var rd = reader = port.readable.getReader();
         (async function () {
           var fatal = false;
           try {
             while (!readAbort) {
-              var r = await reader.read();
+              var r = await rd.read();
               if (r.done) break;
               if (r.value) { for (var i = 0; i < r.value.length; i++) rx.push(r.value[i]); parseRx(); }
             }
           } catch (e) { fatal = true; }
-          try { reader.releaseLock(); } catch (e) {}
+          try { rd.releaseLock(); } catch (e) {}
           // Stream ended/erred while we still thought we were connected → treat as lost.
           if (!readAbort && (fatal || port)) lostPort('flux de lecture interrompu');
         })();
@@ -7486,7 +7541,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         while (rx.length >= 2) {
           var h = rx[0], lenSize, len;
           if (h === 2) { lenSize = 1; len = rx[1]; }
-          else if (h === 3) { if (rx.length < 3) return; lenSize = 2; len = (rx[1] << 8) | rx[2]; }
+          else if (h === 3) { if (rx.length < 3) return; lenSize = 2; len = (rx[1] << 8) | rx[2]; if (len > 1024) { rx.shift(); continue; } }
           else { rx.shift(); continue; }
           var total = 1 + lenSize + len + 2 + 1;
           if (rx.length < total) return;
@@ -7531,17 +7586,22 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         $('mt-fault').textContent = FAULTS[status] || ('code ' + status);
         $('mt-faultbox').classList.toggle('bad', status !== 0);
         lastErpm = erpm; lastDuty = Math.round(duty * 100); lastVolt = volt; lastFault = status;
-        lastPower = power; lastTmot = tmot; lastTmos = tmos; lastAngle = angle;
+        lastPower = power; lastTmot = tmot; lastTmos = tmos; lastAngle = angle; telemSeen = true;
+        if (armed && (status !== 0 || overTemp())) {
+          setArmed(false);
+          log('⚠ ' + (status !== 0 ? 'Défaut moteur « ' + (FAULTS[status] || ('code ' + status)) + ' »' : 'Moteur trop chaud (' + Math.round(Math.max(tmot, tmos)) + ' °C)') + ' — moteur désarmé.');
+        }
         notify();
       }
 
       // ---- control ----
       var MODE_DEFAULTS = { duty: { max: 100, unit: '%', step: 1 }, current: { max: 10, unit: 'A', step: 0.1 }, erpm: { max: 50000, unit: 'ERPM', step: 100 }, position: { max: 3500, unit: '°', step: 10 } };
       function posVel() { return Math.max(0, Math.min(MOTOR_ERPM_MAX, parseFloat($('mt-vel').value) || POS_VEL)); }
-      function posAcc() { return Math.max(1, parseFloat($('mt-acc').value) || POS_ACC); }
-      function currentMax() { return Math.abs(parseFloat($('mt-max').value) || MODE_DEFAULTS[mode].max); }
+      function posAcc() { var a = parseFloat($('mt-acc').value); return (a >= 1 && isFinite(a)) ? a : POS_ACC; }
+      // The limit field can lower the limit, never raise it above MODE_DEFAULTS (the hard limit: edit it there).
+      function currentMax() { var v = Math.abs(parseFloat($('mt-max').value)), hard = MODE_DEFAULTS[mode].max; return v > 0 ? Math.min(v, hard) : hard; }
       function slewStep() { var l = currentMax(); return l > 0 ? l * (0.05 / RAMP_SEC) : 0; } // per 50 ms tick
-      function getState() { return { connected: !!port, armed: armed, source: source, mode: mode, max: currentMax(), unit: MODE_DEFAULTS[mode].unit, erpm: lastErpm, duty: lastDuty, volt: lastVolt, fault: lastFault, power: lastPower, tmot: lastTmot, tmos: lastTmos, angle: lastAngle, cmd: cmd, setpoint: setpoint, estop: estop, lost: lostCount, faultText: FAULTS[lastFault] || ('code ' + lastFault) }; }
+      function getState() { return { connected: !!port, sim: sim, armed: armed, source: source, mode: mode, max: currentMax(), unit: MODE_DEFAULTS[mode].unit, erpm: lastErpm, duty: lastDuty, volt: lastVolt, fault: lastFault, power: lastPower, tmot: lastTmot, tmos: lastTmos, angle: lastAngle, cmd: cmd, setpoint: setpoint, estop: estop, lost: lostCount, faultText: FAULTS[lastFault] || ('code ' + lastFault) }; }
       // Publish the base section's REAL camber (from motor angle) for the simulator's 2D/3D render; null when not driving.
       function updateBaseReal() {
         window.__mtBaseReal = (port && armed && source === 'camber' && mode === 'position')
@@ -7552,7 +7612,9 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
 
       function sendSetpoint() {
         if (!writer) { cmd = 0; return; }
-        if (estop) { write(CMD.duty(0)); cmd = 0; return; } // emergency: assert zero torque, command no motion
+        if (estop) { write(CMD.duty(0), true); cmd = 0; return; } // emergency: assert zero torque, command no motion
+        // The motor stopped answering (link, power, wrong port): never keep driving it blind.
+        if (armed && !telemFresh()) { setArmed(false); log('⚠ Plus de télémétrie moteur (> ' + TELEM_FRESH_MS / 1000 + ' s) — moteur désarmé.'); }
         if (armed && source === 'camber') {
           // Safety (per-tick, independent of event listeners):
           if (motorReefed()) { setArmed(false); log('○ Camber 1 indisponible (ris) — moteur désarmé.'); }
@@ -7562,10 +7624,11 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
           else feedFraction(motorCam() / CAMBER_FULL);
         }
         // Position mode: send the absolute angle directly — the motor's velocity/accel make the (constant-speed) move,
-        // so no software slew. Disarmed → hold the last commanded angle.
+        // so no software slew. Disarmed → hold the last commanded angle; nothing commanded yet → send nothing
+        // (a fresh connection or mode change must never mean "go to 0°").
         if (mode === 'position') {
-          cmd = armed ? setpoint : cmd;
-          write(CMD.posSpd(cmd, posVel(), posAcc()));
+          if (armed) { cmd = setpoint; posHeld = true; }
+          if (posHeld) write(CMD.posSpd(cmd, posVel(), posAcc()), true);
           return;
         }
         // Speed/effort modes: software slew-rate limit (no firmware velocity param to bound them). Disarmed → ramp to 0.
@@ -7573,9 +7636,9 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         var st = slewStep();
         if (cmd < tgt) cmd = Math.min(tgt, cmd + st);
         else if (cmd > tgt) cmd = Math.max(tgt, cmd - st);
-        if (mode === 'duty') write(CMD.duty(Math.max(-1, Math.min(1, cmd / 100))));
-        else if (mode === 'current') write(CMD.current(cmd));
-        else if (mode === 'erpm') write(CMD.rpm(cmd));
+        if (mode === 'duty') write(CMD.duty(Math.max(-1, Math.min(1, cmd / 100))), true);
+        else if (mode === 'current') write(CMD.current(cmd), true);
+        else if (mode === 'erpm') write(CMD.rpm(cmd), true);
       }
       // Single authority for (dis)arming; keeps overlay checkbox, slider-enable and source consistent.
       function setArmed(on, src) {
@@ -7585,7 +7648,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         $('mt-slider').disabled = armed && source === 'camber';
         if (!armed) {
           if (mode === 'position') { setpoint = cmd; } // hold the last angle — don't release torque or snap to flat
-          else { setpoint = 0; cmd = 0; if (writer) { write(CMD.duty(0)); write(CMD.current(0)); } }
+          else { setpoint = 0; cmd = 0; writeStopNow(); }
         }
         notify();
       }
@@ -7596,7 +7659,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
           log('■ STOP — cambrure figée (position maintenue). Déconnectez pour relâcher.');
         } else {
           $('mt-slider').value = 0; updateSliderLabel();
-          if (writer) { write(CMD.duty(0)); write(CMD.current(0)); }
+          writeStopNow();
           log('■ STOP — moteur désarmé, consigne 0.');
         }
       }
@@ -7606,10 +7669,10 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       function autoDriveAllowed() { var ad = $('mt-autodrive'); return !!(ad && ad.checked); }
       // Latching emergency stop: cut output now, block re-arm until explicitly reset.
       function emergencyStop() {
-        estop = true; armed = false; source = 'panel'; setpoint = 0; cmd = 0;
+        estop = true; armed = false; source = 'panel'; setpoint = 0; cmd = 0; posHeld = false;
         $('mt-arm').checked = false; $('mt-slider').disabled = false;
         if (simTimer) { clearInterval(simTimer); simTimer = null; if ($('mt-demo')) $('mt-demo').textContent = 'Démo'; }
-        if (writer) { write(CMD.duty(0)); write(CMD.current(0)); write(CMD.duty(0)); } // assert zero immediately
+        writeStopNow();                                   // drop queued commands, assert zero immediately
         log('⛔ ARRÊT D’URGENCE — moteur coupé. Cliquez « Réarmer » pour réactiver.');
         paintEstop(); notify();
       }
@@ -7630,11 +7693,15 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         $('mt-max').value = def.max; $('mt-unit').textContent = def.unit;
         $('mt-maxlabel').textContent = (mode === 'position') ? '° à pleine cambrure (15)' : 'Limite ±';
         var sl = $('mt-slider'); sl.step = def.step; sl.min = -def.max; sl.max = def.max;
-        sl.value = 0; setpoint = 0; cmd = 0; updateSliderLabel(); // clear any stale cross-mode command value
+        sl.value = 0; setpoint = 0; cmd = 0; posHeld = false; updateSliderLabel(); // clear any stale cross-mode command value
         updatePosInfo();
         setArmed(false); // disarm on mode change for safety
       }
       function applyMax() {
+        var typed = Math.abs(parseFloat($('mt-max').value)), hard = MODE_DEFAULTS[mode].max;
+        if (typed > hard) { $('mt-max').value = hard; log('⚠ Limite plafonnée à ' + hard + ' ' + MODE_DEFAULTS[mode].unit + ' (limite matérielle, MODE_DEFAULTS dans le code).'); }
+        // A new limit rescales the camber → motor mapping: never let the live target jump.
+        if (armed && source === 'camber') { setArmed(false); log('○ Limite modifiée — pilotage Camber désarmé (réarmez).'); }
         var m = currentMax();
         var sl = $('mt-slider'); sl.min = -m; sl.max = m;
         if (Math.abs(setpoint) > m) { setpoint = 0; sl.value = 0; updateSliderLabel(); }
@@ -7659,8 +7726,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       }
       function armCamber(on) {
         if (!on) { setArmed(false); log('○ Moteur désarmé (Camber).'); return true; }
-        if (estop) { log('⛔ Arrêt d’urgence actif — cliquez « Réarmer » d’abord.'); notify(); return false; }
-        if (!port) { log('⚠ Connectez le moteur d’abord (⚙ Réglages → Connecter).'); notify(); return false; }
+        var why = armBlocker(); if (why) { log(why); notify(); return false; }
         if (motorReefed()) { log('⚠ « Camber 1 » (aile 1) indisponible (ris engagé) — désengagez avant d’armer.'); notify(); return false; }
         var autoOn = motorAutomatic();
         if (autoOn && !autoDriveAllowed()) { log('⚠ AUTO actif : cochez « ⚠ AUTO pilote le moteur » ou désactivez AUTO.'); notify(); return false; }
@@ -7668,6 +7734,11 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
           // Manual: require Camber 1 centred (anti-jump). In AUTO-drive the optimiser owns the slider, so the slew protects instead.
           var frac = motorCam() / CAMBER_FULL;
           if (Math.abs(frac) > CAMBER_ARM_DB) { log('⚠ Centrez « Camber 1 » (Base 2m) de l’aile 1 près de 0 avant d’armer (anti à-coup).'); notify(); return false; }
+          // Position: the motor must already be where camber 1 asks, or arming would make it jump there.
+          var tgt = frac * currentMax();
+          if (mode === 'position' && Math.abs(lastAngle - tgt) > CAMBER_ARM_DB * currentMax()) {
+            log('⚠ Le moteur est à ' + Math.round(lastAngle) + '° mais la cambrure 1 demande ' + Math.round(tgt) + '° — « Zéro position » ou réalignez avant d’armer (anti à-coup).'); notify(); return false;
+          }
         }
         // Start the command from where the motor already is (position) so it ramps smoothly (no jump).
         setpoint = 0; cmd = (mode === 'position') ? lastAngle : 0; setArmed(true, 'camber');
@@ -7726,9 +7797,17 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       $('mt-vel').addEventListener('input', function () { if (parseFloat(this.value) > MOTOR_ERPM_MAX) this.value = MOTOR_ERPM_MAX; updatePosInfo(); });
       $('mt-acc').addEventListener('input', updatePosInfo);
       $('mt-arm').addEventListener('change', function () {
-        if (this.checked && estop) { this.checked = false; log('⛔ Arrêt d’urgence actif — cliquez « Réarmer » d’abord.'); return; }
-        if (this.checked && !port) { this.checked = false; log('Connectez-vous d’abord.'); return; }
-        if (this.checked) { setpoint = 0; $('mt-slider').value = 0; updateSliderLabel(); setArmed(true, 'panel'); log('● ARMÉ (panneau) — le curseur pilote le moteur.'); }
+        var why = this.checked ? armBlocker() : null;
+        if (why) { this.checked = false; log(why); return; }
+        if (this.checked) {
+          // Position: start from where the motor is (no jump); other modes start from 0.
+          var start = 0;
+          if (mode === 'position') {
+            if (Math.abs(lastAngle) > currentMax()) { this.checked = false; log('⚠ Moteur à ' + Math.round(lastAngle) + '°, hors de la plage ±' + currentMax() + '° — « Zéro position » d’abord.'); return; }
+            start = lastAngle;
+          }
+          setpoint = start; $('mt-slider').value = start; updateSliderLabel(); setArmed(true, 'panel'); log('● ARMÉ (panneau) — le curseur pilote le moteur.');
+        }
         else { setArmed(false); log('○ Désarmé.'); }
       });
       $('mt-slider').addEventListener('input', function () { if (armed && source === 'camber') return; setpoint = parseFloat(this.value); updateSliderLabel(); });
@@ -7736,7 +7815,12 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         if ($('mt-autozero').checked) { setpoint = 0; this.value = 0; updateSliderLabel(); }
       });
       $('mt-apply').addEventListener('click', function () { if (armed && source === 'camber') { log('Appliquer désactivé : moteur piloté par Camber 1.'); return; } setpoint = parseFloat($('mt-slider').value); updateSliderLabel(); });
-      $('mt-origin').addEventListener('click', function () { if (estop) { log('⛔ Arrêt d’urgence actif — réarmez d’abord.'); return; } if (armed && source === 'camber') { log('Zéro position désactivé pendant le pilotage Camber.'); return; } if (writer) { write(CMD.origin()); log('Zéro position envoyé.'); } });
+      $('mt-origin').addEventListener('click', function () { if (estop) { log('⛔ Arrêt d’urgence actif — réarmez d’abord.'); return; } if (armed && source === 'camber') { log('Zéro position désactivé pendant le pilotage Camber.'); return; } if (writer) {
+          write(CMD.origin());
+          // The motor's present position becomes 0°: hold 0° from now on, or it would travel the old angle again.
+          if (mode === 'position') { setpoint = 0; cmd = 0; $('mt-slider').value = 0; updateSliderLabel(); }
+          log('Zéro position envoyé.');
+        } });
       $('mt-stop').addEventListener('click', stopMotor);
       $('mt-clearlog').addEventListener('click', function () { elLog.textContent = ''; });
       $('mt-demo').addEventListener('click', toggleDemo);
@@ -7747,7 +7831,9 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         else { emergencyStop(); disconnect(); }   // cut + disconnect all motors
       });
       paintEstop();
-      window.addEventListener('beforeunload', function () { if (writer) { try { writer.write(CMD.duty(0)); } catch (e) {} } });
+      function unloadStop() { if (writer) { try { writer.write(CMD.duty(0)); writer.write(CMD.current(0)); } catch (e) {} } }
+      window.addEventListener('beforeunload', unloadStop);
+      window.addEventListener('pagehide', unloadStop);
       // Safety: a backgrounded tab throttles timers, starving the keep-alive — stop explicitly instead.
       document.addEventListener('visibilitychange', function () {
         if (document.hidden && armed) { stopMotor(); log('⏸ Onglet masqué — arrêt de sécurité.'); }
@@ -7908,14 +7994,19 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       var zeroRad = new Array(N).fill(0);     // offset « mise à plat » par canal (sur l'axe de son emplacement)
       var headingImu = (typeof CFG.headingImu === 'number') ? CFG.headingImu : (N - 1);  // canal pour le cap absolu (magnéto)
       var graphCh = 0, hist = [], HIST_MAX = 400;   // historique (deg) de l'IMU sélectionnée pour le graphe de calibrage
-      var extCb = null, customParser = null, warnedNoParser = false;
+      var extCb = null, customParser = null, warnedNoParser = false, badFrames = 0;
       var lostCount = 0;                      // unexpected link losses — read by the alarm banner
       var frameCount = 0, lastRateTs = nowMs(), rateHz = 0;
       function nowMs() { return (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now(); }
 
       // ---- DOM ----
       var elLog = $('imu-log');
-      function log(m) { if (!elLog) return; elLog.textContent += m + '\n'; elLog.scrollTop = elLog.scrollHeight; }
+      function log(m) {
+        if (!elLog) return;
+        var t = elLog.textContent + m + '\n';
+        if (t.length > 20000) t = t.slice(t.indexOf('\n', t.length - 15000) + 1);   // keep the latest lines only
+        elLog.textContent = t; elLog.scrollTop = elLog.scrollHeight;
+      }
       function hex(b) { var s = ''; for (var i = 0; i < b.length; i++) { s += (b[i] < 16 ? '0' : '') + b[i].toString(16) + ' '; } return s.toUpperCase().trim(); }
 
       // ---- axis helpers : bend = valeur sur l'axe de l'emplacement, moins le « Zéro », signé (sans dérive) ----
@@ -7953,7 +8044,8 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       // ---- ingestion API : stocke l'orientation brute (pitch/roll/yaw) par canal ; l'axe utile est choisi par emplacement ----
       function applyEuler(list) {                    // list[ch] = {p,r,y} en radians (brut)
         if (!list || !list.length) return;
-        for (var i = 0; i < N && i < list.length; i++) { var e = list[i] || {}; euler[i] = { p: +e.p || 0, r: +e.r || 0, y: +e.y || 0 }; }
+        var fin = function (v) { v = +v; return isFinite(v) ? v : 0; };
+        for (var i = 0; i < N && i < list.length; i++) { var e = list[i] || {}; euler[i] = { p: fin(e.p), r: fin(e.r), y: fin(e.y) }; }
         var g = euler[graphCh] || { p: 0, r: 0, y: 0 };   // historise l'IMU sélectionnée (deg) pour le graphe
         hist.push({ t: nowMs() / 1000, p: g.p / DEG, r: g.r / DEG, y: g.y / DEG });
         if (hist.length > HIST_MAX) hist.shift();
@@ -7986,9 +8078,11 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
           var raw = line.slice(s + 6, e).split(';'), f = [];
           for (var j = 0; j < raw.length; j++) if (raw[j].length) f.push(raw[j]);   // enlève les champs vides
           if (f.length >= 12 + 3 * N) {           // 12 champs machine + 3 (Pitch,Roll,Yaw) par IMU
-            var imu = [];
+            var imu = [], ok = true;
             for (var k = 0; k < N; k++) imu.push({ pitch: +f[12 + k * 3], roll: +f[13 + k * 3], yaw: +f[14 + k * 3] });
-            ingestEuler(imu);
+            for (k = 0; k < N; k++) ['pitch', 'roll', 'yaw'].forEach(function (a) { if (!(Math.abs(imu[k][a]) <= 360)) ok = false; });   // NaN / Infinity / hors plage
+            if (ok) ingestEuler(imu);
+            else { badFrames++; if (badFrames === 1 || badFrames % 100 === 0) log('⚠ Trame IMU invalide ignorée (' + badFrames + ').'); }
           }
         }
         return nl + 1;                            // octets consommés (trame + \n) → resync automatique
@@ -8046,7 +8140,12 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         port = writer = reader = null; rx = []; connected = false;
         stopSim(); setStatus(false); publish(); log('Déconnecté.');
       }
-      function lostPort() { lostCount++; port = writer = reader = null; rx = []; connected = false; setStatus(false); publish(); log('⚠ Connexion IMU perdue.'); }
+      function lostPort() {
+        var p = port, w = writer;
+        lostCount++; port = writer = reader = null; rx = []; connected = false; setStatus(false); publish(); log('⚠ Connexion IMU perdue.');
+        try { if (w) w.releaseLock(); } catch (e) {}
+        try { if (p && p.close) p.close().catch(function () {}); } catch (e) {}   // so it can be reopened without a reload
+      }
 
       // ---- simulation: synthesize a smooth progressive camber bend across the 5 stations ----
       function startSim() {
@@ -8386,18 +8485,34 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       // =====================================================================================
       // PAGES, THEMES, 3D MODE, LANGUAGE
       // =====================================================================================
-      var page = load('page', 'helm') === 'eng' ? 'eng' : 'helm';
+      var page = 'helm';                     // a restart always opens on the Helm page
       function setPage(p) {
         page = p === 'eng' ? 'eng' : 'helm';
         body.classList.toggle('helm-on', page === 'helm');
-        $('btnPageIco').setAttribute('href', page === 'helm' ? '#i-sliders' : '#i-helm');
-        paintLabels(); save('page', page); hideHelp();
+        $('btnPageIco').setAttribute('href', page === 'helm' ? '#i-sliders' : '#i-back');
+        paintLabels(); hideHelp();
         if (page === 'eng') {
           if (window.__invalidateViews) window.__invalidateViews();
           requestAnimationFrame(function () { try { if (typeof initCFDCanvas === 'function') initCFDCanvas(); } catch (e) {} });
         } else lastTiles = 0;
       }
-      $('btnPage').addEventListener('click', function () { setPage(page === 'helm' ? 'eng' : 'helm'); });
+      // The phone / browser BACK gesture returns from Engineering to the Helm page instead of closing
+      // the app: entering Engineering adds one history entry, leaving it (BARRE or BACK) removes it.
+      function engEntry() { try { return !!(history.state && history.state.accwing === 'eng'); } catch (e) { return false; } }
+      function goPage(p) {
+        if (p === page) return;
+        if (p === 'eng') { if (!engEntry()) try { history.pushState({ accwing: 'eng' }, ''); } catch (e) {} setPage('eng'); }
+        else { setPage('helm'); if (engEntry()) try { history.back(); } catch (e) {} }
+      }
+      window.addEventListener('popstate', function () {
+        if (page !== 'eng' || engEntry()) return;
+        if (body.classList.contains('locked')) {             // locked: BACK does nothing either
+          try { history.pushState({ accwing: 'eng' }, ''); } catch (e) {}
+          toast(L('Écran verrouillé — maintenir DÉVERR. 1,5 s', 'Screen locked — hold UNLOCK 1.5 s')); return;
+        }
+        setPage('helm');
+      });
+      $('btnPage').addEventListener('click', function () { goPage(page === 'helm' ? 'eng' : 'helm'); });
 
       var THEMES = ['day', 'night', 'red'], DIMS = [0, 0.25, 0.5, 0.7];
       var theme = load('theme', 'day'); if (THEMES.indexOf(theme) < 0) theme = 'day';
@@ -8725,6 +8840,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         if (!m || !m.connected) chip('chipMotor', m && m.estop ? 'crit' : '', m && m.estop ? L('ARRÊT URG.', 'E-STOP') : L('HORS LIGNE', 'OFFLINE'));
         else if (m.estop) chip('chipMotor', 'crit', L('ARRÊT URG.', 'E-STOP'));
         else if (m.fault) chip('chipMotor', 'crit', L('DÉFAUT', 'FAULT'));
+        else if (m.sim) chip('chipMotor', 'warn', m.armed ? L('SIMU · ARMÉ', 'SIM · ARMED') : 'SIMULATION');
         else if (m.armed) chip('chipMotor', 'warn', L('ARMÉ', 'ARMED'));
         else chip('chipMotor', 'ok', L('CONNECTÉ', 'CONNECTED'));
         var im = window.ImuBench ? window.ImuBench.getState() : null;
@@ -8801,6 +8917,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
       if (load('lang', 'fr') === 'en' && chkLang && !chkLang.checked) { chkLang.checked = true; fire(chkLang, 'change'); }
       apply3D(load('view3d', 'full'));
       applyTheme();
+      if (engEntry()) try { history.replaceState(null, ''); } catch (e) {}   // reloaded while on Engineering
       setPage(page);
       paintChips(); evalAlarms();
     })();

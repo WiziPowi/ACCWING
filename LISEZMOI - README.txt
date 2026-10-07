@@ -87,7 +87,10 @@ pointilles), 6 grands chiffres et de gros boutons.
   - REGLAGE RAPIDE : A PLAT, OPTIMUM (applique l'optimum une fois).
   - RIS : PLEIN / 1 RIS / 2 RIS / AFFALER.
 Bouton INGENIERIE (en haut) : l'ancienne page complete (moteur, IMU,
-vues 2D/3D, polaire). Maintenir 1 s pour y aller ; BARRE pour revenir.
+vues 2D/3D, polaire). Maintenir 1 s pour y aller. Pour revenir : le
+bouton BARRE (fleche retour, seul bouton colore de l'en-tete) ou le
+geste RETOUR du telephone / navigateur. Apres un redemarrage la page
+s'ouvre toujours sur la BARRE.
 
 Reglage aile par aile : selecteur TOUTES / 1 / 2 / 3 / 4 (a gauche
 de la vue de dessus sur la page Barre, sous COACH/AUTO/PRO sur la page
@@ -138,13 +141,65 @@ A FAIRE COTE BATEAU (hors de ce fichier) :
     ne peut pas le garantir.
 
 The page opens on the HELM screen (big numbers, big buttons, top
-view of the wings). ENGINEERING (hold 1 s) is the former full page.
+view of the wings). ENGINEERING (hold 1 s) is the former full page;
+back with the coloured HELM button (back arrow) or the phone/browser
+BACK gesture. A restart always opens on the HELM page.
 Wing-moving actions need a 1 s hold; very short / multi-finger
 touches are ignored; LOCK leaves only the EMERGENCY STOP live;
 HELP explains any item you tap; DAY / NIGHT / RED NIGHT themes.
 On a Garmin plotter the page must be served by an onboard box
 (OneHelm), which also has to drive the motors (no Web Serial on the
 plotter), read NMEA 2000 and feather the wings on link loss.
+
+================================================================
+  SECURITE (moteur, cybersecurite)  -  SAFETY / SECURITY
+================================================================
+Regles du pilote moteur (banc) :
+  - ARRET D'URGENCE verrouille : il reste actif apres une
+    deconnexion / reconnexion ; seul REARMER (maintenir 1,5 s) l'efface.
+  - Armer exige un moteur qui repond (telemetrie < 1 s), sans defaut
+    ni surchauffe (>= 70 degC, CONFIG.helm.motorCritC).
+  - Desarmement automatique : plus de telemetrie pendant 1 s, defaut
+    moteur, surchauffe, perte de liaison (une trame d'arret est tentee
+    puis le port est ferme), changement de limite pendant le pilotage.
+  - Mode Position : aucun ordre n'est envoye avant d'armer ; l'armement
+    part de l'angle mesure du moteur (pas de saut vers 0 deg) ; armement
+    Camber refuse si le moteur est loin de la consigne ; "Zero position"
+    ne refait pas le trajet.
+  - Le champ Limite peut baisser la limite, jamais depasser celle du
+    code (MODE_DEFAULTS : 100 %, 10 A, 50000 ERPM, 3500 deg).
+  - Valeur non numerique / infinie : la trame n'est pas envoyee. L'arret
+    d'urgence passe devant les ordres en attente.
+Page : aucun script, police ou connexion exterieurs (politique CSP dans
+l'en-tete) ; ne parle qu'a son propre dossier / serveur.
+
+A FAIRE COTE BATEAU (cybersecurite, hors de ce fichier) :
+  - La securite ne doit pas dependre de l'ecran : limites, chien de
+    garde (ailes en drapeau si plus d'ordres) et ARRET D'URGENCE
+    CABLE (coupe l'alimentation moteur) dans le controleur. Activer
+    aussi la temporisation de commande du firmware moteur si elle existe.
+  - Boitier de bord : reseau de commande separe du Wi-Fi invites /
+    marina / Internet ; ordres authentifies (appairage, jeton) et
+    limites / plausibilite verifiees cote controleur ; en-tetes HTTP
+    (CSP + frame-ancestors 'none') ; mises a jour signees ; journal.
+  - NMEA 2000 n'a pas d'authentification : controler la plausibilite
+    du vent / de la vitesse (bornes, variations) avant de laisser AUTO
+    agir.
+  - Lanceurs (.bat / .ps1 / .command) : le petit serveur doit ecouter
+    sur 127.0.0.1 seulement (jamais sur le reseau du bateau).
+
+Motor bench driver: the e-stop stays latched across reconnects (only
+RESET, held 1.5 s, clears it); arming needs live telemetry and no
+fault/overheating; telemetry loss (1 s), fault, overheating or link
+loss disarm; Position mode never moves before arming and starts from
+the measured angle; limits can't exceed MODE_DEFAULTS; invalid numbers
+are never sent; stop frames jump the queue. The page loads no outside
+code and talks only to where it was served from (CSP).
+Boat side: safety must live in the controller (limits, watchdog,
+hard-wired e-stop), not the screen; keep the control network apart
+from guest/marina Wi-Fi and the Internet; authenticate commands;
+sanity-check NMEA 2000 data (no authentication on the bus); signed
+updates; the launcher's local server must listen on 127.0.0.1 only.
 
 ================================================================
   MOTEUR / WEB SERIAL
