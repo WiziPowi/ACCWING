@@ -1210,6 +1210,10 @@
       .auto-active #autoTune .stp, .feather-active #autoTune .stp { opacity:1; pointer-events:auto; }
       #atLive { font-size:12px; color:#95a0ad; white-space:pre-line; padding:2px 2px 8px; min-height:2.8em; font-variant-numeric:tabular-nums; }
       #atReset { width:100%; min-height:44px; }
+      .wind-var-lbl { margin-top:8px; }
+      .wind-var-lbl span { white-space:nowrap; }
+      #windVar .btn-toggle { min-height:44px; }
+      #compass-svg #wind-mean-mark path { fill:none; stroke:#2DD489; stroke-width:1.3; stroke-linejoin:round; }
       .health-item .health-label { font-size:11px; }
       .health-item .health-val { font-size:17px; }
       .health-item.disconnected .health-val { font-size:13px; letter-spacing:.5px; color:var(--fg-1); }
@@ -1528,12 +1532,22 @@
                         <circle cx="-8" cy="1" r="1.1" fill="#c8d2e1" opacity="0.85"/>
                         <circle cx="8"  cy="1" r="1.1" fill="#c8d2e1" opacity="0.85"/>
                     </g>
+                    <!-- Set (mean) wind direction while the wind varies at random: hollow marker on the ring -->
+                    <g id="wind-mean-mark" style="display:none"><path d="M 0,-36.5 L -3.2,-44.5 L 3.2,-44.5 Z"/></g>
                     <!-- Bearing readout -->
                     <text id="compass-bearing" class="compass-bearing-readout" x="0" y="-35" text-anchor="middle">--°</text>
                 </svg>
             </div>
 
-            <!-- TWS slider removed — wind speed is now fixed at 10 knots (see targetVentVitesse10m). -->
+            <!-- Random wind (simulator only): the compass sets the mean direction, the base speed is 10 kn;
+                 shifts and gusts are added on top (levels: CONFIG.windRandom; help texts built from it). -->
+            <div class="labels wind-var-lbl"><label data-fr="Vent variable" data-en="Variable wind">Vent variable</label><span id="windVarNow"></span></div>
+            <div class="model-toggles" id="windVar">
+                <button type="button" class="btn-toggle active-model" data-wvar="off" aria-pressed="true"><span data-fr="Fixe" data-en="Steady">Fixe</span></button>
+                <button type="button" class="btn-toggle" data-wvar="light" aria-pressed="false"><span data-fr="Léger" data-en="Light">Léger</span></button>
+                <button type="button" class="btn-toggle" data-wvar="medium" aria-pressed="false"><span data-fr="Moyen" data-en="Medium">Moyen</span></button>
+                <button type="button" class="btn-toggle" data-wvar="strong" aria-pressed="false"><span data-fr="Fort" data-en="Strong">Fort</span></button>
+            </div>
 
             <div class="section-title" data-fr="Rotation Aile" data-en="Wing Rotation">Rotation Aile</div>
             <div class="controle-groupe">
@@ -3558,6 +3572,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         // --- Compass widget (interactive wind direction) ---
         const compassSvg = document.getElementById('compass-svg');
         const windArrowGroup = document.getElementById('wind-arrow-group');
+        const windMeanMark = document.getElementById('wind-mean-mark');
         const awaArrowGroup = document.getElementById('awa-arrow-group');
         const compassBearing = document.getElementById('compass-bearing');
         let compassDragging = false;
@@ -3610,13 +3625,50 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             });
         }
 
-        // Wind speed fixed at 10 knots (TWS slider removed). Both vars kept as `let` for the
-        // existing smoothing/animation code path that touches them, but neither is mutated by UI.
+        // True wind. target* = the MEAN set by the user (compass direction; speed fixed at 10 kn, no
+        // slider); windAngle / simuVentVitesse10m = the wind actually blowing, which follows the mean
+        // plus the random variation of SimWind (below) when "Vent variable" is on.
         let simuVentVitesse10m = 10.0;
         let targetVentVitesse10m = 10.0;
         let simuBateauVitesse = 0.0;
         let windAngle = Math.PI / 4;
         let targetWindAngle = Math.PI / 4;
+
+        // --- Random wind (simulator only), levels in CONFIG.windRandom. Direction and speed each follow an
+        //     Ornstein–Uhlenbeck random walk (wanders, then drifts back to the mean: std = sigma, memory = tau),
+        //     plus gusts arriving at random (Poisson) as smooth sin² bumps. Seeded generator, so a sequence
+        //     can be replayed exactly: SimWind.seed(n). Off ('off') = offsets ease back to 0 in ~3 s. ---
+        const SimWind = (() => {
+            let level = 'off', seedVal = (Date.now() >>> 0) || 1, rnd;
+            let shift = 0, speed = 0, gust = 0, gustLeft = 0, gustLen = 1, gustAmp = 0;   // rad, fraction, fraction
+            function mulberry32(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+            function gauss() { let u = 0; while (u === 0) u = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rnd()); }
+            function ou(x, sigma, tau, dts) { const a = Math.exp(-dts / tau); return x * a + sigma * Math.sqrt(1 - a * a) * gauss(); }
+            function seed(n) { seedVal = (n >>> 0) || 1; rnd = mulberry32(seedVal); shift = speed = gust = gustLeft = 0; }
+            seed(seedVal);
+            return {
+                step(dts) {                                   // dts: elapsed time (s)
+                    const P = CONFIG.windRandom[level];
+                    if (!P) { const a = Math.exp(-dts / 3); shift *= a; speed *= a; gust *= a; gustLeft = 0; return; }
+                    shift = ou(shift, P.shiftDeg * Math.PI / 180, P.shiftTauS, dts);
+                    speed = ou(speed, P.speedPct / 100, P.speedTauS, dts);
+                    // A gust can't start during another, so the start rate is raised to make gustPerMin the true average.
+                    const startPerS = P.gustPerMin / 60 / Math.max(0.2, 1 - P.gustPerMin * P.gustS / 60);
+                    if (gustLeft <= 0 && rnd() < startPerS * dts) {
+                        gustLen = P.gustS * (0.6 + 0.8 * rnd()); gustAmp = P.gustPct / 100 * (0.5 + rnd()); gustLeft = gustLen;
+                    }
+                    if (gustLeft > 0) { gustLeft = Math.max(0, gustLeft - dts); gust = gustAmp * Math.sin(Math.PI * (1 - gustLeft / gustLen)) ** 2; }
+                    else gust = 0;
+                },
+                angle: (mean) => mean + shift,                // true wind direction around the mean (rad)
+                speed: (mean) => Math.max(CONFIG.windRandom.minKt, Math.min(CONFIG.windRandom.maxKt, mean * (1 + speed + gust))),
+                setLevel(l) { level = CONFIG.windRandom[l] && l !== 'minKt' && l !== 'maxKt' ? l : 'off'; },
+                get level() { return level; },
+                seed,
+                state: () => ({ level, seed: seedVal, shiftDeg: shift * 180 / Math.PI, speedPct: speed * 100, gustPct: gust * 100 }),
+            };
+        })();
+        window.SimWind = SimWind;
 
         let displayAWS = 0, displayAWA = 0, displayTWS = 0;
         window.globalForceX = 0, window.globalForceY = 0, window.globalThrust = 0;
@@ -3823,6 +3875,18 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             // Helm page / marine touch layer. minTouchMs: touches shorter than this are ignored (spray, drops).
             // windAlarmKt: apparent-wind alarm (suggests reefing / feathering). motorWarnC/CritC: motor temperature alarms.
             helm: { minTouchMs: 40, holdMs: 1000, windAlarmKt: 25, motorWarnC: 55, motorCritC: 70 },
+            // Simulator only — random wind ("Vent variable" under the compass, engineering page). The compass
+            // direction and the base speed stay the MEAN; on top of them, per level:
+            //   shiftDeg  typical direction offset (1 σ, °)      shiftTauS  how long a shift lasts (s)
+            //   speedPct  typical speed change (1 σ, % of mean)  speedTauS  how long a change lasts (s)
+            //   gustPerMin gusts per minute (average)  gustPct gust strength (% of mean, ×0.5–1.5)  gustS gust length (s)
+            // minKt / maxKt: limits of the resulting true wind speed.
+            windRandom: {
+                light:  { shiftDeg: 4,  shiftTauS: 40, speedPct: 6,  speedTauS: 10, gustPerMin: 0.5, gustPct: 15, gustS: 6 },
+                medium: { shiftDeg: 8,  shiftTauS: 30, speedPct: 12, speedTauS: 8,  gustPerMin: 1,   gustPct: 25, gustS: 8 },
+                strong: { shiftDeg: 15, shiftTauS: 20, speedPct: 20, speedTauS: 6,  gustPerMin: 2,   gustPct: 40, gustS: 10 },
+                minKt: 2, maxKt: 40
+            },
             render: { resolution: 30, cfdVB: {x:-40,y:-50,w:280,h:500}, cfdCssW:220, cfdCssH:420 },
             // === Banc IMU (5 IMU le long d'UN cambreur de test) ===
             // stationsU : position normalisée (0 = emplanture/corde avant → 1 = bord de fuite) de chaque IMU le long de la corde.
@@ -6439,17 +6503,17 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
             }
             reefAnim = WINGS[displayWingIdx()].reefAnim;   // displayed wing (2D view, generic-wing 3D)
 
-            // Wind direction follows the compass target deterministically (no random gusts).
-            // Handle angle wrap so the smoothing always takes the short path.
-            let _wDelta = targetWindAngle - windAngle;
+            // True wind: the compass direction / base speed (the mean) plus the random variation of SimWind
+            // (zero while "Vent variable" is off). Handle angle wrap so the smoothing takes the short path.
+            SimWind.step(dt / 60);
+            let _wDelta = SimWind.angle(targetWindAngle) - windAngle;
             while (_wDelta > Math.PI)  _wDelta -= 2 * Math.PI;
             while (_wDelta < -Math.PI) _wDelta += 2 * Math.PI;
             windAngle += _wDelta * (1 - Math.exp(-4 * dt / 60));
             windAngle = Math.atan2(Math.sin(windAngle), Math.cos(windAngle));
 
-            // Wind speed: smooth deterministic tracking of the user target (no random gusts).
             targetVentVitesse10m = Math.max(5, Math.min(30, targetVentVitesse10m));
-            simuVentVitesse10m += (targetVentVitesse10m - simuVentVitesse10m) * (1 - Math.exp(-2 * dt / 60));
+            simuVentVitesse10m += (SimWind.speed(targetVentVitesse10m) - simuVentVitesse10m) * (1 - Math.exp(-2 * dt / 60));
 
             let b_vx = 0, b_vy = +simuBateauVitesse;
 
@@ -6608,6 +6672,10 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
                 // Boat-relative bearing: 0°=BOW, 90°=STB, 180°=STERN, 270°=PORT
                 const bearingDeg = ((Math.round(rotDeg) % 360) + 360) % 360;
                 compassBearing.textContent = bearingDeg + '°';
+            }
+            if (windMeanMark) {
+                windMeanMark.style.display = SimWind.level === 'off' ? 'none' : '';
+                windMeanMark.setAttribute('transform', `rotate(${((targetWindAngle - Math.PI / 2 + _cYaw) * 180 / Math.PI).toFixed(1)})`);
             }
             if (awaArrowGroup) {
                 const awaRotDeg = (displayAWA - Math.PI / 2 + _cYaw) * 180 / Math.PI;
@@ -8704,6 +8772,40 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
           setTxt('atLive', L('Optimum calculé : ', 'Computed optimum: ') + fmt(raw.rot, raw.cams) + '\n'
             + L('Appliqué par AUTO : ', 'Applied by AUTO: ') + fmt(committedOptRotation, committedOptCamber));
         }, 400);
+      })();
+
+      // =====================================================================================
+      // ENGINEERING PAGE: random wind for the simulator (SimWind in the main script). Starts steady
+      // after every restart. Help texts are built from CONFIG.windRandom so they match the settings.
+      // =====================================================================================
+      (function windVariation() {
+        var box = $('windVar'); if (!box || !window.SimWind || typeof CONFIG === 'undefined') return;
+        var btns = box.querySelectorAll('[data-wvar]');
+        Array.prototype.forEach.call(btns, function (b) {
+          var k = b.getAttribute('data-wvar'), P = CONFIG.windRandom[k];
+          if (!P) {
+            b.setAttribute('data-help', 'Simulation : vent constant, direction de la boussole, 10 nds à 10 m.');
+            b.setAttribute('data-help-en', 'Simulator: steady wind, compass direction, 10 kn at 10 m.');
+          } else {
+            var g = P.gustPerMin >= 1 ? P.gustPerMin + ' / min' : '1 / ' + Math.round(1 / P.gustPerMin) + ' min';
+            b.setAttribute('data-help', 'Simulation uniquement. Vent variable autour de la direction de la boussole : ±' + P.shiftDeg + '° de direction et ±' + P.speedPct
+              + ' % de force (écart type), rafales d\'environ +' + P.gustPct + ' % pendant ' + P.gustS + ' s, ' + g + '. La flèche verte montre le vent réel, le triangle creux la direction réglée.');
+            b.setAttribute('data-help-en', 'Simulator only. Wind varying around the compass direction: ±' + P.shiftDeg + '° direction and ±' + P.speedPct
+              + ' % speed (standard deviation), gusts of about +' + P.gustPct + ' % for ' + P.gustS + ' s, ' + g + '. The green arrow shows the actual wind, the hollow triangle the set direction.');
+          }
+          b.addEventListener('click', function () {
+            window.SimWind.setLevel(k);
+            Array.prototype.forEach.call(btns, function (o) { var on = o === b; o.classList.toggle('active-model', on); o.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+            paintNow();
+          });
+        });
+        // Live readout: actual true wind (masthead sensor, same as the VENT REEL tile) and its offset from the set direction.
+        function paintNow() {
+          if (window.SimWind.level === 'off') { setTxt('windVarNow', ''); return; }
+          var off = norm180((windAngle - targetWindAngle) * 180 / Math.PI);
+          setTxt('windVarNow', displayTWS.toFixed(1) + ' ' + L('nds', 'kn') + ' · ' + fmtS(off) + '°');
+        }
+        setInterval(function () { if (!body.classList.contains('helm-on')) paintNow(); }, 400);
       })();
 
       // =====================================================================================

@@ -121,6 +121,18 @@ Reglages AUTO - hysteresis (page Ingenierie, colonne Controles, sous
   - En direct : optimum calcule / optimum applique par AUTO.
   - VALEURS PAR DEFAUT remet les valeurs d'origine (CONFIG.opt et
     CONFIG.modes dans le code).
+Vent variable (simulation seulement ; page Ingenierie, sous la
+boussole) : FIXE / LEGER / MOYEN / FORT. La boussole donne la direction
+moyenne, le vent de base est 10 nds ; s'y ajoutent des bascules de
+direction, des variations de force et des rafales au hasard
+(LEGER +-4 deg / +-6 % / 1 rafale toutes les 2 min ; MOYEN +-8 deg /
++-12 % / 1 rafale par min ; FORT +-15 deg / +-20 % / 2 rafales par min,
+ecarts types). Fleche verte = vent reel, triangle creux = direction
+reglee ; a droite : vent reel en tete de mat et ecart de direction.
+Reglages des niveaux : CONFIG.windRandom dans le code. Repart sur FIXE
+a chaque demarrage. Pour rejouer exactement la meme sequence (tests) :
+SimWind.seed(n) dans la console.
+
 Les reglages sont memorises par le navigateur de l'ecran (Jetson) :
 lancer Chromium avec un profil persistant (pas en navigation privee /
 --incognito), sinon ils reviennent aux valeurs par defaut a chaque
@@ -132,6 +144,11 @@ downwind on beyond 130 deg / off below 120 deg apparent wind (kept at
 least 2 deg apart), live computed vs applied optimum, DEFAULT VALUES.
 Saved by the screen's browser: run Chromium on the Jetson with a
 persistent profile (not incognito) or they reset at every start.
+Variable wind (simulator only, Engineering page under the compass):
+STEADY / LIGHT / MEDIUM / STRONG random shifts, speed changes and gusts
+around the compass direction and the 10 kn base (CONFIG.windRandom);
+green arrow = actual wind, hollow triangle = set direction. Starts
+STEADY; SimWind.seed(n) replays a sequence.
 
 Securites tactiles :
   - Actions qui font bouger l'aile = MAINTENIR 1 s : AUTO (activation),
