@@ -1204,6 +1204,12 @@
         font:700 26px/1 var(--ui-font); cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
       .auto-active .stp, .feather-active .stp, .stp:disabled { opacity:.3; pointer-events:none; }
       .feather-active input[type="range"] { pointer-events:none; }
+      /* AUTO tuning stays adjustable while AUTO runs (that is when it is tuned), unlike the wing controls. */
+      .auto-active #autoTune input[type="range"], .feather-active #autoTune input[type="range"] { pointer-events:auto; }
+      .auto-active #autoTune input[type="range"]::-webkit-slider-thumb { background:#c3cad3; border-color:#0b0d10; box-shadow:none; }
+      .auto-active #autoTune .stp, .feather-active #autoTune .stp { opacity:1; pointer-events:auto; }
+      #atLive { font-size:12px; color:#95a0ad; white-space:pre-line; padding:2px 2px 8px; min-height:2.8em; font-variant-numeric:tabular-nums; }
+      #atReset { width:100%; min-height:44px; }
       .health-item .health-label { font-size:11px; }
       .health-item .health-val { font-size:17px; }
       .health-item.disconnected .health-val { font-size:13px; letter-spacing:.5px; color:var(--fg-1); }
@@ -1569,6 +1575,31 @@
                 <label class="btn-toggle" id="btnReef1" data-hold="1000" data-hold-if="reefChange" data-help="1 ris — retire la section de tête. Maintenir 1 s." data-help-en="1 reef — drops the head section. Hold 1 s."><input type="radio" name="reef" value="1">1 Ris</label>
                 <label class="btn-toggle" id="btnReef2" data-hold="1000" data-hold-if="reefChange" data-help="2 ris — retire les deux sections du haut. Maintenir 1 s." data-help-en="2 reefs — drops the top two sections. Hold 1 s."><input type="radio" name="reef" value="2">2 Ris</label>
                 <label class="btn-toggle" id="btnReefAffale" data-hold="1000" data-hold-if="reefChange" data-help="Affaler — replie toute l'aile dans le balestron. Maintenir 1 s." data-help-en="Douse — folds the whole wing into the boom. Hold 1 s."><input type="radio" name="reef" value="4">Affaler</label>
+            </div>
+
+            <!-- AUTO tuning (hysteresis). AUTO adopts a new optimum only when it differs from the one it is
+                 applying by more than the dead band; the downwind (PORTANT) sail mode switches on and off at
+                 two different apparent-wind angles. Saved on this screen; wired in the helm script. -->
+            <div class="section-title"><span data-fr="Réglages AUTO — hystérésis" data-en="AUTO tuning — hysteresis">Réglages AUTO — hystérésis</span></div>
+            <div id="autoTune">
+                <div class="controle-groupe" data-help="AUTO n'adopte une nouvelle cambrure optimale que si elle s'écarte de plus de ce seuil de la cambrure appliquée (par cambreur). Plus grand : moins de mouvements des cambreurs quand le vent varie, réglage un peu moins fin. L'optimum est calculé par pas de 1 %." data-help-en="AUTO only adopts a new optimal camber when it differs from the applied camber by more than this (per camber batten). Larger: fewer camber movements when the wind varies, slightly less precise trim. The optimum is computed in 1 % steps.">
+                    <div class="labels"><label for="atCam" data-fr="Seuil cambrure" data-en="Camber dead band">Seuil cambrure</label><span id="atCamV">2.5 %</span></div>
+                    <div class="slider-wrapper"><input type="range" id="atCam" min="0" max="10" step="0.5" value="2.5" aria-label="Seuil cambrure AUTO / AUTO camber dead band"></div>
+                </div>
+                <div class="controle-groupe" data-help="AUTO ne tourne l'aile vers un nouvel angle optimal que s'il s'écarte de plus de ce seuil de l'angle appliqué. Plus grand : moins de rotations quand le vent varie. L'optimum est calculé au degré près." data-help-en="AUTO only turns the wing to a new optimal angle when it differs from the applied angle by more than this. Larger: fewer rotations when the wind varies. The optimum is computed to the nearest degree.">
+                    <div class="labels"><label for="atRot" data-fr="Seuil angle aile" data-en="Wing angle dead band">Seuil angle aile</label><span id="atRotV">5°</span></div>
+                    <div class="slider-wrapper"><input type="range" id="atRot" min="0" max="30" step="1" value="5" aria-label="Seuil angle AUTO / AUTO angle dead band"></div>
+                </div>
+                <div class="controle-groupe" data-help="Mode voile PORTANT activé quand le vent apparent dépasse cet angle (depuis l'avant). Reste au moins 2° au-dessus de l'angle de sortie : l'écart évite le va-et-vient entre les modes. Agit sur l'indication MODE VOILE." data-help-en="DOWNWIND sail mode switches on when the apparent wind goes beyond this angle (from the bow). Stays at least 2° above the off angle: the gap stops the mode flipping back and forth. Drives the SAIL MODE indication.">
+                    <div class="labels"><label for="atPin" data-fr="Portant : entrée au-delà de" data-en="Downwind: on beyond">Portant : entrée au-delà de</label><span id="atPinV">130°</span></div>
+                    <div class="slider-wrapper"><input type="range" id="atPin" min="90" max="175" step="1" value="130" aria-label="Portant entrée / Downwind on"></div>
+                </div>
+                <div class="controle-groupe" data-help="Mode voile PORTANT désactivé quand le vent apparent revient en deçà de cet angle (depuis l'avant)." data-help-en="DOWNWIND sail mode switches off when the apparent wind comes back below this angle (from the bow).">
+                    <div class="labels"><label for="atPout" data-fr="Portant : sortie en deçà de" data-en="Downwind: off below">Portant : sortie en deçà de</label><span id="atPoutV">120°</span></div>
+                    <div class="slider-wrapper"><input type="range" id="atPout" min="85" max="170" step="1" value="120" aria-label="Portant sortie / Downwind off"></div>
+                </div>
+                <div id="atLive" data-help="Optimum calculé en continu (avant le seuil) et optimum réellement appliqué par AUTO (après le seuil). Angle d'aile depuis l'axe du bateau · cambrure moyenne." data-help-en="Optimum computed continuously (before the dead band) and the optimum AUTO actually applies (after the dead band). Wing angle from the boat axis · mean camber."></div>
+                <button type="button" class="btn-toggle" id="atReset" data-help="Remet les seuils d'origine (2,5 % · 5° · portant 130° / 120°)." data-help-en="Restores the original thresholds (2.5 % · 5° · downwind 130° / 120°)."><span data-fr="Valeurs par défaut" data-en="Default values">Valeurs par défaut</span></button>
             </div>
 
             <!-- The Windelo model loads automatically: the full STL when served by the PC launcher
@@ -5562,6 +5593,7 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
 
             optCamberVals = _optCache.camberVals.slice();
             let optimalRotationDeg = _optCache.rotationDeg;
+            window.__autoOptRaw = { rot: optimalRotationDeg, cams: optCamberVals };   // AUTO tuning readout (before the dead band)
 
             // (Plus d'inversion de cambrure : l'optimiseur choisit déjà, ci-dessus, la cambrure qui
             //  maximise la poussée avant de la physique live — donc on applique tel quel.)
@@ -8601,6 +8633,78 @@ ygKKAosCygKLAssCigKIAokCigKJAosCjALMAs0CjALNAo0CzALOAs8CzALPAs0CzgKOAo8CzgKPAs8C
         bindRepeat(mi, function (k) { stepSlider(input, -d[1] * k, d[2]); });
         bindRepeat(pl, function (k) { stepSlider(input, d[1] * k, d[2]); });
       });
+
+      // =====================================================================================
+      // ENGINEERING PAGE: AUTO tuning — hysteresis thresholds (CONFIG.opt dead bands, CONFIG.modes
+      // downwind enter / exit). AUTO reads CONFIG every frame, so a change applies at once.
+      // Saved in this screen's browser storage (accwing.autoTune); defaults = the CONFIG values.
+      // =====================================================================================
+      (function autoTune() {
+        if (typeof CONFIG === 'undefined' || !$('autoTune')) return;
+        var RAD = 180 / Math.PI;
+        // Downwind angles are stored from the stern in rad; shown as apparent-wind angle from the bow.
+        var DEF_RAD = { pin: CONFIG.modes.portantEnterRad, pout: CONFIG.modes.portantExitRad };
+        var DEF = { cam: CONFIG.opt.camberDeadbandPct, rot: CONFIG.opt.rotationDeadbandDeg,
+                    pin: Math.round(180 - DEF_RAD.pin * RAD), pout: Math.round(180 - DEF_RAD.pout * RAD) };
+        var F = { cam: { id: 'atCam', step: 0.5, unit: ' %', dec: 1 }, rot: { id: 'atRot', step: 1, unit: '°', dec: 0 },
+                  pin: { id: 'atPin', step: 1, unit: '°', dec: 0 },   pout: { id: 'atPout', step: 1, unit: '°', dec: 0 } };
+        var GAP = 2;                          // downwind: the "on" angle stays at least 2° above the "off" angle
+        var cur = { cam: DEF.cam, rot: DEF.rot, pin: DEF.pin, pout: DEF.pout };
+        function clampTo(k, v) { var el = $(F[k].id), st = F[k].step; return Math.max(+el.min, Math.min(+el.max, Math.round(v / st) * st)); }
+        function set(k, v) {
+          cur[k] = clampTo(k, v);
+          if (k === 'pin' && cur.pout > cur.pin - GAP) cur.pout = clampTo('pout', cur.pin - GAP);
+          if (k === 'pout' && cur.pin < cur.pout + GAP) cur.pin = clampTo('pin', cur.pout + GAP);
+        }
+        function commit(persist) {
+          CONFIG.opt.camberDeadbandPct = cur.cam;
+          CONFIG.opt.rotationDeadbandDeg = cur.rot;
+          // Untouched angles keep the exact CONFIG value (the slider shows it rounded to 1°).
+          CONFIG.modes.portantEnterRad = cur.pin === DEF.pin ? DEF_RAD.pin : (180 - cur.pin) / RAD;
+          CONFIG.modes.portantExitRad = cur.pout === DEF.pout ? DEF_RAD.pout : (180 - cur.pout) / RAD;
+          Object.keys(F).forEach(function (k) {
+            var el = $(F[k].id); if (+el.value !== cur[k]) el.value = cur[k];
+            setTxt(F[k].id + 'V', cur[k].toFixed(F[k].dec) + F[k].unit);
+          });
+          if (persist) save('autoTune', JSON.stringify(cur));
+        }
+        // Restore saved values (ignored if unreadable, out of range or inconsistent).
+        var saved = null; try { saved = JSON.parse(load('autoTune', 'null')); } catch (e) {}
+        if (saved && typeof saved === 'object') {
+          Object.keys(F).forEach(function (k) { var v = +saved[k]; if (isFinite(v)) cur[k] = clampTo(k, v); });
+          if (cur.pin < cur.pout + GAP) { cur.pin = DEF.pin; cur.pout = DEF.pout; }
+        }
+        commit(false);
+        Object.keys(F).forEach(function (k) {
+          var input = $(F[k].id), wrap = input.closest('.slider-wrapper');
+          input.addEventListener('input', function () { set(k, +input.value); commit(true); });
+          // − / + steppers like the other engineering sliders (tap = 1 step, hold = repeat).
+          var row = document.createElement('div'); row.className = 'stp-row';
+          var mi = document.createElement('button'), pl = document.createElement('button');
+          [[mi, '−', -1], [pl, '+', 1]].forEach(function (b) {
+            b[0].type = 'button'; b[0].className = 'stp'; b[0].textContent = b[1];
+            var txt = b[1] + String(F[k].step) + F[k].unit;
+            b[0].setAttribute('aria-label', txt);
+            b[0].setAttribute('data-help', txt.replace('.', ',') + ' — maintenir pour répéter');
+            b[0].setAttribute('data-help-en', txt + ' — hold to repeat');
+            bindRepeat(b[0], function (n) { set(k, cur[k] + b[2] * F[k].step * n); commit(true); });
+          });
+          wrap.parentNode.insertBefore(row, wrap); row.appendChild(mi); row.appendChild(wrap); row.appendChild(pl);
+        });
+        $('atReset').addEventListener('click', function () {
+          cur = { cam: DEF.cam, rot: DEF.rot, pin: DEF.pin, pout: DEF.pout };
+          commit(true); toast(L('Seuils AUTO par défaut', 'AUTO thresholds reset'));
+        });
+        // Live readout: what the optimiser computes vs what AUTO applies (the dead band at work).
+        setInterval(function () {
+          if (body.classList.contains('helm-on')) return;
+          var raw = window.__autoOptRaw, Wg = window.Wings;
+          if (!raw || !Wg || committedOptRotation == null || !committedOptCamber) { setTxt('atLive', ''); return; }
+          var fmt = function (rot, cams) { return fmtS(norm180(rot - 90)) + '° · ' + fmtS(Wg.meanCamber({ cams: cams, reef: 0 }) || 0, 1) + ' %'; };
+          setTxt('atLive', L('Optimum calculé : ', 'Computed optimum: ') + fmt(raw.rot, raw.cams) + '\n'
+            + L('Appliqué par AUTO : ', 'Applied by AUTO: ') + fmt(committedOptRotation, committedOptCamber));
+        }, 400);
+      })();
 
       // =====================================================================================
       // HELM: wing selector, modes (MANUAL / AUTO / FEATHER), steppers, quick settings, reef.

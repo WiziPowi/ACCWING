@@ -109,6 +109,30 @@ the selected wing(s). Each wing has its own mode, angle, camber and
 reef; total thrust is the sum of the four. Wing-to-wing wake effects
 are not modelled.
 
+Reglages AUTO - hysteresis (page Ingenierie, colonne Controles, sous
+"Prise de ris") ; curseur + boutons - / + pour chaque seuil :
+  - Seuil cambrure (defaut 2,5 %) : AUTO n'adopte une nouvelle
+    cambrure optimale que si elle s'ecarte de plus de ce seuil de la
+    cambrure appliquee (l'optimum est calcule par pas de 1 %).
+  - Seuil angle aile (defaut 5 deg) : idem pour l'angle de l'aile.
+  - Portant : entree au-dela de 130 deg, sortie en deca de 120 deg de
+    vent apparent (indication MODE VOILE) ; l'entree reste toujours au
+    moins 2 deg au-dessus de la sortie.
+  - En direct : optimum calcule / optimum applique par AUTO.
+  - VALEURS PAR DEFAUT remet les valeurs d'origine (CONFIG.opt et
+    CONFIG.modes dans le code).
+Les reglages sont memorises par le navigateur de l'ecran (Jetson) :
+lancer Chromium avec un profil persistant (pas en navigation privee /
+--incognito), sinon ils reviennent aux valeurs par defaut a chaque
+demarrage.
+
+AUTO tuning - hysteresis (Engineering page, Controls column, below
+Reefing): camber dead band (2.5 %), wing angle dead band (5 deg),
+downwind on beyond 130 deg / off below 120 deg apparent wind (kept at
+least 2 deg apart), live computed vs applied optimum, DEFAULT VALUES.
+Saved by the screen's browser: run Chromium on the Jetson with a
+persistent profile (not incognito) or they reset at every start.
+
 Securites tactiles :
   - Actions qui font bouger l'aile = MAINTENIR 1 s : AUTO (activation),
     ris / affaler, armer le moteur, aller a la page Ingenierie.
